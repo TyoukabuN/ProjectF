@@ -6,51 +6,34 @@ public class StateMachine : State
 {
     public Dictionary<int, State> stateDict = new Dictionary<int, State>();
 
-    public State current;
+    public State lastState;
+    public State currentState;
     public int defaultStateKey = -1;
 
-    public override bool OnInit()
-    {
-        if (current == null)
-        {
-            if (stateDict.TryGetValue(defaultStateKey, out current))
-            {
-                return current.OnInit();
-            }
-            return base.OnInit();
-        }
-        return current.OnInit();
-    }
+
     public override bool OnEnter()
     {
-        if (current == null)
+        if (currentState == null)
         {
             return base.OnEnter();
         }
-        return current.OnEnter();
+        return currentState.OnEnter();
     }
-    public override bool OnExit()
+    public override bool OnUpdate(float timeStep = 0)
     {
-        if (current == null)
+        if (currentState == null)
         {
-            return base.OnExit();
+            return base.OnUpdate(timeStep);
         }
-        return current.OnExit();
+        return currentState.OnUpdate(timeStep);
     }
-    public override bool OnCondition()
-    {
-        if (current == null)
-        {
-            return base.OnCondition();
-        }
-        return current.OnCondition();
-    }
+
     public override bool OnDispose()
     {
-        if (current == null)
+        if (currentState == null)
         {
             return base.OnDispose();
         }
-        return current.OnDispose();
+        return currentState.OnDispose();
     }
 }
