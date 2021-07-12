@@ -25,11 +25,7 @@ public class StateMachine : State
     {
         if (current == null)
         {
-            if (stateDict.TryGetValue(defaultStateKey, out current))
-            {
-                return current.OnEnter();
-            }
-            return base.OnInit();
+            return base.OnEnter();
         }
         return current.OnEnter();
     }
