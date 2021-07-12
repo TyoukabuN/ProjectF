@@ -366,3 +366,4 @@ FodyWeavers.xsd
 /ProjectF.sln
 /Assembly-CSharp.csproj
 /.vsconfig
+*.csproj
