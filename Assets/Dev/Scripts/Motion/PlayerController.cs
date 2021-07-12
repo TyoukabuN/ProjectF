@@ -47,6 +47,24 @@ public partial class PlayerController : Controller, IControllable
             m_FSM.OnInit();
             m_FSM.Enter((int)StateType.Stand);
         }
+
+        System.Reflection.MemberInfo info = typeof(InputDefine);
+        object[] attributes = info.GetCustomAttributes(typeof(ObservedKey), false);
+        for (int i = 0; i < attributes.Length; i++)
+        {
+            Debug.Log((KeyCode)attributes[i]);
+        }
+
+        foreach (var field in typeof(InputDefine).GetFields())
+        {
+            var attrs = field.GetCustomAttributes(typeof(ObservedKey), false);
+            if (attrs.Length <= 0)
+            {
+                continue;
+            }
+
+            ObservedKey attr = attrs[0] as ObservedKey;
+        }
     }
 
     // Update is called once per frame
@@ -56,5 +74,7 @@ public partial class PlayerController : Controller, IControllable
         {
             m_FSM.OnUpdate(Time.deltaTime);
         }
+
+        Update_InputDetection();
     }
 }

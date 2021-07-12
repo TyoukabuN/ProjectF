@@ -25,6 +25,13 @@ public partial class PlayerController : Controller, IControllable
     private int recordMaxCount = 500;
     private int recordMinCount = 50;
 
+    public void Update_InputDetection()
+    { 
+        if(Input.anyKeyDown)
+        {
+            Debug.Log(Input.inputString);
+        }
+    }
     /// <summary>
     /// 是否点击了按钮
     /// </summary>
@@ -107,4 +114,10 @@ public partial class PlayerController : Controller, IControllable
         }
         return click >= combo;
     }
+}
+
+[AttributeUsage( AttributeTargets.All)]
+public sealed class ObservedKey : Attribute
+{ 
+
 }

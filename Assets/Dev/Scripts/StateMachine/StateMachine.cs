@@ -24,7 +24,7 @@ public class StateMachine : State
 
         lastState = currentState;
         currentState = state;
-        Debug.Log(((PlayerController.StateType)currentState.stateKey).ToString());
+        //Debug.Log(((PlayerController.StateType)currentState.stateKey).ToString());
         state.OnEnter();
 
         return false;
