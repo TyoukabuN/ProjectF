@@ -4,9 +4,9 @@ using UnityEngine;
 
 public interface IControllable
 {
-    void MoveForward(State state);
-    void MoveBackward(State state);
-    void TureLeft(State state);
-    void TureRight(State state);
-    void OnMotion(State state);
+    void MoveForward(float timeStep = 0);
+    void MoveBackward(float timeStep = 0);
+    void TureLeft(float timeStep = 0);
+    void TureRight(float timeStep = 0);
+    void OnMotion(float timeStep = 0);
 }

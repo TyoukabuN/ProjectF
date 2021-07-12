@@ -45,23 +45,4 @@ public class FSM : StateMachine
         return state.OnInit(this, key);
     }
 
-    public bool Enter(int stateKey)
-    {
-        State state;
-        if (!stateDict.TryGetValue(stateKey, out state))
-            return false;
-
-        if (currentState != null &&!currentState.OnExit(stateKey))
-            return false;
-
-        if (!state.OnCondition(currentState!=null? currentState.stateKey:-1))
-            return false;
-
-        lastState = currentState;
-        currentState = state;
-
-        state.OnEnter();
-
-        return false;
-    }
 }

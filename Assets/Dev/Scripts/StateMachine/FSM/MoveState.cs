@@ -6,32 +6,45 @@ public class MoveState : State
 {
     public IControllable controllable;
 
-    public MoveState(int stateKey = -1) : base(stateKey)
-    { 
+    public MoveState(IControllable controllable,int stateKey = -1) : base(stateKey)
+    {
+        this.controllable = controllable;
     }
     public override bool OnUpdate(float timeStep = 0)
     {
         if (controllable == null)
             return false;
 
-        if (Input.GetKey(KeyCode.W))
+        bool anyMove = false;
+
+        if (Input.GetKey(KeyCode.UpArrow))
         {
-            controllable.MoveForward(this);
+            anyMove = anyMove || true;
+            controllable.MoveForward(Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.DownArrow))
         {
-            controllable.MoveBackward(this);
+            anyMove = anyMove || true;
+            controllable.MoveBackward(Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
-            controllable.TureLeft(this);
+            anyMove = anyMove || true;
+            controllable.TureLeft(Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
-            controllable.TureRight(this);
+            anyMove = anyMove || true;
+            controllable.TureRight(Time.deltaTime);
         }
 
-        controllable.OnMotion(this);
+        controllable.OnMotion(Time.deltaTime);
+
+        if (!anyMove)
+        {
+            stateMachine.Enter((int)PlayerController.StateType.Stand);
+        }
+
         return true;
     }
 }

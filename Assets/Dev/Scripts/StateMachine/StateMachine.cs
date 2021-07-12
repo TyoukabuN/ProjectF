@@ -10,7 +10,25 @@ public class StateMachine : State
     public State currentState;
     public int defaultStateKey = -1;
 
+    public bool Enter(int stateKey)
+    {
+        State state;
+        if (!stateDict.TryGetValue(stateKey, out state))
+            return false;
 
+        if (currentState != null && !currentState.OnExit(stateKey))
+            return false;
+
+        if (!state.OnCondition(currentState != null ? currentState.stateKey : -1))
+            return false;
+
+        lastState = currentState;
+        currentState = state;
+        Debug.Log(((PlayerController.StateType)currentState.stateKey).ToString());
+        state.OnEnter();
+
+        return false;
+    }
     public override bool OnEnter()
     {
         if (currentState == null)

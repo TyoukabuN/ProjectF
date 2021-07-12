@@ -5,29 +5,32 @@ using System;
 
 public partial class PlayerController : Controller, IControllable
 {
-    public void MoveBackward(State state)
+    public float Speed = 20;
+    private Vector3 displacement = Vector3.zero;
+    public void MoveForward(float timeStep = 0)
     {
-        throw new System.NotImplementedException();
+        displacement += Vector3.forward * Speed * timeStep;
+    }
+    public void MoveBackward(float timeStep = 0)
+    {
+        displacement -= Vector3.forward * Speed * timeStep;
     }
 
-    public void MoveForward(State state)
+    public void TureLeft(float timeStep = 0)
     {
-        throw new System.NotImplementedException();
+        displacement -= Vector3.right * Speed * timeStep;
     }
 
-    public void OnMotion(State state)
+    public void TureRight(float timeStep = 0)
     {
-        throw new System.NotImplementedException();
+        displacement += Vector3.right * Speed * timeStep;
     }
 
-    public void TureLeft(State state)
+    public void OnMotion(float timeStep = 0)
     {
-        throw new System.NotImplementedException();
+        transform.position += displacement;
+        displacement = Vector3.zero;
     }
 
-    public void TureRight(State state)
-    {
-        throw new System.NotImplementedException();
-    }
 
 }

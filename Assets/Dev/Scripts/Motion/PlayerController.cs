@@ -33,7 +33,7 @@ public partial class PlayerController : Controller, IControllable
         if (m_FSM == null)
         {
             m_FSM = new FSM();
-            m_FSM.AddState((int)StateType.Move, new MoveState());
+            m_FSM.AddState((int)StateType.Move, new MoveState(this));
             m_FSM.AddState((int)StateType.Stand, new StandState());
             m_FSM.OnInit();
             m_FSM.Enter((int)StateType.Stand);
