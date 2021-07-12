@@ -5,32 +5,58 @@ using System;
 
 public partial class PlayerController : Controller, IControllable
 {
-    public float Speed = 20;
-    private Vector3 displacement = Vector3.zero;
     public void MoveForward(float timeStep = 0)
     {
-        displacement += Vector3.forward * Speed * timeStep;
+        velocity += Vector3.forward * Speed;
     }
     public void MoveBackward(float timeStep = 0)
     {
-        displacement -= Vector3.forward * Speed * timeStep;
+        velocity -= Vector3.forward * Speed;
     }
 
-    public void TureLeft(float timeStep = 0)
+    public void TurnLeft(float timeStep = 0)
     {
-        displacement -= Vector3.right * Speed * timeStep;
+        velocity -= Vector3.right * Speed;
     }
 
-    public void TureRight(float timeStep = 0)
+    public void TurnRight(float timeStep = 0)
     {
-        displacement += Vector3.right * Speed * timeStep;
+        velocity += Vector3.right * Speed;
     }
 
     public void OnMotion(float timeStep = 0)
     {
+        displacement += velocity * timeStep;
         transform.position += displacement;
         displacement = Vector3.zero;
     }
 
+    public bool OnInputCheck_Move(float timeStep = 0)
+    {
+        bool anyMove = false;
+
+        if (Input.GetKey(InputDefine.Forward))
+        {
+            anyMove = anyMove || true;
+            this.MoveForward(Time.deltaTime);
+        }
+        if (Input.GetKey(InputDefine.Backward))
+        {
+            anyMove = anyMove || true;
+            this.MoveBackward(Time.deltaTime);
+        }
+        if (Input.GetKey(InputDefine.Left))
+        {
+            anyMove = anyMove || true;
+            this.TurnLeft(Time.deltaTime);
+        }
+        if (Input.GetKey(InputDefine.Right))
+        {
+            anyMove = anyMove || true;
+            this.TurnRight(Time.deltaTime);
+        }
+
+        return anyMove;
+    }
 
 }

@@ -6,7 +6,10 @@ public interface IControllable
 {
     void MoveForward(float timeStep = 0);
     void MoveBackward(float timeStep = 0);
-    void TureLeft(float timeStep = 0);
-    void TureRight(float timeStep = 0);
+    void TurnLeft(float timeStep = 0);
+    void TurnRight(float timeStep = 0);
+    void Jump(float timeStep = 0);
     void OnMotion(float timeStep = 0);
+    bool OnInputCheck_Move(float timeStep = 0);
+    bool OnInputCheck_Jump(float timeStep = 0);
 }

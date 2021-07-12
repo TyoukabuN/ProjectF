@@ -4,6 +4,8 @@ using UnityEngine;
 
 public abstract class State
 {
+    public IControllable controllable;
+
     public StateMachine stateMachine;
     public int stateKey = -1;
     public bool isInit = false;

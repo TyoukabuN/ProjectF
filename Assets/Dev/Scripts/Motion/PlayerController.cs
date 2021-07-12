@@ -8,6 +8,7 @@ public partial class PlayerController : Controller, IControllable
     { 
         Stand,
         Move,
+        Jump,
     }
 
     protected FSM m_FSM;
@@ -22,7 +23,11 @@ public partial class PlayerController : Controller, IControllable
     }
 
     public static PlayerController current;
-    // Start is called before the first frame update
+
+    public float Speed = 20;
+    private Vector3 displacement = Vector3.zero;
+    private Vector3 velocity = Vector3.zero;
+    private Vector3 gravity = -Vector3.up * 10f;
     void Awake()
     {
         if (current == null)
@@ -33,8 +38,9 @@ public partial class PlayerController : Controller, IControllable
         if (m_FSM == null)
         {
             m_FSM = new FSM();
-            m_FSM.AddState((int)StateType.Move, new MoveState(this));
             m_FSM.AddState((int)StateType.Stand, new StandState());
+            m_FSM.AddState((int)StateType.Move, new MoveState(this));
+            m_FSM.AddState((int)StateType.Jump, new JumpState(this));
             m_FSM.OnInit();
             m_FSM.Enter((int)StateType.Stand);
         }
