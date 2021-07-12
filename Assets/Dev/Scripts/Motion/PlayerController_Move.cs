@@ -5,6 +5,11 @@ using System;
 
 public partial class PlayerController : Controller, IControllable
 {
+    //Physice Properties
+    public float Speed = 20;
+    private Vector3 displacement = Vector3.zero;
+    private Vector3 velocity = Vector3.zero;
+    private Vector3 gravity = -Vector3.up * 10f;
     public void MoveForward(float timeStep = 0)
     {
         velocity += Vector3.forward * Speed;
@@ -26,31 +31,32 @@ public partial class PlayerController : Controller, IControllable
 
     public void OnMotion(float timeStep = 0)
     {
-        displacement += velocity * timeStep;
+        displacement += velocity * timeStep + gravity * timeStep * (transform.position.y > 0 ? 1 : 0);
         transform.position += displacement;
         displacement = Vector3.zero;
+        velocity = Vector3.zero;
     }
 
     public bool OnInputCheck_Move(float timeStep = 0)
     {
         bool anyMove = false;
 
-        if (Input.GetKey(InputDefine.Forward))
+        if (IsKeyOn(InputDefine.Forward))
         {
             anyMove = anyMove || true;
             this.MoveForward(Time.deltaTime);
         }
-        if (Input.GetKey(InputDefine.Backward))
+        if (IsKeyOn(InputDefine.Backward))
         {
             anyMove = anyMove || true;
             this.MoveBackward(Time.deltaTime);
         }
-        if (Input.GetKey(InputDefine.Left))
+        if (IsKeyOn(InputDefine.Left))
         {
             anyMove = anyMove || true;
             this.TurnLeft(Time.deltaTime);
         }
-        if (Input.GetKey(InputDefine.Right))
+        if (IsKeyOn(InputDefine.Right))
         {
             anyMove = anyMove || true;
             this.TurnRight(Time.deltaTime);

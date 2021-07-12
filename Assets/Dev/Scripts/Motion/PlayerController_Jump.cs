@@ -13,9 +13,8 @@ public partial class PlayerController : Controller, IControllable
     {
         bool anyJump = false;
 
-        if (Input.GetKeyDown(InputDefine.Jump))
+        if (IsKeyOn(InputDefine.Jump))
         {
-            RecordKey(InputDefine.Jump);
             anyJump = anyJump || true;
             this.Jump(Time.deltaTime);
         }
