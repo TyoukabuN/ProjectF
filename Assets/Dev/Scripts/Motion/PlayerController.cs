@@ -24,10 +24,13 @@ public partial class PlayerController : Controller, IControllable
 
     public static PlayerController current;
 
+    //Physice Properties
     public float Speed = 20;
     private Vector3 displacement = Vector3.zero;
     private Vector3 velocity = Vector3.zero;
     private Vector3 gravity = -Vector3.up * 10f;
+
+
     void Awake()
     {
         if (current == null)
