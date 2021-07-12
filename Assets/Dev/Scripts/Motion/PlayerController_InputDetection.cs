@@ -19,11 +19,26 @@ public partial class PlayerController : Controller, IControllable
 
     //time interval of key down
     private Dictionary<KeyCode, float> keyPressBook = new Dictionary<KeyCode, float>();
-
     private List<KeyRecord> keyRecordList = new List<KeyRecord>();
 
     private int recordMaxCount = 500;
     private int recordMinCount = 50;
+
+    private Dictionary<KeyCode, bool> observedKeyBook = new Dictionary<KeyCode, bool>();
+
+    public void InitObservedKey()
+    {
+        foreach (var field in typeof(InputDefine).GetFields())
+        {
+            var attrs = field.GetCustomAttributes(typeof(ObservedKey), false);
+            if (attrs.Length <= 0)
+            {
+                continue;
+            }
+
+            KeyCode key = (KeyCode)field.GetValue(field);
+        }
+    }
 
     public void Update_InputDetection()
     { 
