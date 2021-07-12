@@ -24,7 +24,7 @@ public partial class PlayerController : Controller, IControllable
     private int recordMaxCount = 500;
     private int recordMinCount = 50;
 
-    private Dictionary<KeyCode, bool> observedKeyBook = new Dictionary<KeyCode, bool>();
+    private List<KeyCode> observedKeyList = new List<KeyCode>();
 
     public void InitObservedKey()
     {
@@ -37,14 +37,22 @@ public partial class PlayerController : Controller, IControllable
             }
 
             KeyCode key = (KeyCode)field.GetValue(field);
+            observedKeyList.Add(key);
         }
     }
 
     public void Update_InputDetection()
-    { 
-        if(Input.anyKeyDown)
+    {
+        foreach (var keyCode in observedKeyList)
         {
-            Debug.Log(Input.inputString);
+            if (Input.GetKeyDown(keyCode))
+            {
+                RecordKey(keyCode);
+            }
+            if(Input.GetKeyUp(keyCode))
+            {
+                ClearKey(keyCode);
+            }
         }
     }
     /// <summary>
