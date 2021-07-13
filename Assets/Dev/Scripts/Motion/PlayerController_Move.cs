@@ -96,27 +96,14 @@ public partial class PlayerController : Controller, IControllable
             }
         }
 
-        //grounded = Physics.CheckCapsule(collider.bounds.center, new Vector3(collider.bounds.center.x, collider.bounds.min.y - 0.1f, collider.bounds.center.z), 0.18f);
-
         return grounded;
     }
 
-    //make sure u replace "floor" with your gameobject name.on which player is standing
-    void OnCollisionEnter(Collision theCollision)
-    {
-        if (theCollision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            grounded = true;
-        }
-        //collider.
-    }
-
-    ////consider when character is jumping .. it will exit collision.
-    //void OnCollisionExit(Collision theCollision)
+    //void OnCollisionEnter(Collision theCollision)
     //{
     //    if (theCollision.gameObject.layer == LayerMask.NameToLayer("Ground"))
     //    {
-    //        grounded = false;
+    //        grounded = true;
     //    }
     //}
 
