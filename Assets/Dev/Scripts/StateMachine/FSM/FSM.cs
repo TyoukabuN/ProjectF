@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FSM : StateMachine
 {
+
     public bool OnInit(int stateKey = -1)
     {
         return OnInit(null, stateKey);

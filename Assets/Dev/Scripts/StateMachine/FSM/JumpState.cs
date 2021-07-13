@@ -8,6 +8,12 @@ public class JumpState : State
     {
         this.controllable = controllable;
     }
+    public override bool OnEnter()
+    {
+        controllable.Jump(Time.deltaTime);
+        return true;
+
+    }
     public override bool OnUpdate(float timeStep = 0)
     {
         if (controllable == null)
@@ -16,7 +22,12 @@ public class JumpState : State
         var anyMove = controllable.OnInputCheck_Move(Time.deltaTime);
         var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
 
-        controllable.OnMotion(Time.deltaTime);
+        controllable.Motion(Time.deltaTime);
+
+        if (controllable.IsGround())
+        {
+            stateMachine.Enter((int)PlayerController.StateType.Move);
+        }
 
         return true;
     }

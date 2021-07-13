@@ -9,7 +9,9 @@ public interface IControllable
     void TurnLeft(float timeStep = 0);
     void TurnRight(float timeStep = 0);
     void Jump(float timeStep = 0);
-    void OnMotion(float timeStep = 0);
+    void Motion(float timeStep = 0);
     bool OnInputCheck_Move(float timeStep = 0);
     bool OnInputCheck_Jump(float timeStep = 0);
+    bool IsMoving();
+    bool IsGround();
 }

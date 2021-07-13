@@ -4,17 +4,24 @@ using UnityEngine;
 
 public class StandState : State
 {
+    public StandState(IControllable controllable, int stateKey = -1) : base(stateKey)
+    {
+        this.controllable = controllable;
+    }
     public override bool OnUpdate(float timeStep = 0)
     {
-        bool anyMove = false;
+        var anyMove = controllable.OnInputCheck_Move(Time.deltaTime);
+        var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
 
-        if (Input.GetKey(InputDefine.Forward) ||
-            Input.GetKey(InputDefine.Backward) ||
-            Input.GetKey(InputDefine.Left) ||
-            Input.GetKey(InputDefine.Right) )
+       controllable.Motion(Time.deltaTime);
+
+        if (anyMove)
         {
-            anyMove = anyMove || true;
             stateMachine.Enter((int)PlayerController.StateType.Move);
+        }
+        if (anyJump)
+        {
+            stateMachine.Enter((int)PlayerController.StateType.Jump);
         }
         return true;
     }

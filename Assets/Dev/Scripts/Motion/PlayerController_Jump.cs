@@ -5,9 +5,11 @@ using System;
 
 public partial class PlayerController : Controller, IControllable
 {
+    public float JumpSpeed = 10;
     public void Jump(float timeStep = 0)
     {
-        displacement += Vector3.up * Speed * timeStep;
+        verticalVelocity = Vector3.zero;
+        verticalVelocity += Vector3.up * JumpSpeed;
     }
     public bool OnInputCheck_Jump(float timeStep = 0)
     {
@@ -16,9 +18,10 @@ public partial class PlayerController : Controller, IControllable
         if (IsKeyOn(InputDefine.Jump))
         {
             anyJump = anyJump || true;
-            this.Jump(Time.deltaTime);
         }
         return anyJump;
     }
+
+
 
 }

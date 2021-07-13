@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MoveState : State
 {
-    public IControllable controllable;
-
     public MoveState(IControllable controllable,int stateKey = -1) : base(stateKey)
     {
         this.controllable = controllable;
@@ -18,9 +16,11 @@ public class MoveState : State
         var anyMove = controllable.OnInputCheck_Move(Time.deltaTime);
         var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
 
-        controllable.OnMotion(Time.deltaTime);
 
-        if (!anyMove)
+        controllable.Motion(Time.deltaTime);
+
+
+        if (!controllable.IsMoving())
         {
             stateMachine.Enter((int)PlayerController.StateType.Stand);
         }

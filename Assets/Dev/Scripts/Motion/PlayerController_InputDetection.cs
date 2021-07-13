@@ -41,17 +41,33 @@ public partial class PlayerController : Controller, IControllable
         }
     }
 
+    public bool Debug_Input = false;
+    public void DebugInput(KeyCode keyCode,string exStr)
+    {
+        if (Debug_Input)
+        { 
+            Debug.Log(keyCode + exStr);
+        }
+    }
     public void Update_InputDetection()
     {
         foreach (var keyCode in observedKeyList)
         {
-            if (Input.GetKeyDown(keyCode))
+            if (Input.GetKeyDown(keyCode) || Input.GetKey(keyCode))
             {
-                RecordKey(keyCode);
+                if (!IsKeyOn(keyCode))
+                {
+                    DebugInput(keyCode, " Down");
+                    RecordKey(keyCode);
+                }
             }
-            if(Input.GetKeyUp(keyCode))
+            if(Input.GetKeyUp(keyCode) || !Input.GetKey(keyCode))
             {
-                ClearKey(keyCode);
+                if (IsKeyOn(keyCode))
+                { 
+                    DebugInput(keyCode, " Up");
+                    ClearKey(keyCode);
+                }
             }
         }
     }
