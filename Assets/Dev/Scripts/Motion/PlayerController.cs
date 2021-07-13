@@ -12,6 +12,7 @@ public partial class PlayerController : Controller, IControllable
         Stand,
         Move,
         Jump,
+        Fall,
     }
 
     protected FSM m_FSM;
@@ -29,6 +30,7 @@ public partial class PlayerController : Controller, IControllable
 
     private CharacterController characterController;
     private new Rigidbody rigidbody;
+    private CapsuleCollider collider;
 
 
     void Awake()
@@ -44,6 +46,7 @@ public partial class PlayerController : Controller, IControllable
             m_FSM.AddState((int)StateType.Stand, new StandState(this));
             m_FSM.AddState((int)StateType.Move, new MoveState(this));
             m_FSM.AddState((int)StateType.Jump, new JumpState(this));
+            m_FSM.AddState((int)StateType.Fall, new FallState(this));
             m_FSM.OnInit();
             m_FSM.Enter((int)StateType.Stand);
         }
@@ -55,6 +58,10 @@ public partial class PlayerController : Controller, IControllable
         if (rigidbody == null)
         {
             rigidbody = GetComponent<Rigidbody>();
+        }
+        if (collider == null)
+        {
+            collider = GetComponent<CapsuleCollider>();
         }
 
         InitObservedKey();
@@ -74,17 +81,26 @@ public partial class PlayerController : Controller, IControllable
     }
 
 #if UNITY_EDITOR
+    private GUIStyle GizmosGUIStyle = null;
     void OnDrawGizmos()
     {
         if (m_FSM == null)
             return;
 
-        GUIStyle style = new GUIStyle();
-        style.richText = true;
+        if (GizmosGUIStyle == null)
+        { 
+            GUIStyle style = new GUIStyle();
+            style.richText = true;
+            GizmosGUIStyle = style;
+        }
         var state = string.Format("<color=red>{0}</color>", ((StateType)m_FSM.currentState.stateKey).ToString());
-        Handles.Label(transform.position, state, style);
+        var jump = string.Format("<color=red>Jump:{0}/{1}</color>", JumpCounter.ToString(), CanJumpTime.ToString());
+        var ground = string.Format("<color=red>Grounded:{0}</color>", grounded.ToString());
+        string str = state + "\n" + jump + "\n" + ground;
+        Handles.Label(transform.position, str, GizmosGUIStyle);
         Handles.color = Color.red;
 
+        Gizmos.color = Color.red; 
         Gizmos.DrawWireSphere(transform.position + k_GroundedOffset, k_GroundedRadius);
     }
 #endif

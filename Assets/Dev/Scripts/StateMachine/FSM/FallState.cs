@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using StateType = PlayerController.StateType;
-public class JumpState : State
+
+public class FallState : State
 {
-    public JumpState(IControllable controllable, int stateKey = -1) : base(stateKey)
+    public FallState(IControllable controllable, int stateKey = -1) : base(stateKey)
     {
         this.controllable = controllable;
     }
-    public override bool OnEnter(int stateKey = -1)
-    {
-        controllable.Jump(Time.deltaTime);
-        return true;
-    }
+
     public override bool OnUpdate(float timeStep = 0)
     {
         if (controllable == null)
@@ -22,6 +19,7 @@ public class JumpState : State
         var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
 
         controllable.Motion(Time.deltaTime);
+
 
         if (anyJump && controllable.CanJump())
         {

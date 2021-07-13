@@ -55,7 +55,7 @@ public partial class PlayerController : Controller, IControllable
         {
             if (Input.GetKeyDown(keyCode) || Input.GetKey(keyCode))
             {
-                if (!IsKeyOn(keyCode))
+                if (!GetKey(keyCode))
                 {
                     DebugInput(keyCode, " Down");
                     RecordKey(keyCode);
@@ -63,7 +63,7 @@ public partial class PlayerController : Controller, IControllable
             }
             if(Input.GetKeyUp(keyCode) || !Input.GetKey(keyCode))
             {
-                if (IsKeyOn(keyCode))
+                if (GetKey(keyCode))
                 { 
                     DebugInput(keyCode, " Up");
                     ClearKey(keyCode);
@@ -76,7 +76,7 @@ public partial class PlayerController : Controller, IControllable
     /// </summary>
     /// <param name="keyCode"></param>
     /// <returns></returns>
-    public bool IsKeyOn(KeyCode keyCode)
+    public bool GetKey(KeyCode keyCode)
     {
         if (!keyPressBook.ContainsKey(keyCode))
         {
@@ -85,6 +85,11 @@ public partial class PlayerController : Controller, IControllable
         }
 
         return keyPressBook[keyCode] > 0;
+    }
+
+    public bool GetKeyDown(KeyCode keyCode)
+    {
+        return Input.GetKeyDown(keyCode);
     }
 
     /// <summary>

@@ -53,6 +53,7 @@ public partial class PlayerController : Controller, IControllable
         if (rigidbody)
         {
             rigidbody.velocity = velocity;
+            rigidbody.MovePosition(rigidbody.position + velocity * timeStep );
         }
 
         velocity = Vector3.zero;
@@ -95,8 +96,30 @@ public partial class PlayerController : Controller, IControllable
             }
         }
 
+        //grounded = Physics.CheckCapsule(collider.bounds.center, new Vector3(collider.bounds.center.x, collider.bounds.min.y - 0.1f, collider.bounds.center.z), 0.18f);
+
         return grounded;
     }
+
+    //make sure u replace "floor" with your gameobject name.on which player is standing
+    void OnCollisionEnter(Collision theCollision)
+    {
+        if (theCollision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            grounded = true;
+        }
+        //collider.
+    }
+
+    ////consider when character is jumping .. it will exit collision.
+    //void OnCollisionExit(Collision theCollision)
+    //{
+    //    if (theCollision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+    //    {
+    //        grounded = false;
+    //    }
+    //}
+
 
     private bool anyMoveInput = false;
     public bool IsMoving()
@@ -114,22 +137,22 @@ public partial class PlayerController : Controller, IControllable
     {
         anyMoveInput = false;
 
-        if (IsKeyOn(InputDefine.Forward))
+        if (GetKey(InputDefine.Forward))
         {
             anyMoveInput = anyMoveInput || true;
             this.MoveForward(Time.deltaTime);
         }
-        if (IsKeyOn(InputDefine.Backward))
+        if (GetKey(InputDefine.Backward))
         {
             anyMoveInput = anyMoveInput || true;
             this.MoveBackward(Time.deltaTime);
         }
-        if (IsKeyOn(InputDefine.Left))
+        if (GetKey(InputDefine.Left))
         {
             anyMoveInput = anyMoveInput || true;
             this.TurnLeft(Time.deltaTime);
         }
-        if (IsKeyOn(InputDefine.Right))
+        if (GetKey(InputDefine.Right))
         {
             anyMoveInput = anyMoveInput || true;
             this.TurnRight(Time.deltaTime);

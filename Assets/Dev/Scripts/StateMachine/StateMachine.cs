@@ -27,11 +27,11 @@ public class StateMachine : State
 
         Debug.Log(((PlayerController.StateType)currentState.stateKey).ToString());
 
-        state.OnEnter();
+        state.OnEnter(lastState != null ? lastState.stateKey : -1);
 
         return false;
     }
-    public override bool OnEnter()
+    public override bool OnEnter(int stateKey = -1)
     {
         if (currentState == null)
         {

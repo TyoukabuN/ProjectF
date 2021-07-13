@@ -21,7 +21,7 @@ public abstract class State
 
         return true;
     }
-    public virtual bool OnEnter()
+    public virtual bool OnEnter(int stateKey=-1)
     {
         return true;
     }
