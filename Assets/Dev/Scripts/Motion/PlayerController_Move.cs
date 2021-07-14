@@ -7,6 +7,12 @@ public partial class PlayerController : Controller, IControllable
 {
     //Physice Properties
     public float Speed = 20;
+    public float RuningSpeedMul = 1.8f;
+    [SerializeField]private float SpeedMul = 1;
+    public float FinalHorizontalSpeed
+    {
+        get { return Speed * SpeedMul; }
+    }
     [Range(0f,1f)]
     public float StopSmoothParam = 0.3f;
     private Vector3 velocity = Vector3.zero;
@@ -20,28 +26,28 @@ public partial class PlayerController : Controller, IControllable
     public Vector3 gravity = -Vector3.up * 10f;
     public void MoveForward(float timeStep = 0)
     {
-        horizontalVelocity += Vector3.forward * Speed;
+        horizontalVelocity += Vector3.forward * FinalHorizontalSpeed;
     }
     public void MoveBackward(float timeStep = 0)
     {
-        horizontalVelocity -= Vector3.forward * Speed;
+        horizontalVelocity -= Vector3.forward * FinalHorizontalSpeed;
     }
 
     public void TurnLeft(float timeStep = 0)
     {
-        horizontalVelocity -= Vector3.right * Speed;
+        horizontalVelocity -= Vector3.right * FinalHorizontalSpeed;
     }
 
     public void TurnRight(float timeStep = 0)
     {
-        horizontalVelocity += Vector3.right * Speed;
+        horizontalVelocity += Vector3.right * FinalHorizontalSpeed;
     }
 
     public void Motion(float timeStep = 0)
     {
-        if (horizontalVelocity.magnitude > maxHorizontalVelocity)
+        if (horizontalVelocity.magnitude > FinalHorizontalSpeed)
         {
-            horizontalVelocity = horizontalVelocity.normalized * maxHorizontalVelocity;
+            horizontalVelocity = horizontalVelocity.normalized * FinalHorizontalSpeed;
         }
         if (verticalVelocity.magnitude > maxVerticalVelocity)
         {
@@ -120,9 +126,15 @@ public partial class PlayerController : Controller, IControllable
     }
 
 
+    public float GetMoveSpeedMul()
+    {
+        return SpeedMul;
+    }
+
     public bool OnInputCheck_Move(float timeStep = 0)
     {
         anyMoveInput = false;
+
 
         if (GetKey(InputDefine.Forward))
         {
@@ -144,6 +156,32 @@ public partial class PlayerController : Controller, IControllable
             anyMoveInput = anyMoveInput || true;
             this.TurnRight(Time.deltaTime);
         }
+
+        //if (GetKey(InputDefine.Forward) ||
+        //    GetKey(InputDefine.Backward) ||
+        //    GetKey(InputDefine.Left) ||
+        //    GetKey(InputDefine.Right))
+        //{
+        //    anyMoveInput = anyMoveInput || true;
+        //}
+
+        if (SpeedMul <= 1.00001)
+        {
+            if (IsDoubleClick(InputDefine.Forward) ||
+                IsDoubleClick(InputDefine.Backward) ||
+                IsDoubleClick(InputDefine.Left) ||
+                IsDoubleClick(InputDefine.Right))
+            {
+                SpeedMul = RuningSpeedMul;
+            }
+        }
+        else if(!anyMoveInput)
+        {
+            SpeedMul = 1f;
+        }
+
+
+
         return anyMoveInput;
     }
 

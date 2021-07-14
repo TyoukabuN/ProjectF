@@ -15,7 +15,7 @@ public interface IControllable
     void Motion(float timeStep = 0);
     bool OnInputCheck_Move(float timeStep = 0);
     bool OnInputCheck_Jump(float timeStep = 0);
-
     bool IsMoving();
+    float GetMoveSpeedMul();
     bool IsGround();
 }

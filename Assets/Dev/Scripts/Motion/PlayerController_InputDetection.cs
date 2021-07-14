@@ -131,7 +131,7 @@ public partial class PlayerController : Controller, IControllable
     /// <summary>
     /// 连击的间隔
     /// </summary>
-    private float comboInterval = 0.1f;
+    [SerializeField]private float comboInterval = 0.1f;
 
     /// <summary>
     /// 相同按钮的连击判断
