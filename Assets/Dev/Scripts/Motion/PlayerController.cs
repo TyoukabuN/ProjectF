@@ -93,10 +93,11 @@ public partial class PlayerController : Controller, IControllable
             style.richText = true;
             GizmosGUIStyle = style;
         }
-        var state = string.Format("<color=red>{0}</color>", ((StateType)m_FSM.currentState.stateKey).ToString());
-        var jump = string.Format("<color=red>Jump:{0}/{1}</color>", JumpCounter.ToString(), CanJumpTime.ToString());
-        var ground = string.Format("<color=red>Grounded:{0}</color>", grounded.ToString());
-        string str = state + "\n" + jump + "\n" + ground;
+        var state = string.Format("<color=red>状态:{0}</color>", ((StateType)m_FSM.currentState.stateKey).ToString());
+        var jump = string.Format("<color=red>跳跃:{0}/{1}</color>", JumpCounter.ToString(), CanJumpTime.ToString());
+        var speed = string.Format("<color=red>速度:{0}</color>", FinalHorizontalSpeed.ToString());
+        var ground = string.Format("<color=red>着地:{0}</color>", grounded.ToString());
+        string str = state + "\n" + jump + "\n" + speed + "\n" + ground;
         Handles.Label(transform.position, str, GizmosGUIStyle);
         Handles.color = Color.red;
 
