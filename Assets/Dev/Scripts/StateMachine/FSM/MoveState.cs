@@ -8,6 +8,12 @@ public class MoveState : State
     {
         this.controllable = controllable;
     }
+    public override bool OnEnter(int stateKey = -1)
+    {
+        controllable.SetAnimatorTrigger("Move");
+
+        return true;
+    }
     public override bool OnUpdate(float timeStep = 0)
     {
         if (controllable == null)

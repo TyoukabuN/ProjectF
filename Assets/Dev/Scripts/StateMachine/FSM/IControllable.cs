@@ -18,4 +18,5 @@ public interface IControllable
     bool IsMoving();
     float GetMoveSpeedMul();
     bool IsGround();
+    void SetAnimatorTrigger(string name);
 }

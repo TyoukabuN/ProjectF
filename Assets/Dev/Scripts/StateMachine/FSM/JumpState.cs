@@ -23,6 +23,8 @@ public class JumpState : State
 
         controllable.Motion(Time.deltaTime);
 
+        controllable.SetAnimatorTrigger(anyMove?"Move":"Stand");
+
         if (anyJump && controllable.CanJump())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
