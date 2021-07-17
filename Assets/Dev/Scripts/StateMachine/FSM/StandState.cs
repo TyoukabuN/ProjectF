@@ -8,6 +8,12 @@ public class StandState : State
     {
         this.controllable = controllable;
     }
+    public override bool OnEnter(int stateKey = -1)
+    {
+        controllable.SetAnimatorTrigger("Stand");
+
+        return true;
+    }
     public override bool OnUpdate(float timeStep = 0)
     {
         var anyMove = controllable.OnInputCheck_Move(Time.deltaTime);

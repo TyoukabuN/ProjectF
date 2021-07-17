@@ -3,20 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public partial class PlayerController : Controller, IControllable
+public partial class PlayerController
 {
-    public struct KeyRecord
-    {
-        public KeyCode keyCode;
-        public float time;
-
-        public KeyRecord(KeyCode keyCoded, float time)
-        {
-            this.keyCode = keyCoded;
-            this.time = time;
-        }
-    }
-
     //time interval of key down
     private Dictionary<KeyCode, float> keyPressBook = new Dictionary<KeyCode, float>();
     private List<KeyRecord> keyRecordList = new List<KeyRecord>();
@@ -157,6 +145,18 @@ public partial class PlayerController : Controller, IControllable
             }
         }
         return click >= combo;
+    }
+
+    public struct KeyRecord
+    {
+        public KeyCode keyCode;
+        public float time;
+
+        public KeyRecord(KeyCode keyCoded, float time)
+        {
+            this.keyCode = keyCoded;
+            this.time = time;
+        }
     }
 }
 

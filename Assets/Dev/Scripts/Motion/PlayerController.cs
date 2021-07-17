@@ -31,6 +31,7 @@ public partial class PlayerController : Controller, IControllable
     private CharacterController characterController;
     private new Rigidbody rigidbody;
     private CapsuleCollider collider;
+    private Animator animator;
 
 
     void Awake()
@@ -62,6 +63,10 @@ public partial class PlayerController : Controller, IControllable
         if (collider == null)
         {
             collider = GetComponent<CapsuleCollider>();
+        }
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
         }
 
         InitObservedKey();

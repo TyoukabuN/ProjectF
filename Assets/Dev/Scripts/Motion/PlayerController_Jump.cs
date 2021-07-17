@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public partial class PlayerController : Controller, IControllable
+public partial class PlayerController 
 {
     public float JumpSpeed = 10;
     public int CanJumpTime = 2;
