@@ -42,7 +42,7 @@ public partial class PlayerController : Controller, IControllable
     }
 
     public bool Debug_Input = false;
-    public void DebugInput(KeyCode keyCode,string exStr)
+    public void DebugInput(KeyCode keyCode,string exStr = "")
     {
         if (Debug_Input)
         { 
