@@ -10,7 +10,7 @@ public class JumpState : State
     }
     public override bool OnEnter(int stateKey = -1)
     {
-        controllable.Jump(Time.deltaTime);
+         controllable.Jump(Time.deltaTime);
         return true;
     }
     public override bool OnUpdate(float timeStep = 0)
