@@ -19,4 +19,6 @@ public interface IControllable
     float GetMoveSpeedMul();
     bool IsGround();
     void SetAnimatorTrigger(string name);
+    Vector3 GetForwardVector();
+    Vector3 GetRightVector();
 }

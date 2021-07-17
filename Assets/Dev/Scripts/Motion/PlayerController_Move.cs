@@ -13,48 +13,75 @@ public partial class PlayerController
     {
         get { return Speed * SpeedMul; }
     }
+    public float FinalVerticalSpeed
+    {
+        get { return JumpSpeed * SpeedMul; }
+    }
     [Range(0f,1f)]
     public float StopSmoothParam = 0.3f;
+    [Range(0f, 1f)]
+    public float RotationDragParam = 0.3f;
+
     private Vector3 velocity = Vector3.zero;
 
     public Vector3 horizontalVelocity = Vector3.zero;
     public Vector3 verticalVelocity = Vector3.zero;
 
-    public float maxHorizontalVelocity = 3;
-    public float maxVerticalVelocity = 3;
-
     public Vector3 gravity = -Vector3.up * 10f;
+
+    private Vector3 tempForward = Vector3.zero;
+    private Vector3 tempRight = Vector3.zero;
+
+    public Vector3 GetForwardVector()
+    {
+        if (followingCamera)
+        {
+            tempForward.Set(followingCamera.transform.forward.x, 0, followingCamera.transform.forward.z);
+            return tempForward.normalized;
+        }
+        return Vector3.forward;
+    }
+    public Vector3 GetRightVector()
+    {
+        if (followingCamera)
+        {
+            tempRight.Set(followingCamera.transform.right.x, 0, followingCamera.transform.right.z);
+            return tempRight.normalized;
+        }
+        return Vector3.right;
+    }
     public void MoveForward(float timeStep = 0)
     {
-        horizontalVelocity += Vector3.forward * FinalHorizontalSpeed;
+        horizontalVelocity += GetForwardVector() * FinalHorizontalSpeed;
     }
     public void MoveBackward(float timeStep = 0)
     {
-        horizontalVelocity -= Vector3.forward * FinalHorizontalSpeed;
+        horizontalVelocity -= GetForwardVector() * FinalHorizontalSpeed;
     }
 
     public void TurnLeft(float timeStep = 0)
     {
-        horizontalVelocity -= Vector3.right * FinalHorizontalSpeed;
+        horizontalVelocity -= GetRightVector() * FinalHorizontalSpeed;
     }
 
     public void TurnRight(float timeStep = 0)
     {
-        horizontalVelocity += Vector3.right * FinalHorizontalSpeed;
+        horizontalVelocity += GetRightVector() * FinalHorizontalSpeed;
     }
 
     public void Motion(float timeStep = 0)
     {
+        //limit
         if (horizontalVelocity.magnitude > FinalHorizontalSpeed)
         {
             horizontalVelocity = horizontalVelocity.normalized * FinalHorizontalSpeed;
         }
-        if (verticalVelocity.magnitude > maxVerticalVelocity)
+        if (verticalVelocity.magnitude > FinalVerticalSpeed)
         {
-            verticalVelocity = verticalVelocity.normalized * maxVerticalVelocity;
+            verticalVelocity = verticalVelocity.normalized * FinalVerticalSpeed;
         }
 
-
+        //displacement
         velocity = horizontalVelocity + verticalVelocity;
         if (rigidbody)
         {
@@ -63,6 +90,14 @@ public partial class PlayerController
         }
 
         velocity = Vector3.zero;
+
+        //rotation
+        if (anyMoveInput)
+        {
+            var forward = Vector3.Lerp(transform.forward, GetForwardVector(), RotationDragParam);
+            forward.y = 0;
+            transform.forward = forward.normalized;
+        }
 
         //drag
         if (!anyMoveInput)

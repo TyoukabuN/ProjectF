@@ -22,7 +22,7 @@ public partial class PlayerController
         JumpCounter = 0;
         return true;
     }
-    public float jumpAddtion = 0.01f;
+    public float jumpAddtion = 0.05f;
     public void Jump(float timeStep = 0)
     {
         if (JumpCounter >= CanJumpTime)

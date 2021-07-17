@@ -29,10 +29,11 @@ public partial class PlayerController : Controller, IControllable
     public static PlayerController current;
 
     private CharacterController characterController;
-    private new Rigidbody rigidbody;
-    private CapsuleCollider collider;
     private Animator animator;
+    [SerializeField]private Camera followingCamera;
 
+    private new Rigidbody rigidbody;
+    private new CapsuleCollider collider;
 
     void Awake()
     {
