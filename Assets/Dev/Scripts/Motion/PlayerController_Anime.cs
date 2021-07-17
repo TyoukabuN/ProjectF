@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class PlayerController : Controller, IControllable
+public partial class PlayerController
 {
     public void SetAnimatorTrigger(string name)
     {

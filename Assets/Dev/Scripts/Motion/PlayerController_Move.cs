@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public partial class PlayerController : Controller, IControllable
+public partial class PlayerController
 {
     //Physice Properties
     public float Speed = 20;
