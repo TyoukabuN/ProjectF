@@ -367,6 +367,10 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: 5a3039a91c2d04c6f9c03393d7a2938a, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 906286c99fb2d4067a01f807dd4fd739, type: 2}
     - target: {fileID: 400002, guid: 5a3039a91c2d04c6f9c03393d7a2938a, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -379,10 +383,6 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 14
       objectReference: {fileID: 0}
-    - target: {fileID: 2300000, guid: 5a3039a91c2d04c6f9c03393d7a2938a, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 906286c99fb2d4067a01f807dd4fd739, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a3039a91c2d04c6f9c03393d7a2938a, type: 3}
 --- !u!1 &367798301
@@ -492,7 +492,7 @@ GameObject:
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
-  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -536,7 +536,7 @@ MonoBehaviour:
   RuningSpeedMul: 2.5
   SpeedMul: 1
   StopSmoothParam: 0.8
-  RotationDragParam: 0.08
+  RotationDragParam: 0.5
   horizontalVelocity: {x: 0, y: 0, z: 0}
   verticalVelocity: {x: 0, y: 0, z: 0}
   gravity: {x: -0, y: -30, z: -0}

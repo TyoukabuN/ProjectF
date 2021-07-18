@@ -94,7 +94,8 @@ public partial class PlayerController
         //rotation
         if (anyMoveInput)
         {
-            var forward = Vector3.Lerp(transform.forward, GetForwardVector(), RotationDragParam);
+            //var forward = Vector3.Lerp(transform.forward, GetForwardVector(), RotationDragParam);
+            var forward = Vector3.Lerp(transform.forward, horizontalVelocity.normalized, RotationDragParam);
             forward.y = 0;
             transform.forward = forward.normalized;
         }
