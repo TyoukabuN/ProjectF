@@ -18,9 +18,9 @@ public partial class PlayerController
         get { return JumpSpeed * SpeedMul; }
     }
     [Range(0f,1f)]
-    public float StopSmoothParam = 0.3f;
+    public float Damping = 0.3f;
     [Range(0f, 1f)]
-    public float RotationDragParam = 0.3f;
+    public float RotationDamping = 0.3f;
 
     private Vector3 velocity = Vector3.zero;
 
@@ -95,15 +95,15 @@ public partial class PlayerController
         if (anyMoveInput)
         {
             //var forward = Vector3.Lerp(transform.forward, GetForwardVector(), RotationDragParam);
-            var forward = Vector3.Lerp(transform.forward, horizontalVelocity.normalized, RotationDragParam);
+            var forward = Vector3.Lerp(transform.forward, horizontalVelocity.normalized, RotationDamping);
             forward.y = 0;
             transform.forward = forward.normalized;
         }
 
-        //drag
+        //damp
         if (!anyMoveInput)
         { 
-            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, StopSmoothParam);
+            horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Damping);
         }
 
         if (!IsGround())
