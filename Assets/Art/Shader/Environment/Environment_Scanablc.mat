@@ -24,11 +24,11 @@ Material:
         m_Scale: {x: 0.25, y: 0.25}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AutoScanMul: 3
-    - _BackGradient: 1.54
+    - _AutoScanMul: 6.3
+    - _BackGradient: 3.87
     - _ForwardGradient: 0
     - _ScanLineWidth: 0.05
-    - _ScaningRadius: 20
+    - _ScaningRadius: 10
     m_Colors:
     - _ScanLineAppearCenter: {r: 0, g: 0, b: 0, a: 0}
     - _ScanLineColor: {r: 0.10849059, g: 1, b: 0.7106584, a: 1}
