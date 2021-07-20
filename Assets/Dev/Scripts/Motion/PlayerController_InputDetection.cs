@@ -34,7 +34,7 @@ public partial class PlayerController
     {
         if (Debug_Input)
         { 
-            Debug.Log(keyCode + exStr);
+            //Debug.Log(keyCode + exStr);
         }
     }
     public void Update_InputDetection()

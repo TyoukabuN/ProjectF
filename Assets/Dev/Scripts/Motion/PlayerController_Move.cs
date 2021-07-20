@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 using System;
 
 public partial class PlayerController
@@ -32,8 +33,23 @@ public partial class PlayerController
     private Vector3 tempForward = Vector3.zero;
     private Vector3 tempRight = Vector3.zero;
 
+    void OnCameraCutEvent(CinemachineBrain brain)
+    {
+
+    }
+    [SerializeField]private CinemachineVirtualCamera continuousVC;
+    void OnCameraActivatedEvent(ICinemachineCamera now, ICinemachineCamera pre)
+    {
+        continuousVC = pre as CinemachineVirtualCamera;
+    }
+
     public Vector3 GetForwardVector()
     {
+        if (continuousVC != null)
+        {
+            tempForward.Set(continuousVC.VirtualCameraGameObject.transform.forward.x, 0, continuousVC.VirtualCameraGameObject.transform.forward.z);
+            return tempForward.normalized;
+        }
         if (followingCamera)
         {
             tempForward.Set(followingCamera.transform.forward.x, 0, followingCamera.transform.forward.z);
@@ -43,6 +59,11 @@ public partial class PlayerController
     }
     public Vector3 GetRightVector()
     {
+        if (continuousVC != null)
+        {
+            tempForward.Set(continuousVC.VirtualCameraGameObject.transform.right.x, 0, continuousVC.VirtualCameraGameObject.transform.right.z);
+            return tempForward.normalized;
+        }
         if (followingCamera)
         {
             tempRight.Set(followingCamera.transform.right.x, 0, followingCamera.transform.right.z);
@@ -71,6 +92,7 @@ public partial class PlayerController
 
     public void Motion(float timeStep = 0)
     {
+        //Cinemachine.CinemachineBrain.
         //limit
         if (horizontalVelocity.magnitude > FinalHorizontalSpeed)
         {
@@ -104,6 +126,7 @@ public partial class PlayerController
         if (!anyMoveInput)
         { 
             horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Damping);
+            continuousVC = null;
         }
 
         if (!IsGround())

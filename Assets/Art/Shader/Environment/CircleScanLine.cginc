@@ -3,7 +3,7 @@
 
 #include "UnityCG.cginc"
 
-float3 _ScanLineAppearCenter;
+float4 _ScanLineAppearCenter;
 float _ScanLineWidth;
 
 float _ForwardGradient;
@@ -14,7 +14,7 @@ float4 _ScanLineTestParam;
 float CompoutScanLinePct(float scaningRadius,float3 wpos,float addtion)
 {
 	wpos.y = 0;
-	float3 vec3 = wpos - _ScanLineAppearCenter;
+	float3 vec3 = wpos - _ScanLineAppearCenter.xyz;
 	vec3 += normalize(vec3) * _ScanLineTestParam.y;
 
 	float halfW = _ScanLineWidth * 0.5;

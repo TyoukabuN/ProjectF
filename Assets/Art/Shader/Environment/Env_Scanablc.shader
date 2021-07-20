@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _ScanLineAppearCenter ("ScanLineAppearPoint", Vector) = (0,0,0,0)
+        //_ScanLineAppearCenter ("ScanLineAppearPoint", Vector) = (0,0,0,0)
         _ScanLineWidth ("ScanLineWidth", float) = 0.5
         _ScanLineColor ("ScanLineColor",Color)= (1,1,1,1)
 
@@ -60,13 +60,16 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
+                fixed4 texColor = tex2D(_MainTex, i.uv);
 
                 float pct = CompoutScanLinePct(_ScaningRadius,i.wpos,_Time.y*_AutoScanMul);
 
-                col = lerp(col,_ScanLineColor + col,pct);
+                fixed4 col = lerp(texColor,_ScanLineColor + texColor,pct);
+
+                col = lerp(texColor,col,step(0.001,_ScanLineAppearCenter.w));
+                // apply fog
+                UNITY_APPLY_FOG(i.fogCoord, col);
+
                 return col;
             }
             ENDCG

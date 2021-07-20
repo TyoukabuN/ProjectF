@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -28,12 +29,13 @@ public partial class PlayerController : Controller, IControllable
 
     public static PlayerController current;
 
-    private CharacterController characterController;
     private Animator animator;
     [SerializeField]private Camera followingCamera;
+    private CharacterController characterController;
+    private CinemachineBrain cinemachineBrain;
 
-    private new Rigidbody rigidbody;
     private new CapsuleCollider collider;
+    private new Rigidbody rigidbody;
 
     void Awake()
     {
@@ -69,6 +71,18 @@ public partial class PlayerController : Controller, IControllable
         {
             animator = GetComponentInChildren<Animator>();
         }
+        if (cinemachineBrain == null && Camera.main)
+        {
+            cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
+            if (cinemachineBrain)
+            {
+                cinemachineBrain.m_CameraCutEvent.RemoveListener(OnCameraCutEvent);
+                cinemachineBrain.m_CameraCutEvent.AddListener(OnCameraCutEvent);
+                cinemachineBrain.m_CameraActivatedEvent.RemoveListener(OnCameraActivatedEvent);
+                cinemachineBrain.m_CameraActivatedEvent.AddListener(OnCameraActivatedEvent);
+            }
+        }
+
 
         InitObservedKey();
     }
@@ -76,6 +90,7 @@ public partial class PlayerController : Controller, IControllable
     // Update is called once per frame
     void FixedUpdate()
     {
+        Update_CircleScanLine();
         Update_InputDetection();
 
         if (m_FSM != null)
