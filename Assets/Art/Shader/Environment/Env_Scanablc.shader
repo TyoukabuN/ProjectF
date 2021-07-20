@@ -65,7 +65,7 @@
                 UNITY_APPLY_FOG(i.fogCoord, col);
 
                 float pct = CompoutScanLinePct(_ScaningRadius,i.wpos,_Time.y*_AutoScanMul);
-                //return float4(pct,pct,pct,1);
+
                 col = lerp(col,_ScanLineColor + col,pct);
                 return col;
             }

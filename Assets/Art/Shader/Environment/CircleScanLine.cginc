@@ -29,6 +29,7 @@ float CompoutScanLinePct(float scaningRadius,float3 wpos,float addtion)
 
 	addtion *= -1;
 	//minues part
+	//special process because gradient part will inverse when addtion is negative
 	float integral = 0;
 	float fractional = modf(abs(addtion)/scaningRadius,integral);
 	integral += 1;
