@@ -1,25 +1,16 @@
-﻿Shader "Tyouka/Env/Scanablc"
+﻿Shader "Tyouka/Env/Transparency"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        //_ScanLineAppearCenter ("ScanLineAppearPoint", Vector) = (0,0,0,0)
-        _ScanLineWidth ("ScanLineWidth", float) = 0.5
-        _ScanLineColor ("ScanLineColor",Color)= (1,1,1,1)
-
-        _ScaningRadius ("ScaningRadius",float)= 0.5
-        _AutoScanMul ("AutoScanMul",float)= 0
-
-        _ForwardGradient ("ForwardGradient",float)= 5
-        _BackGradient ("BackGradient",float)= 5
-
-        _ScanLineTestParam ("ScanLineTestParam", Vector) = (0,0,0,0)
+        _FadeOutParam ("FadeOutParam",Vector) = (0,0,0,0)
+        [Enum(UnityEngine.Rendering.BlendMode)]_SrcBlend ("SrcBlend",float) = 5
+        [Enum(UnityEngine.Rendering.BlendMode)]_DistBlend ("SrcBlend",float) = 10
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
-        LOD 100
-
+        Tags { "Queue"="Transparent" }
+        Blend [_SrcBlend][_DistBlend]
         Pass
         {
             CGPROGRAM
@@ -31,6 +22,7 @@
             #include "UnityCG.cginc"
             #include "CircleScanLine.cginc"
 
+
             struct v2f
             {
                 float2 uv : TEXCOORD0;
@@ -41,10 +33,8 @@
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            float4 _ScanLineColor;
-            float _AutoScanMul;
-
-            float _ScaningRadius;
+            float4 _FadeOutParam;
+            float4 _Realtime;
 
             v2f vert (appdata_base v)
             {
@@ -58,16 +48,18 @@
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
-                fixed4 texColor = tex2D(_MainTex, i.uv);
+                float param  = 1 - saturate((_FadeOutParam.y - _Realtime.y)/(_FadeOutParam.y - _FadeOutParam.x));
+                float targetAlpha = lerp(_FadeOutParam.z,_FadeOutParam.w,param);
 
-                float pct = CompoutScanLinePct(_ScaningRadius,i.wpos,_Time.y*_AutoScanMul);
+                targetAlpha = lerp(1,targetAlpha,step(0.001,_FadeOutParam.x));
 
-                fixed4 col = lerp(texColor,_ScanLineColor + texColor,pct);
+                fixed4 texColor = tex2D(_MainTex, i.uv); 
 
-                col = lerp(texColor,col,step(0.001,_ScanLineAppearCenter.w));
-                // apply fog
+                float4 col = texColor;
+
                 UNITY_APPLY_FOG(i.fogCoord, col);
+
+                col.a *= targetAlpha;
 
                 return col;
             }
