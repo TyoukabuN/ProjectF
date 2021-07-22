@@ -6,6 +6,8 @@ public class ShaderHandle : MonoBehaviour
 {
     public readonly static int Realtime_ID = Shader.PropertyToID("_Realtime");
     public readonly static int FadeOutParam_ID = Shader.PropertyToID("_FadeOutParam");
+    public readonly static int SrcBlend_ID = Shader.PropertyToID("_SrcFactor");
+    public readonly static int DstBlend_ID = Shader.PropertyToID("_DstFactor");
 
     private Vector4 realtimeVec4 = Vector4.zero;
     // Start is called before the first frame update
