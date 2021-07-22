@@ -37,7 +37,7 @@ public class ObstacleFadeOut : MonoBehaviour
     /// </summary>
     public List<ColdDownInfo> coldDownList = new List<ColdDownInfo>();
     /// <summary>
-    /// 冷切时间
+    /// 触发透明动画的冷却时间(包括淡入和淡出)
     /// </summary>
     public float TriggerInterval = 0.2f;
 
