@@ -128,6 +128,9 @@ namespace TMesh
             }
         }
 #if UNITY_EDITOR
+        public readonly static int Realtime_ID = Shader.PropertyToID("_XTime");
+
+        private Vector4 realtimeVec4 = Vector4.zero;
         void Update()
         {
             var sceneView = UnityEditor.SceneView.currentDrawingSceneView;
@@ -148,6 +151,10 @@ namespace TMesh
             
 
             transform.Translate(forward * v * Speed + right * h * Speed);
+
+            float t = Time.realtimeSinceStartup;
+            realtimeVec4.Set(t / 20, t, t * 2, t * 3);
+            Shader.SetGlobalVector(Realtime_ID, realtimeVec4);
         }
 #endif
     }
