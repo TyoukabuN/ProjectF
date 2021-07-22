@@ -9,9 +9,18 @@ using UnityEditor;
 
 public class ObstacleFadeOut : MonoBehaviour
 {
-    private Camera camera;
+    public float RecoverTimeStep = 0.5f;
+    public float RecoverCounter = 0.0f;
 
-    public List<Renderer> Renderer = new List<Renderer>();
+    public Vector2 ExtentsXY = new Vector2(2, 2);
+    public float fadeOutDuration = 1.0f;
+    public float lengthOffset = 0f;
+
+    private Camera camera;
+    [SerializeField]private List<Renderer> Renderer = new List<Renderer>();
+    private Vector3 tempVec3 = Vector3.zero;
+    private Vector4 tempVec4 = Vector4.zero;
+
     private void Awake()
     {
         if (!camera)
@@ -19,9 +28,6 @@ public class ObstacleFadeOut : MonoBehaviour
             camera = GetComponent<Camera>();
         }    
     }
-
-    public float RecoverTimeStep = 0.5f;
-    public float RecoverCounter = 0.0f;
 
     void Update()
     {
@@ -49,7 +55,6 @@ public class ObstacleFadeOut : MonoBehaviour
     }
 #endif
 
-    public float lengthOffset = 0f;
     public float length
     {
         get {
@@ -60,10 +65,7 @@ public class ObstacleFadeOut : MonoBehaviour
             return dir.magnitude + lengthOffset;
         }
     }
-    public Vector2 ExtentsXY = new Vector2(2, 2);
-    private Vector3 tempVec3 = Vector3.zero;
-    private Vector4 tempVec4 = Vector4.zero;
-    public float fadeOutDuration = 1.0f;
+
     public bool ScanObstacle()
     {
         if (!camera)
