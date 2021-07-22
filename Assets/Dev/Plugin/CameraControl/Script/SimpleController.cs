@@ -123,7 +123,7 @@ namespace TMesh
                     {
                         Debug.Log(123);
                     }
-                    
+
                 }
             }
         }
@@ -143,12 +143,12 @@ namespace TMesh
             var h = Input.GetAxis(HorizontalAxi);
             var v = Input.GetAxis(VerticalAxi);
 
-            var forward = new Vector3(sceneCam.transform.forward.x,0, sceneCam.transform.forward.z);
+            var forward = new Vector3(sceneCam.transform.forward.x, 0, sceneCam.transform.forward.z);
             forward.Normalize();
 
             var right = new Vector3(sceneCam.transform.right.x, 0, sceneCam.transform.right.z);
             right.Normalize();
-            
+
 
             transform.Translate(forward * v * Speed + right * h * Speed);
 
