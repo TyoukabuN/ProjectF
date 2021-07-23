@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FishingRod : MonoBehaviour
 {
+    public 
     // Start is called before the first frame update
     void Start()
     {
