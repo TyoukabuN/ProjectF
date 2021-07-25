@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: tyous_water
+  m_Shader: {fileID: 4800000, guid: 89faa7c6fe0ed5f49b618603483fe5e7, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 2800000, guid: f0c1d3101531cdb4d8a6a96f63710ae8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RampTex:
+        m_Texture: {fileID: 2800000, guid: 386aa73cce8f1bc4aa278d64a596ba3f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _DepthFactor: 3.01
+    - _FoamFactor: 0
+    - _RampColorIntensity: 1.06
+    - _waveHight: 0.029
+    - _waveScale: 1.3
+    - _waveSpeed: 59.27
+    m_Colors:
+    - _BottomColor: {r: 0.016544133, g: 0.020164903, b: 0.022058845, a: 1}
+    - _Color: {r: 0.222, g: 0.733924, b: 1, a: 0.516}
+    - _EdgeColor: {r: 0.44852942, g: 0.21107265, b: 0.21107265, a: 0.934}
+    - _FoamLineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _waveScale: {r: 1, g: 60.07, b: 1, a: 1}
