@@ -1,4 +1,4 @@
-﻿Shader "tyous/water"
+﻿Shader "Tyouka/Env/Unlit_Toon_Water"
 {
 	Properties{
 		_Color ("Color",color) = (1,1,1,1)
@@ -48,10 +48,10 @@
 				float4 wpos = mul(unity_ObjectToWorld, v.vertex);
 
 				float4 _sampler = tex2Dlod(_NoiseTex,float4(v.texcoord.xy * _NoiseTex_ST.xy + _NoiseTex_ST.zw,0,0));
-				wpos.y += sin(_Time.y + (v.texcoord.x + _sampler.x) * _waveScale.x) * _waveHight;
-				wpos.y += sin(_Time.y + (v.texcoord.y + _sampler.y) * _waveScale.y) * _waveHight;
-				// wpos.x += sin(_sampler.x + _waveScale.x + _Time.x *  _waveSpeed)* _waveHight;
-				// wpos.y += cos(_sampler.y + _waveScale.y + _Time.x *  _waveSpeed)* _waveHight;
+				//wpos.y += sin(_Time.y + (v.texcoord.x + _sampler.x) * _waveScale.x) * _waveHight;
+				//wpos.y += sin(_Time.y + (v.texcoord.y + _sampler.y) * _waveScale.y) * _waveHight;
+				 wpos.x += sin(_sampler.x + _waveScale.x + _Time.x *  _waveSpeed)* _waveHight;
+				 wpos.y += cos(_sampler.y + _waveScale.y + _Time.x *  _waveSpeed)* _waveHight;
 				o.pos = mul(UNITY_MATRIX_VP, wpos);
 				o.uv = v.texcoord;
 				o.screenPos = ComputeScreenPos(o.pos);
@@ -60,7 +60,7 @@
 			float4 frag(v2f i):SV_TARGET{
 				float4 depth = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture,UNITY_PROJ_COORD(i.screenPos));
 				
-				//LinearEyeDepth(depth) P下的z 没在ndc
+				//LinearEyeDepth(depth) 是在Project Space下的z 不是在ndc
 				//i.screenPos.w P下的-z 在齐次空间下screenPos为（x,y,z,-z） 参考projection matrix的生成过程 
 				//越深越大
 				 //( LinearEyeDepth(depth) - i.screenPos.w)
