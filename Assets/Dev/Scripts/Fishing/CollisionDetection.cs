@@ -9,6 +9,13 @@ public class CollisionDetection : MonoBehaviour
 {
     public List<Edge> Edges = new List<Edge>();
 
+    public int stepCount
+    {
+        get{
+            return Edges.Count;
+        }
+    }
+
     public static CollisionDetection current;
     private void Awake()
     {

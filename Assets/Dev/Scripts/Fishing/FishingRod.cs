@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(CollisionDetection))]
 public class FishingRod : MonoBehaviour
@@ -12,9 +13,11 @@ public class FishingRod : MonoBehaviour
     /// <summary>
     /// 绳子有多少节
     /// </summary>
-    public float m_FishLineStep = 10f;
+    public int m_FishLineStep = 10;
 
-    public float fishLineStep
+    public GameObject lineRoot;
+
+    public int fishLineStep
     {
         get
         {
@@ -52,6 +55,26 @@ public class FishingRod : MonoBehaviour
         if (!SelfCheck())
             return;
 
+        if (collisiionDetection.stepCount == m_FishLineStep)
+            return;
+
+        float diff = Mathf.Abs(collisiionDetection.stepCount - m_FishLineStep);
+        Func<bool> func = diff < 0 ? RemoveStep : AddStep;
+
+        for (int i = 0; i < diff; i++)
+        {
+            func();
+        }
+    }
+
+    public bool AddStep()
+    {
+        return true;
+    }
+
+    public bool RemoveStep()
+    {
+        return true;
     }
 
 }

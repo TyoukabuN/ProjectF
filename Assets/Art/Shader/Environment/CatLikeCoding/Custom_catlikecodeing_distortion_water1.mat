@@ -20,17 +20,17 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _FlowMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: fd30c83732d4e914ab03812e56d3840a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 36beb1edb0cdee541b3e983b5c2f4a36, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - PowerA: 1
     - PowerB: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0
     - _Metallic: 0
     - _UJump: 0.25
     - _VJump: 0.25
