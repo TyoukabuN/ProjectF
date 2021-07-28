@@ -2,18 +2,56 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(CollisionDetection))]
 public class FishingRod : MonoBehaviour
 {
-    public 
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// 鱼线有多长
+    /// </summary>
+    public float fishLineLength = 10.0f;
+    /// <summary>
+    /// 绳子有多少节
+    /// </summary>
+    public float m_FishLineStep = 10f;
+
+    public float fishLineStep
     {
-        
+        get
+        {
+            return m_FishLineStep;
+        }
+
+        set
+        {
+            if (value == m_FishLineStep)
+                return;
+
+            UpdateLineStep();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private CollisionDetection collisiionDetection;
+
+    private void Awake()
     {
-        
+        SelfCheck();
     }
+
+    public bool SelfCheck()
+    {
+        if (!collisiionDetection)
+            collisiionDetection = GetComponent<CollisionDetection>();
+
+        if (!collisiionDetection)
+            return false;
+        return true;
+    }
+
+    public void UpdateLineStep()
+    {
+        if (!SelfCheck())
+            return;
+
+    }
+
 }

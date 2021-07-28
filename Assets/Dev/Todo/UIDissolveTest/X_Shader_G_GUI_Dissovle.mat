@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Custom_catlikecodeing_distortion_water
-  m_Shader: {fileID: 4800000, guid: 34a006e84f367034baf298cfb6c5f3ed, type: 3}
+  m_Name: X_Shader_G_GUI_Dissovle
+  m_Shader: {fileID: 4800000, guid: 47d66a2cfcd9ef24ba4a8a571640c017, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,21 +19,27 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _FlowMap:
-        m_Texture: {fileID: 2800000, guid: fd30c83732d4e914ab03812e56d3840a, type: 3}
+    - _DissolveTex:
+        m_Texture: {fileID: 2800000, guid: e9752b862be038d4eb3cd31f9da8d306, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 36beb1edb0cdee541b3e983b5c2f4a36, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - PowerA: 0.598
-    - PowerB: 1
-    - _Glossiness: 0.5
-    - _Metallic: 0
-    - _TimeScale: 0.25
-    - _UJump: 0
-    - _VJump: 0
+    - _ColorMask: 15
+    - _DissolveFactor1: 0.377
+    - _DissolveFactor2: 0.595
+    - _DissolvePower: 166.90549
+    - _DissolvePreview: 0
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DissolvEdgeColor: {r: 0.91, g: 0.25, b: 0.05, a: 1}
+    - _EdgeColor: {r: 0.09, g: 0.09, b: 0.09, a: 1}

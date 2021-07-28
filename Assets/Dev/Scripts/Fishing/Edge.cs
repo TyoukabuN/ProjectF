@@ -10,7 +10,7 @@ public class Edge : MonoBehaviour
 {
     public Point[] points = new Point[2];
     public float originLength = 1;
-    public float tinyValue = 0.001f;
+    private float tinyValue = 0.001f;
 
     public void Tick()
     {

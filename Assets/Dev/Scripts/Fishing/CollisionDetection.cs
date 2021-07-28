@@ -52,8 +52,6 @@ public class CollisionDetection : MonoBehaviour
     void Update()
     {
         UpdateEdge();
-        UpdateEdge();
-        UpdateEdge();
     }
 
     public void UpdateEdge()
