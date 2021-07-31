@@ -7,9 +7,9 @@ using UnityEditor;
 
 public class Point : MonoBehaviour
 {
-    public Vector3 Acceleration;
+    public Vector3 Acceleration = new Vector3(0,-9.8f,0);
     public Vector3 OldPosition;
-    public bool simulate = false;
+    public bool simulate = true;
 
     public void Tick(float timeStep)
     {
@@ -30,23 +30,3 @@ public class Point : MonoBehaviour
     }
 }
 
-#if UNITY_EDITOR
-[CustomEditor(typeof(Point))]
-[CanEditMultipleObjects]
-public class PointCustom : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        if (GUILayout.Button("store current postion"))
-        {
-            foreach(var point in targets)
-            {
-                var target = point as Point;
-                target.OldPosition = target.transform.position;
-            }
-        }
-    }
-}
-#endif

@@ -2,20 +2,53 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.Animations;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-[RequireComponent(typeof(CollisionDetection))]
 public class FishingRod : MonoBehaviour
 {
     /// <summary>
     /// 鱼线有多长
     /// </summary>
-    public float fishLineLength = 10.0f;
+    private float fishLineLength = 10.0f;
     /// <summary>
     /// 绳子有多少节
     /// </summary>
-    public int m_FishLineStep = 10;
+    private int m_FishLineStep = 10;
 
-    public GameObject lineRoot;
+    public float stepLength = 1f;
+
+    public int StepCount
+    {
+        get {
+            return collisiionDetection.stepCount;
+        }
+    }
+    public Point LastPoint
+    {
+        get {
+            if (StepCount <= 0)
+            {
+                return null;
+            }
+            return collisiionDetection.Edges[StepCount - 1].points[1];
+        }
+    }
+    public Point RootPoint
+    {
+        get
+        {
+            if (StepCount <= 0)
+            {
+                return null;
+            }
+            return collisiionDetection.Edges[0].points[0];
+        }
+    }
+
+    private CollisionDetection collisiionDetection = new CollisionDetection();
 
     public int fishLineStep
     {
@@ -33,19 +66,22 @@ public class FishingRod : MonoBehaviour
         }
     }
 
-    private CollisionDetection collisiionDetection;
 
     private void Awake()
     {
         SelfCheck();
     }
+    private void Update()
+    {
+        collisiionDetection.OnUpdate();
+    }
 
     public bool SelfCheck()
     {
-        if (!collisiionDetection)
+        if (collisiionDetection == null)
             collisiionDetection = GetComponent<CollisionDetection>();
 
-        if (!collisiionDetection)
+        if (collisiionDetection == null)
             return false;
         return true;
     }
@@ -59,22 +95,105 @@ public class FishingRod : MonoBehaviour
             return;
 
         float diff = Mathf.Abs(collisiionDetection.stepCount - m_FishLineStep);
-        Func<bool> func = diff < 0 ? RemoveStep : AddStep;
 
         for (int i = 0; i < diff; i++)
         {
-            func();
+            if (diff < 0) {
+                RemoveStep();
+                continue;
+            }
+            AddStep();
         }
+    }
+    public Point GetPoint(string name = "")
+    {
+        return GetPoint(transform, name);
+    }
+
+    public Point GetPoint(Transform parent,string name = "")
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            name = string.Format("point_{0}", StepCount + 1);
+        }
+        var gobj = new GameObject(name);
+        Point point = gobj.AddComponent<Point>();
+
+        gobj.transform.position = parent.transform.position;
+        //
+        point.OldPosition = parent.position;
+
+        return point;
     }
 
     public bool AddStep()
     {
-        return true;
+        if (!LastPoint)
+        {
+            var root = GetPoint("lineRoot");
+            root.gameObject.transform.SetParent(transform, false);
+            root.gameObject.transform.localPosition = Vector3.zero;
+            root.simulate = false;
+
+            return collisiionDetection.AddEdge(root, GetPoint(), stepLength);
+        }
+        return collisiionDetection.AddEdge(LastPoint, GetPoint(LastPoint.transform), stepLength);
     }
 
     public bool RemoveStep()
     {
+        if (!LastPoint)
+        {
+            return false;
+        }
+
+        var edge = collisiionDetection.Edges[collisiionDetection.Edges.Count - 1];
+        collisiionDetection.RemoveEdge(edge);
         return true;
     }
 
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        foreach (var edge in collisiionDetection.Edges)
+        {
+            if (edge.points[0] == null)
+                return;
+
+            if (edge.points[1] == null)
+                return;
+
+            Gizmos.DrawLine(edge.points[0].transform.position, edge.points[1].transform.position);
+            Gizmos.color = Color.white;
+        }
+    }
+#endif
+
 }
+
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(FishingRod))]
+[CanEditMultipleObjects]
+public class FishingRodEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        FishingRod instance = target as FishingRod;
+
+        if (GUILayout.Button("Add Step"))
+        {
+            instance.AddStep();
+        }
+        if (GUILayout.Button("Remove Step"))
+        {
+            instance.RemoveStep();
+        }
+    }
+}
+
+
+#endif
+

@@ -2,15 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-public class Edge : MonoBehaviour
+
+public class Edge
 {
     public Point[] points = new Point[2];
     public float originLength = 1;
-    private float tinyValue = 0.001f;
+    private float tinyValue = 0.01f;
+
+    public Edge(Point p1, Point p2)
+    {
+        points[0] = p1;
+        points[1] = p2;
+    }
+
+    public Edge(Point p1, Point p2,float originLength):this(p1,p2)
+    {
+        this.originLength = originLength;
+    }
+
+    public bool Vaild()
+    {
+        return points[0]!=null && points[1] != null;
+    }
 
     public void Tick()
     {
@@ -28,6 +42,10 @@ public class Edge : MonoBehaviour
 
         var p1p2 = p2.transform.position - p1.transform.position;
 
+        if (p1p2.magnitude <= tinyValue)
+        {
+            p1p2 = Vector3.down * tinyValue;
+        }
         //var diff = Mathf.Abs(p1p2.magnitude - originLength);
         var diff = (p1p2.magnitude - originLength);
 
@@ -46,54 +64,5 @@ public class Edge : MonoBehaviour
         }
     }
 
-#if UNITY_EDITOR
-    void OnDrawGizmos()
-    {
-        if (points[0] == null)
-            return;
-
-        if (points[1] == null)
-            return;
-
-        Gizmos.color = Color.white;
-        if (Selection.activeGameObject == this.gameObject)
-        {
-            Gizmos.color = Color.yellow;
-        }
-
-        Gizmos.DrawLine(this.points[0].transform.position, this.points[1].transform.position);
-        Gizmos.color = Color.white;
-
-    }
-#endif
 }
-
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(Edge))]
-[CanEditMultipleObjects]
-public class EdgeCustom : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        if (GUILayout.Button("Add To Collision Detection"))
-        {
-            foreach (var edge in targets)
-            {
-                CollisionDetection.AddEdge(edge as Edge);
-            }
-        }
-        if (GUILayout.Button("Remove From Collision Detection"))
-        {
-            foreach (var edge in targets)
-            {
-                CollisionDetection.RemoveEdge(edge as Edge);
-            }
-        }
-    }
-}
-
-#endif
 

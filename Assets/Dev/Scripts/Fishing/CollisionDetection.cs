@@ -5,7 +5,7 @@ using TMesh;
 
 
 [ExecuteInEditMode]
-public class CollisionDetection : MonoBehaviour
+public class CollisionDetection
 {
     public List<Edge> Edges = new List<Edge>();
 
@@ -16,56 +16,58 @@ public class CollisionDetection : MonoBehaviour
         }
     }
 
-    public static CollisionDetection current;
-    private void Awake()
+    public bool AddEdge(Edge edge)
     {
-        if (current == null)
-            current = this;
-    }
-
-    public static bool AddEdge(Edge edge)
-    {
-        if (current == null)
-            current = GameObject.FindObjectOfType<CollisionDetection>();
-
-        if (current == null)
+        if (Edges.Contains(edge))
             return false;
 
-        if (current.Edges.Contains(edge))
-            return false;
-
-
-        current.Edges.Add(edge);
+        Edges.Add(edge);
         return true;
-        
     }
 
-    public static bool RemoveEdge(Edge edge)
+    public bool AddEdge(Point p1, Point p2)
     {
-        if (current == null)
-            current = GameObject.FindObjectOfType<CollisionDetection>();
+        return AddEdge(new Edge(p1, p2));
+    }
+    public bool AddEdge(Point p1, Point p2,float length)
+    {
+        return AddEdge(new Edge(p1, p2, length));
+    }
 
-        if (current == null)
+
+    public bool RemoveEdge(Edge edge)
+    {
+        if (!Edges.Contains(edge))
             return false;
 
-        if (!current.Edges.Contains(edge))
-            return false;
-
-
-        current.Edges.Remove(edge);
+        Edges.Remove(edge);
         return true;
 
     }
-    void Update()
+    public void OnUpdate()
     {
         UpdateEdge();
     }
 
-    public void UpdateEdge()
+    private void EdgeVaildCheck()
     {
+        for (int i = 0; i < Edges.Count; i++)
+        {
+            if (!Edges[i].Vaild())
+            { 
+                Edges.RemoveAt(i);
+                i--;
+            }
+        }
+    }
+
+    private void UpdateEdge()
+    {
+        EdgeVaildCheck();
+
         foreach (var edge in Edges)
         {
-            if (!edge)
+            if (edge == null)
                 continue;
 
             edge.Tick();
