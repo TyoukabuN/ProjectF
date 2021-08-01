@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.Animations;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -19,6 +20,10 @@ public class FishingRod : MonoBehaviour
     private int m_FishLineStep = 10;
 
     public float stepLength = 1f;
+
+    public float lineWidth = 0.1f;
+
+    public bool gizmos = true;
 
     public int StepCount
     {
@@ -49,6 +54,7 @@ public class FishingRod : MonoBehaviour
     }
 
     private CollisionDetection collisiionDetection = new CollisionDetection();
+    private LineRenderer lineRenderer;
 
     public int fishLineStep
     {
@@ -66,31 +72,25 @@ public class FishingRod : MonoBehaviour
         }
     }
 
-
     private void Awake()
     {
-        SelfCheck();
+        lineRenderer = GetComponent<LineRenderer>();
+        if (!lineRenderer)
+        {
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+        }
     }
     private void Update()
     {
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
+
         collisiionDetection.OnUpdate();
-    }
-
-    public bool SelfCheck()
-    {
-        if (collisiionDetection == null)
-            collisiionDetection = GetComponent<CollisionDetection>();
-
-        if (collisiionDetection == null)
-            return false;
-        return true;
+        UpdateLineRenderer();
     }
 
     public void UpdateLineStep()
     {
-        if (!SelfCheck())
-            return;
-
         if (collisiionDetection.stepCount == m_FishLineStep)
             return;
 
@@ -152,9 +152,29 @@ public class FishingRod : MonoBehaviour
         return true;
     }
 
+    public void UpdateLineRenderer()
+    {
+        if (StepCount <= 0)
+            return;
+
+        Vector3[] positions = new Vector3[StepCount + 1];
+        positions[0] = collisiionDetection.Edges[0].points[0].transform.position;
+        for (int i=0; i < StepCount;i++)
+        {
+            var edge = collisiionDetection.Edges[i];
+            positions[i + 1] = edge.points[1].transform.position;
+        }
+
+        lineRenderer.positionCount = positions.Length;
+        lineRenderer.SetPositions(positions);
+    }
+
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {
+        if (!gizmos)
+            return;
+
         foreach (var edge in collisiionDetection.Edges)
         {
             if (edge.points[0] == null)

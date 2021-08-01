@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: red
+  m_Shader: {fileID: 4800000, guid: 6145c9c3cf9d5934fb248c3b0e255f46, type: 3}
+  m_ShaderKeywords: _QUALITY_HIGH
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpSMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ElectricFlowFlowTex1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ElectricFlowFlowTex2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FrozenRandomTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GlossyEnvMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LowMatCap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MultiColorMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _Alphactl: 1
+    - _BumpScale: 1
+    - _ColorPower: 1
+    - _Cutoff: 0.5
+    - _DiffuseScatteringExponent: 8
+    - _DiffuseScatteringOffset: 0
+    - _DstBlend: 0
+    - _ElectricFlow: 0
+    - _ElectricFlowColorStrength: 1
+    - _ElectricFlowPow: 1
+    - _ElectricFlowWidth: 1
+    - _EnabledCustomLight: 0
+    - _Frezz: 0
+    - _Frozen: 0
+    - _Glossiness: 0.5
+    - _InputRendererParameter: 0
+    - _LightCameraDir: 0
+    - _LightPower: 1
+    - _LowMatCapPower: 2
+    - _Metallic: 0
+    - _Mode: 0
+    - _ModelFadePreview: 0.38
+    - _MultiColorEnabled: 0
+    - _Occlusion: 1
+    - _OffsetFactor: 1
+    - _OffsetUnit: 0
+    - _Quality: 0
+    - _Saturation: 1
+    - _Shining: 0
+    - _ShiningStrength: 0
+    - _ShiningUpIntensity: 0
+    - _SrcBlend: 1
+    - _ZWrite: 1
+    m_Colors:
+    - _Color: {r: 0.8941177, g: 0.007843138, b: 0.007843138, a: 1}
+    - _DiffuseScatteringColor: {r: 0, g: 0, b: 0, a: 0}
+    - _DiffuseScatteringDir: {r: 0, g: 0, b: 0, a: 0}
+    - _ElectricFlowColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _ElectricFlowFlowSpeed: {r: 0.5, g: 0.5, b: 0, a: 1}
+    - _ElectricFlowFlowSpeed1: {r: -0.5, g: -0.5, b: 0, a: 1}
+    - _FadeParameter: {r: 0, g: 0, b: 1, a: 1}
+    - _FrezzeColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
+    - _FrozenRimColor: {r: 1, g: 0, b: 0, a: 1}
+    - _HitRimParameter: {r: 0, g: 0, b: 0, a: 0}
+    - _LightColor: {r: 1, g: 1, b: 1, a: 1}
+    - _LightDir: {r: 0.89, g: -0.24, b: 0.37, a: 0.08}
+    - _LowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ModelFadeParam: {r: 1, g: 0, b: 1, a: -0.5}
+    - _ModelFadeWaveParam: {r: 7.31, g: 1.11, b: 56.12, a: 1}
+    - _MultiColorB: {r: 1, g: 1, b: 1, a: 0.1}
+    - _MultiColorG: {r: 1, g: 1, b: 1, a: 0.1}
+    - _MultiColorR: {r: 1, g: 1, b: 1, a: 0.1}
+    - _ReplaceColor: {r: 0, g: 0, b: 0, a: 0}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 0}
+    - _ShiningRimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShiningUpColor: {r: 1, g: 1, b: 1, a: 1}
+    - _xSHAb: {r: -0.023, g: 0.11, b: 0.027, a: 0.26}
+    - _xSHAg: {r: -0.012, g: 0.028, b: 0.015, a: 0.2}
+    - _xSHAr: {r: -0.0075, g: -0.015, b: 0.009, a: 0.16}
+    - _xSHBb: {r: -0.018, g: 0.021, b: 0.057, a: -0.047}
+    - _xSHBg: {r: -0.0094, g: 0.011, b: 0.045, a: -0.032}
+    - _xSHBr: {r: -0.0056, g: 0.0066, b: 0.031, a: -0.021}
+    - _xSHC: {r: 0.027, g: 0.039, b: 0.047, a: 1}
