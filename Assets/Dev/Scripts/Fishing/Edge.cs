@@ -7,8 +7,8 @@ using UnityEngine;
 public class Edge
 {
     public Point[] points = new Point[2];
-    public float originLength = 1;
-    private float tinyValue = 0.01f;
+    public float length = 1;
+    private float tinyValue = 0.02f;
 
     public Edge(Point p1, Point p2)
     {
@@ -18,7 +18,7 @@ public class Edge
 
     public Edge(Point p1, Point p2,float originLength):this(p1,p2)
     {
-        this.originLength = originLength;
+        this.length = originLength;
     }
 
     public bool Vaild()
@@ -34,6 +34,8 @@ public class Edge
         if (points[1] == null)
             return;
 
+        var tlength = Mathf.Max(length, tinyValue);
+
         var p1 = points[0];
         var p2 = points[1];
 
@@ -47,7 +49,7 @@ public class Edge
             p1p2 = Vector3.down * tinyValue;
         }
         //var diff = Mathf.Abs(p1p2.magnitude - originLength);
-        var diff = (p1p2.magnitude - originLength);
+        var diff = (p1p2.magnitude - tlength);
 
         if (!p2.simulate)
         {

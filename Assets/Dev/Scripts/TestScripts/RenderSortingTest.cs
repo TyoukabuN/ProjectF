@@ -37,7 +37,6 @@ public class RenderSortingTestEditor:Editor
 
         if (GUILayout.Button("Setup"))
         {
-            UnityEngine.Rendering.CullMode
             var renderer = instance.gameObject1.GetComponentInChildren<Renderer>();
             renderer.sortingLayerID = SortingLayer.NameToID(instance.layer1);
             renderer.sortingOrder = instance.orderInLayer1;

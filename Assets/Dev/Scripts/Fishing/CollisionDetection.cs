@@ -34,13 +34,23 @@ public class CollisionDetection
         return AddEdge(new Edge(p1, p2, length));
     }
 
+    public void SetEdgesLength(float length)
+    {
+        for (int i = 0; i < Edges.Count; i++)
+        {
+            Edges[i].length = length;
+        }
+    }
 
-    public bool RemoveEdge(Edge edge)
+    public bool RemoveEdge(Edge edge,bool destroyPoint = true)
     {
         if (!Edges.Contains(edge))
             return false;
 
-        Edges.Remove(edge);
+        if (Edges.Remove(edge) && destroyPoint)
+        {
+            GameObject.DestroyImmediate(edge.points[1]);
+        }
         return true;
 
     }

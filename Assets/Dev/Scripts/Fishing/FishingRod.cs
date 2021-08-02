@@ -13,13 +13,19 @@ public class FishingRod : MonoBehaviour
     /// <summary>
     /// 鱼线有多长
     /// </summary>
-    private float fishLineLength = 10.0f;
+    public float fishLineLength = 10.0f;
     /// <summary>
     /// 绳子有多少节
     /// </summary>
-    private int m_FishLineStep = 10;
+    public float fishLineStep = 10f;
 
-    public float stepLength = 1f;
+    public float stepLength {
+        get {
+            return fishLineLength / fishLineStep;
+        }
+    }
+
+    public float stepLengthPct = 1f;
 
     public float lineWidth = 0.1f;
 
@@ -56,22 +62,6 @@ public class FishingRod : MonoBehaviour
     private CollisionDetection collisiionDetection = new CollisionDetection();
     private LineRenderer lineRenderer;
 
-    public int fishLineStep
-    {
-        get
-        {
-            return m_FishLineStep;
-        }
-
-        set
-        {
-            if (value == m_FishLineStep)
-                return;
-
-            UpdateLineStep();
-        }
-    }
-
     private void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -91,10 +81,10 @@ public class FishingRod : MonoBehaviour
 
     public void UpdateLineStep()
     {
-        if (collisiionDetection.stepCount == m_FishLineStep)
+        if (collisiionDetection.stepCount == fishLineStep)
             return;
 
-        float diff = Mathf.Abs(collisiionDetection.stepCount - m_FishLineStep);
+        float diff = Mathf.Abs(collisiionDetection.stepCount - fishLineStep);
 
         for (int i = 0; i < diff; i++)
         {
@@ -126,7 +116,7 @@ public class FishingRod : MonoBehaviour
         return point;
     }
 
-    public bool AddStep()
+    public void AddStep()
     {
         if (!LastPoint)
         {
@@ -135,9 +125,13 @@ public class FishingRod : MonoBehaviour
             root.gameObject.transform.localPosition = Vector3.zero;
             root.simulate = false;
 
-            return collisiionDetection.AddEdge(root, GetPoint(), stepLength);
+            collisiionDetection.AddEdge(root, GetPoint(), stepLength);
+            collisiionDetection.SetEdgesLength(stepLength);
+            return;
         }
-        return collisiionDetection.AddEdge(LastPoint, GetPoint(LastPoint.transform), stepLength);
+
+        collisiionDetection.AddEdge(LastPoint, GetPoint(LastPoint.transform), stepLength);
+        collisiionDetection.SetEdgesLength(stepLength);
     }
 
     public bool RemoveStep()
@@ -148,7 +142,7 @@ public class FishingRod : MonoBehaviour
         }
 
         var edge = collisiionDetection.Edges[collisiionDetection.Edges.Count - 1];
-        collisiionDetection.RemoveEdge(edge);
+        collisiionDetection.RemoveEdge(edge,true);
         return true;
     }
 
@@ -202,6 +196,14 @@ public class FishingRodEditor : Editor
         DrawDefaultInspector();
 
         FishingRod instance = target as FishingRod;
+
+        if (GUILayout.Button("General Line"))
+        {
+            while (instance.StepCount < instance.fishLineStep)
+            {
+                instance.AddStep();
+            }
+        }
 
         if (GUILayout.Button("Add Step"))
         {
