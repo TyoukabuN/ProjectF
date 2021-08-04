@@ -25,6 +25,7 @@ public class FishingRod : MonoBehaviour
         }
     }
 
+    [Range(0,1)]
     public float stepLengthPct = 1f;
 
     public float lineWidth = 0.1f;
@@ -70,10 +71,36 @@ public class FishingRod : MonoBehaviour
             lineRenderer = gameObject.AddComponent<LineRenderer>();
         }
     }
+
+    public float frac(float value)
+    {
+        return value - Mathf.Floor(value);
+    }
+
     private void Update()
     {
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
+        stepLengthPct = Mathf.Clamp01(stepLengthPct);
+
+        var floor = Mathf.Floor(stepLengthPct * StepCount);
+
+        for (int i=0;i < collisiionDetection.Edges.Count;i++)
+        {
+            var edge = collisiionDetection.Edges[i];
+            float pct = (collisiionDetection.Edges.Count - i) - stepLengthPct * StepCount;
+
+            if (pct < 1 && pct > 0)
+            {
+                edge.normalizeLength = pct;
+            }
+            else if (pct >= 1)
+            {
+                edge.normalizeLength = 0;
+            }
+            else
+            {
+                edge.normalizeLength = 1;
+            }
+        }
 
         collisiionDetection.OnUpdate();
         UpdateLineRenderer();
@@ -148,6 +175,12 @@ public class FishingRod : MonoBehaviour
 
     public void UpdateLineRenderer()
     {
+        if (!lineRenderer)
+            return;
+
+        lineRenderer.startWidth = lineWidth;
+        lineRenderer.endWidth = lineWidth;
+
         if (StepCount <= 0)
             return;
 

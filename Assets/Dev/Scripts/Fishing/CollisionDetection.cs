@@ -57,6 +57,7 @@ public class CollisionDetection
     public void OnUpdate()
     {
         UpdateEdge();
+        UpdateEdge();
     }
 
     private void EdgeVaildCheck()

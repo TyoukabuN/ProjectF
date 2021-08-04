@@ -8,6 +8,15 @@ public class Edge
 {
     public Point[] points = new Point[2];
     public float length = 1;
+    public float normalizeLength = 1;
+    /// <summary>
+    /// length multiple with normalizeLength
+    /// </summary>
+    public float Length
+    {
+        get { return length * normalizeLength; }
+    }
+
     private float tinyValue = 0.02f;
 
     public Edge(Point p1, Point p2)
@@ -34,7 +43,7 @@ public class Edge
         if (points[1] == null)
             return;
 
-        var tlength = Mathf.Max(length, tinyValue);
+        var tlength = Mathf.Max(Length, tinyValue);
 
         var p1 = points[0];
         var p2 = points[1];
