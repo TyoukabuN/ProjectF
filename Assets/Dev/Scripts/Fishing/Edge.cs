@@ -8,7 +8,9 @@ public class Edge
 {
     public Point[] points = new Point[2];
     public float length = 1;
-    public float normalizeLength = 1;
+    private float m_normalizeLength = 1f;
+    public float normalizeLength = 1f;
+    public float dumping = 1f;
     /// <summary>
     /// length multiple with normalizeLength
     /// </summary>
@@ -43,13 +45,14 @@ public class Edge
         if (points[1] == null)
             return;
 
-        var tlength = Mathf.Max(Length, tinyValue);
+        var tlength = Mathf.Max(Length, 0.001f);
 
         var p1 = points[0];
         var p2 = points[1];
 
         //p1.Tick(Time.deltaTime);
         //p2.Tick(Time.deltaTime);
+        bool normalizeChange = m_normalizeLength != normalizeLength;
 
         var p1p2 = p2.transform.position - p1.transform.position;
 
@@ -70,8 +73,16 @@ public class Edge
         }
         else
         {
-            p1.transform.position += p1p2.normalized * diff * 0.5f;
-            p2.transform.position -= p1p2.normalized * diff * 0.5f;
+            //p2.transform.position -= p1p2.normalized * diff * 1.0f;
+            p1.transform.position += p1p2.normalized * diff * 0.5f * Mathf.Max(0.05f, dumping);
+            p2.transform.position -= p1p2.normalized * diff * 0.5f * Mathf.Max(0.05f, dumping);
+        }
+
+        if (normalizeChange)
+        {
+            p1.ApplyCurrentPosition();
+            p2.ApplyCurrentPosition();
+            m_normalizeLength = normalizeLength;
         }
     }
 

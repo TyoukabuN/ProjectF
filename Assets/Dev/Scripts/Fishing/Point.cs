@@ -48,6 +48,10 @@ public class Point : MonoBehaviour
 
         point.OldPosition = temp;
     }
+    public void ApplyCurrentPosition()
+    {
+        OldPosition = transform.position;
+    }
     public void Update()
     {
         if (!simulate)

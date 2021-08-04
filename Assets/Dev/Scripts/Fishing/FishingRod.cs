@@ -25,8 +25,11 @@ public class FishingRod : MonoBehaviour
         }
     }
 
+    public float m_stepLengthPct = 1f;
     [Range(0,1)]
     public float stepLengthPct = 1f;
+    [Range(0, 1)]
+    public float edgeDumping = 1f;
 
     public float lineWidth = 0.1f;
 
@@ -79,14 +82,32 @@ public class FishingRod : MonoBehaviour
 
     private void Update()
     {
-        stepLengthPct = Mathf.Clamp01(stepLengthPct);
+        ApplyNormalizeLength();
+        UpdateLineRenderer();
 
-        var floor = Mathf.Floor(stepLengthPct * StepCount);
-
-        for (int i=0;i < collisiionDetection.Edges.Count;i++)
+        for (int i = 0; i < collisiionDetection.Edges.Count; i++)
         {
             var edge = collisiionDetection.Edges[i];
-            float pct = (collisiionDetection.Edges.Count - i) - stepLengthPct * StepCount;
+            edge.dumping = edgeDumping;
+        }
+
+        collisiionDetection.OnUpdate();
+    }
+
+    public void ApplyNormalizeLength()
+    {
+        if (m_stepLengthPct == stepLengthPct)
+            return;
+
+        m_stepLengthPct = stepLengthPct = Mathf.Clamp01(stepLengthPct);
+
+        var floor = Mathf.Floor(m_stepLengthPct * StepCount);
+
+        for (int i = 0; i < collisiionDetection.Edges.Count; i++)
+        //for (int i = collisiionDetection.Edges.Count-1; i >= 0; i--)
+        {
+            var edge = collisiionDetection.Edges[i];
+            float pct = (collisiionDetection.Edges.Count - i) - m_stepLengthPct * StepCount;
 
             if (pct < 1 && pct > 0)
             {
@@ -101,9 +122,6 @@ public class FishingRod : MonoBehaviour
                 edge.normalizeLength = 1;
             }
         }
-
-        collisiionDetection.OnUpdate();
-        UpdateLineRenderer();
     }
 
     public void UpdateLineStep()
