@@ -9,17 +9,34 @@ public class Edge
     public Point[] points = new Point[2];
     public float length = 1;
     private float m_normalizeLength = 1f;
-    public float normalizeLength = 1f;
+    public bool flexbleLength;
+    public float normalizeLength
+    {
+        get {
+            return m_normalizeLength;
+        }
+        set {
+            if(FirstPoint != null)
+                FirstPoint.ApplyCurrentPosition();
+            if (LastPoint != null)
+                LastPoint.ApplyCurrentPosition();
+
+            m_normalizeLength = value;
+        }
+
+    }
     public float dumping = 1f;
     /// <summary>
     /// length multiple with normalizeLength
     /// </summary>
     public float Length
     {
-        get { return length * normalizeLength; }
+        get { return length * m_normalizeLength; }
     }
+    public Point FirstPoint { get { return this.points[0]; } }
+    public Point LastPoint  {   get{return this.points[1];} }
 
-    private float tinyValue = 0.02f;
+    private float tinyValue = 0.001f;
 
     public Edge(Point p1, Point p2)
     {
@@ -45,7 +62,7 @@ public class Edge
         if (points[1] == null)
             return;
 
-        var tlength = Mathf.Max(Length, 0.001f);
+        var tlength = Mathf.Max(Length, tinyValue);
 
         var p1 = points[0];
         var p2 = points[1];
@@ -74,8 +91,8 @@ public class Edge
         else
         {
             //p2.transform.position -= p1p2.normalized * diff * 1.0f;
-            p1.transform.position += p1p2.normalized * diff * 0.5f * Mathf.Max(0.05f, dumping);
-            p2.transform.position -= p1p2.normalized * diff * 0.5f * Mathf.Max(0.05f, dumping);
+            p1.transform.position += p1p2.normalized * diff * 0.5f * Mathf.Max(tinyValue, dumping);
+            p2.transform.position -= p1p2.normalized * diff * 0.5f * Mathf.Max(tinyValue, dumping);
         }
 
         if (normalizeChange)

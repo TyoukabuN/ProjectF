@@ -67,6 +67,8 @@ public class Point : MonoBehaviour
 public class PointCustom : Editor
 {
     public Vector3 force = Vector3.zero;
+    public float power = 500;
+    public Transform shotTarget = null;
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
@@ -82,11 +84,50 @@ public class PointCustom : Editor
             }
         }
 
-        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
         {
             force = EditorGUILayout.Vector3Field("",force);
             if (GUILayout.Button("施力"))
             {
+                instance.AddForce(force);
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+        {
+            EditorGUILayout.BeginVertical();
+            { 
+                shotTarget = EditorGUILayout.ObjectField("目标:",shotTarget, typeof(Transform), true) as Transform;
+                power = EditorGUILayout.FloatField("力度",power);
+                EditorGUILayout.EndVertical();
+            }
+
+            if(!shotTarget) 
+            {
+                var temp = GameObject.Find("ShotTarget");
+                if (!temp)
+                {
+                    temp = (new GameObject("ShotTarget"));
+                }
+                if (temp)
+                { 
+                    shotTarget = temp.transform;
+                }
+            }
+
+            if (GUILayout.Button("施力"))
+            {
+                var dir = shotTarget.position - instance.transform.position;
+                force = dir.normalized * power;
+
+                var rigidBody = instance.gameObject.GetComponent<Rigidbody>();
+                if (rigidBody)
+                {
+                    rigidBody.AddForce(force);
+                    return;
+                }
+
                 instance.AddForce(force);
             }
             EditorGUILayout.EndHorizontal();

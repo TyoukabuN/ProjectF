@@ -9,27 +9,27 @@ public class CollisionDetection
 {
     public List<Edge> Edges = new List<Edge>();
 
-    public int stepCount
+    public int edgeCount
     {
         get{
             return Edges.Count;
         }
     }
 
-    public bool AddEdge(Edge edge)
+    public Edge AddEdge(Edge edge)
     {
         if (Edges.Contains(edge))
-            return false;
+            return null;
 
         Edges.Add(edge);
-        return true;
+        return edge;
     }
 
-    public bool AddEdge(Point p1, Point p2)
+    public Edge AddEdge(Point p1, Point p2)
     {
         return AddEdge(new Edge(p1, p2));
     }
-    public bool AddEdge(Point p1, Point p2,float length)
+    public Edge AddEdge(Point p1, Point p2,float length)
     {
         return AddEdge(new Edge(p1, p2, length));
     }
@@ -44,16 +44,20 @@ public class CollisionDetection
 
     public bool RemoveEdge(Edge edge,bool destroyPoint = true)
     {
+        if (edge == null)
+            return false;
+
         if (!Edges.Contains(edge))
             return false;
 
         if (Edges.Remove(edge) && destroyPoint)
         {
-            GameObject.DestroyImmediate(edge.points[1]);
+            GameObject.Destroy(edge.points[0].gameObject);
+            GameObject.Destroy(edge.points[1].gameObject);
         }
         return true;
-
     }
+
     public void OnUpdate()
     {
         UpdateEdge();
