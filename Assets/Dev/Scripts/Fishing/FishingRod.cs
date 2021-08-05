@@ -38,7 +38,7 @@ public class FishingRod : MonoBehaviour
     public int StepCount
     {
         get {
-            return collisiionDetection.stepCount;
+            return collisionDetection.stepCount;
         }
     }
     public Point LastPoint
@@ -48,7 +48,7 @@ public class FishingRod : MonoBehaviour
             {
                 return null;
             }
-            return collisiionDetection.Edges[StepCount - 1].points[1];
+            return collisionDetection.Edges[StepCount - 1].points[1];
         }
     }
     public Point RootPoint
@@ -59,11 +59,11 @@ public class FishingRod : MonoBehaviour
             {
                 return null;
             }
-            return collisiionDetection.Edges[0].points[0];
+            return collisionDetection.Edges[0].points[0];
         }
     }
 
-    private CollisionDetection collisiionDetection = new CollisionDetection();
+    private CollisionDetection collisionDetection = new CollisionDetection();
     private LineRenderer lineRenderer;
 
     private void Awake()
@@ -85,13 +85,13 @@ public class FishingRod : MonoBehaviour
         ApplyNormalizeLength();
         UpdateLineRenderer();
 
-        for (int i = 0; i < collisiionDetection.Edges.Count; i++)
+        for (int i = 0; i < collisionDetection.Edges.Count; i++)
         {
-            var edge = collisiionDetection.Edges[i];
+            var edge = collisionDetection.Edges[i];
             edge.dumping = edgeDumping;
         }
 
-        collisiionDetection.OnUpdate();
+        collisionDetection.OnUpdate();
     }
 
     public void ApplyNormalizeLength()
@@ -99,37 +99,53 @@ public class FishingRod : MonoBehaviour
         if (m_stepLengthPct == stepLengthPct)
             return;
 
-        m_stepLengthPct = stepLengthPct = Mathf.Clamp01(stepLengthPct);
 
-        var floor = Mathf.Floor(m_stepLengthPct * StepCount);
+       // var floor = Mathf.Floor(m_stepLengthPct * StepCount);
 
-        for (int i = 0; i < collisiionDetection.Edges.Count; i++)
-        //for (int i = collisiionDetection.Edges.Count-1; i >= 0; i--)
+        var sign = stepLengthPct - m_stepLengthPct;
+
+        if (true)
         {
-            var edge = collisiionDetection.Edges[i];
-            float pct = (collisiionDetection.Edges.Count - i) - m_stepLengthPct * StepCount;
+            for (int i = StepCount - 1; i >= 0; i--)
+            {
+                var edge = collisionDetection.Edges[i];
+                float pct = (i + 1) - stepLengthPct * StepCount;
 
-            if (pct < 1 && pct > 0)
-            {
-                edge.normalizeLength = pct;
+                if (pct < 1 && pct > 0)
+                    edge.normalizeLength = Mathf.Clamp01(Mathf.Abs(1 - pct));
+                else if (pct >= 1)
+                    edge.normalizeLength = 0f;
+                else
+                    edge.normalizeLength = 1f;
             }
-            else if (pct >= 1)
-            {
-                edge.normalizeLength = 0;
-            }
-            else
-            {
-                edge.normalizeLength = 1;
-            }
+
         }
+
+        //if (sign > 0)
+        //{ 
+        //    for (int i = 0; i < StepCount; i++)
+        //    {
+        //        var edge = collisionDetection.Edges[StepCount - i - 1];
+        //        float pct = stepLengthPct * StepCount - i;
+
+        //        if (pct < 1 && pct > 0)
+        //            edge.normalizeLength = Mathf.Clamp01(Mathf.Abs(1 - pct));
+        //        else if (pct <= 0)
+        //            edge.normalizeLength = 0f;
+        //        else
+        //            edge.normalizeLength = 1f;
+        //    }
+        //}
+
+        m_stepLengthPct = stepLengthPct = Mathf.Clamp01(stepLengthPct);
     }
 
     public void UpdateLineStep()
     {
-        if (collisiionDetection.stepCount == fishLineStep)
+        if (collisionDetection.stepCount == fishLineStep)
             return;
 
-        float diff = Mathf.Abs(collisiionDetection.stepCount - fishLineStep);
+        float diff = Mathf.Abs(collisionDetection.stepCount - fishLineStep);
 
         for (int i = 0; i < diff; i++)
         {
@@ -170,13 +186,13 @@ public class FishingRod : MonoBehaviour
             root.gameObject.transform.localPosition = Vector3.zero;
             root.simulate = false;
 
-            collisiionDetection.AddEdge(root, GetPoint(), stepLength);
-            collisiionDetection.SetEdgesLength(stepLength);
+            collisionDetection.AddEdge(root, GetPoint(), stepLength);
+            collisionDetection.SetEdgesLength(stepLength);
             return;
         }
 
-        collisiionDetection.AddEdge(LastPoint, GetPoint(LastPoint.transform), stepLength);
-        collisiionDetection.SetEdgesLength(stepLength);
+        collisionDetection.AddEdge(LastPoint, GetPoint(LastPoint.transform), stepLength);
+        collisionDetection.SetEdgesLength(stepLength);
     }
 
     public bool RemoveStep()
@@ -186,8 +202,8 @@ public class FishingRod : MonoBehaviour
             return false;
         }
 
-        var edge = collisiionDetection.Edges[collisiionDetection.Edges.Count - 1];
-        collisiionDetection.RemoveEdge(edge,true);
+        var edge = collisionDetection.Edges[collisionDetection.Edges.Count - 1];
+        collisionDetection.RemoveEdge(edge,true);
         return true;
     }
 
@@ -203,10 +219,10 @@ public class FishingRod : MonoBehaviour
             return;
 
         Vector3[] positions = new Vector3[StepCount + 1];
-        positions[0] = collisiionDetection.Edges[0].points[0].transform.position;
+        positions[0] = collisionDetection.Edges[0].points[0].transform.position;
         for (int i=0; i < StepCount;i++)
         {
-            var edge = collisiionDetection.Edges[i];
+            var edge = collisionDetection.Edges[i];
             positions[i + 1] = edge.points[1].transform.position;
         }
 
@@ -220,7 +236,7 @@ public class FishingRod : MonoBehaviour
         if (!gizmos)
             return;
 
-        foreach (var edge in collisiionDetection.Edges)
+        foreach (var edge in collisionDetection.Edges)
         {
             if (edge.points[0] == null)
                 return;
