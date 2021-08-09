@@ -7,31 +7,34 @@ using UnityEngine;
 public class Edge
 {
     public Point[] points = new Point[2];
-    public float length = 1;
+    public float m_length = 1;
     private float m_normalizeLength = 1f;
-    public bool flexbleLength;
+    public bool flexbleLength = true;
+    public float extendThresholdPct = 0.15f;
+    public float extendPerFramePct = 0.005f;
     public float normalizeLength
     {
         get {
             return m_normalizeLength;
         }
         set {
+            m_normalizeLength = value;
+            m_normalizeLength = Mathf.Clamp01(m_normalizeLength);
+
             if(FirstPoint != null)
                 FirstPoint.ApplyCurrentPosition();
             if (LastPoint != null)
                 LastPoint.ApplyCurrentPosition();
-
-            m_normalizeLength = value;
         }
-
     }
+
     public float dumping = 1f;
     /// <summary>
     /// length multiple with normalizeLength
     /// </summary>
     public float Length
     {
-        get { return length * m_normalizeLength; }
+        get { return m_length * m_normalizeLength; }
     }
     public Point FirstPoint { get { return this.points[0]; } }
     public Point LastPoint  {   get{return this.points[1];} }
@@ -46,7 +49,7 @@ public class Edge
 
     public Edge(Point p1, Point p2,float originLength):this(p1,p2)
     {
-        this.length = originLength;
+        this.m_length = originLength;
     }
 
     public bool Vaild()
@@ -79,6 +82,24 @@ public class Edge
         }
         //var diff = Mathf.Abs(p1p2.magnitude - originLength);
         var diff = (p1p2.magnitude - tlength);
+
+        if (flexbleLength)
+        {
+            if (normalizeLength < 1 && diff > 0)
+            {
+                if ((Mathf.Abs(diff) / Length) >= extendThresholdPct)
+                { 
+                    normalizeLength += extendPerFramePct;
+                }
+            }
+            else if(normalizeLength > 0 && diff < 0)
+            {
+                if ((Mathf.Abs(diff) / Length) >= extendThresholdPct)
+                {
+                    normalizeLength -= extendPerFramePct;
+                }
+            }    
+        }
 
         if (!p2.simulate)
         {

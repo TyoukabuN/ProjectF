@@ -38,7 +38,7 @@ public class CollisionDetection
     {
         for (int i = 0; i < Edges.Count; i++)
         {
-            Edges[i].length = length;
+            Edges[i].m_length = length;
         }
     }
 
