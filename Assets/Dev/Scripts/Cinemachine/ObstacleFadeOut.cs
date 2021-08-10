@@ -173,7 +173,6 @@ public class ObstacleFadeOut : MonoBehaviour
             }
         }
 
-        Debug.Log(res.Length);
         return true;
     }
 
