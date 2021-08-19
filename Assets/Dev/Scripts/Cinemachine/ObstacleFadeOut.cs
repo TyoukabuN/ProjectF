@@ -194,13 +194,19 @@ public class ObstacleFadeOut : MonoBehaviour
             tempVec4.y = tempVec4.x + animeTime;
             tempVec4.z = OriginAlpha;
             tempVec4.w = TargetAlpha;
+
             if (recover)
             {
                 tempVec4.z = TargetAlpha;
                 tempVec4.w = OriginAlpha;
             }
+            var mpb = new MaterialPropertyBlock();
+            renderer.GetPropertyBlock(mpb);
 
-            mat.SetVector(ShaderHandle.FadeOutParam_ID, tempVec4);
+            mpb.SetVector(ShaderHandle.FadeOutParam_ID, tempVec4);
+
+            renderer.SetPropertyBlock(mpb);
+
             mat.SetInt(ShaderHandle.SrcBlend_ID, (int)BlendMode.SrcAlpha);
             mat.SetInt(ShaderHandle.DstBlend_ID, (int)BlendMode.OneMinusSrcAlpha);
             mat.renderQueue = (int)RenderQueue.Transparent;
