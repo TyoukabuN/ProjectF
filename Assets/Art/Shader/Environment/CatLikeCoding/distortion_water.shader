@@ -54,7 +54,7 @@
             float3 uvwB = FlowUVW(IN.uv_MainTex,flowVector,jump,time,true);
 
             fixed4 texA = tex2D (_MainTex,uvwA.xy)* uvwA.z * PowerA ;
-            fixed4 texB = tex2D (_MainTex,uvwB.xy)* uvwB.z * PowerB ;
+            fixed4 texB = tex2D (_MainTex,uvwB.xy)* uvwB.z * PowerB * 0;
 
             fixed4 c = (texA + texB) * _Color;
 
