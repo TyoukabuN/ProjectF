@@ -26,7 +26,7 @@
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags {"RenderType"="Opaque" }
         LOD 200
 
         CGPROGRAM
@@ -73,9 +73,8 @@
             fixed4 texB = tex2D (_MainTex,uvwB.xy)* uvwB.z * PowerB ;
 
             fixed4 c = (texA + texB) * _Color;
-
-            o.Albedo = c.rgb;
             o.Normal = normalize(normalA + normalB);
+            o.Albedo = c.rgb;
         }
         ENDCG
     }
