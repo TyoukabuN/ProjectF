@@ -36,18 +36,19 @@ Material:
     - PowerB: 1
     - _FlowOffect: -0.5
     - _FlowStrength: 0
-    - _Glossiness: 0.5
+    - _Glossiness: 0.694
     - _Metallic: 0
+    - _NormalScale: -1.19
     - _RadialShear_Center: 0
     - _RadialShear_Offset: 0
     - _RadialShear_Strength: -1.16
-    - _Speed: 0.5
-    - _Tiling: 2
+    - _Speed: 1
+    - _Tiling: 3
     - _TimeScale: 0.25
-    - _UJump: 0.2
-    - _VJump: 0.1
+    - _UJump: 0.25
+    - _VJump: 0.25
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.53333336, g: 0.67058825, b: 0.82745105, a: 1}
     - _RadialShear_Center: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _RadialShear_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _RadialShear_Strength: {r: 0, g: 0, b: 0, a: 0}
