@@ -50,6 +50,8 @@ public class ProceduralGrid : MonoBehaviour
         if (!mesh)
             mesh = new Mesh();
 
+        meshFilter.mesh = mesh;
+
         var gInterval = new WaitForSeconds(0.05f);
         vertexs.Clear();
         for (int y = 0; y < GridSizeY + 1; y++)
@@ -57,9 +59,9 @@ public class ProceduralGrid : MonoBehaviour
             for (int x = 0; x < GridSizeX + 1; x++)
             { 
                 vertexs.Add(new Vector3(x,y));
-                yield return gInterval; 
             }
         }
+        mesh.vertices = vertexs.ToArray();
 
         var trangles = ListPool<int>.Get();
         var temp = ListPool<int>.Get();
@@ -72,19 +74,18 @@ public class ProceduralGrid : MonoBehaviour
                 temp.Clear();
                 temp.Add(bIndice);
                 temp.Add(bIndice + GridSizeX + 1);
-                temp.Add(bIndice+1);
-                         
+                temp.Add(bIndice + 1);
                 temp.Add(bIndice + 1);
                 temp.Add(bIndice + GridSizeX + 1);
                 temp.Add(bIndice + GridSizeX + 2);
                 trangles.AddRange(temp);
+
+                mesh.triangles = trangles.ToArray();
+                yield return gInterval;
             }
         }
-        mesh.vertices = vertexs.ToArray();
-        mesh.triangles = trangles.ToArray();
 
         mesh.name = "Procedural Mesh";
-        meshFilter.mesh = mesh;
 
         ListPool<int>.Release(trangles);
         ListPool<int>.Release(temp);
