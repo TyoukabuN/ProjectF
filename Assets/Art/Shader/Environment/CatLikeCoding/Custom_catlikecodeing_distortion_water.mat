@@ -19,8 +19,12 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _DerivHeightMap:
+        m_Texture: {fileID: 2800000, guid: a6b5b06515bdf8e4ead2b188fb7edf4a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _FlowMap:
-        m_Texture: {fileID: 2800000, guid: fd30c83732d4e914ab03812e56d3840a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 5126f3304d2084d7e824deb2e79c69ae, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -34,21 +38,24 @@ Material:
     m_Floats:
     - PowerA: 1
     - PowerB: 1
-    - _FlowOffect: -0.5
-    - _FlowStrength: 0
-    - _Glossiness: 0.694
+    - _Derivative: 2
+    - _FlowOffect: 0
+    - _FlowStrength: 0.1
+    - _Glossiness: 0.693
+    - _HeightScale: 0.1
+    - _HeightScaleModulated: 17.04
     - _Metallic: 0
-    - _NormalScale: -1.19
+    - _NormalScale: 1
     - _RadialShear_Center: 0
     - _RadialShear_Offset: 0
     - _RadialShear_Strength: -1.16
-    - _Speed: 1
+    - _Speed: 0.6
     - _Tiling: 3
     - _TimeScale: 0.25
     - _UJump: 0.25
-    - _VJump: 0.25
+    - _VJump: 0.2
     m_Colors:
-    - _Color: {r: 0.53333336, g: 0.67058825, b: 0.82745105, a: 1}
+    - _Color: {r: 0.3065528, g: 0.5147804, b: 0.66176474, a: 1}
     - _RadialShear_Center: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _RadialShear_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _RadialShear_Strength: {r: 0, g: 0, b: 0, a: 0}
+    - _RadialShear_Strength: {r: 1, g: 1, b: 0, a: 0}
