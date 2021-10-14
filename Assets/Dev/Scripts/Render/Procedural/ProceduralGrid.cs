@@ -29,6 +29,8 @@ public class ProceduralGrid : MonoBehaviour
         //    meshRenderer.materials = new Material[] { };
 
         ReGenerate();
+
+        meshRenderer.material = ShaderHandle.GetMaterial("Custom_UVChecker");
     }
 
     void Update()
@@ -54,14 +56,18 @@ public class ProceduralGrid : MonoBehaviour
 
         var gInterval = new WaitForSeconds(0.05f);
         vertexs.Clear();
+
+        var uv = ListPool<Vector2>.Get();
         for (int y = 0; y < GridSizeY + 1; y++)
         {
             for (int x = 0; x < GridSizeX + 1; x++)
             { 
                 vertexs.Add(new Vector3(x,y));
+                uv.Add(new Vector2(x / GridSizeX, y / GridSizeY));
             }
         }
         mesh.vertices = vertexs.ToArray();
+        mesh.uv = uv.ToArray();
 
         var trangles = ListPool<int>.Get();
         var temp = ListPool<int>.Get();
@@ -81,14 +87,30 @@ public class ProceduralGrid : MonoBehaviour
                 trangles.AddRange(temp);
 
                 mesh.triangles = trangles.ToArray();
+                mesh.RecalculateNormals();
                 yield return gInterval;
             }
         }
+
+        //other version
+        //use in OpenGL
+        //int[] triangles = new int[GridSizeX * GridSizeY * 6];
+        //for (int ti = 0, vi = 0, y = 0; y < GridSizeY; y++, vi++)
+        //{ 
+        //    for (int x = 0; x < GridSizeX; x++, ti += 6,vi++)
+        //    {
+        //        triangles[ti] = vi;
+        //        triangles[ti + 1] = triangles[ti + 4] = vi + GridSizeX + 1;
+        //        triangles[ti + 2] = triangles[ti + 3] = vi + 1;
+        //        triangles[ti + 5] = vi + GridSizeX + 2;
+        //    }
+        //}
 
         mesh.name = "Procedural Mesh";
 
         ListPool<int>.Release(trangles);
         ListPool<int>.Release(temp);
+        ListPool<Vector2>.Release(uv);
 
         working = false;
         yield break;

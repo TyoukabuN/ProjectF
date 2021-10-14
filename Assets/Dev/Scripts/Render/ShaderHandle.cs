@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShaderHandle : MonoBehaviour
+public partial class ShaderHandle : MonoSingleton<ShaderHandle>
 {
     public readonly static int Realtime_ID = Shader.PropertyToID("_Realtime");
     public readonly static int FadeOutParam_ID = Shader.PropertyToID("_FadeOutParam");
@@ -11,9 +11,9 @@ public class ShaderHandle : MonoBehaviour
 
     private Vector4 realtimeVec4 = Vector4.zero;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        SetupRenderAsset();
     }
 
     // Update is called once per frame

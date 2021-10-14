@@ -30,14 +30,23 @@ namespace TMesh
         /// </summary>
         /// <param name="vertices"></param>
         /// <returns>The sign of the result of the shoelace formula</returns>
+        /// notice that the definition of front-facing about triangle have different between OpenGL and D3D
+        /// triangles defined with counter-clockwise vertices are processed as front-facing triangles.
+        /// otherwise,there defined with clockwise in D3D
         public static bool IsPositiveOrder(TVertex[] vertices)
         {
-            return CalOrienttionSign(vertices) < 0;
+            var res = CalOrienttionSign(vertices);
+            if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLCore ||
+                SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLES2 ||
+                SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.OpenGLES3)
+                return res < 0;
+            else
+                return res > 0;
         }
 
         public static bool IsPositiveOrder(TTrangle tTrangle)
         {
-            return CalOrienttionSign(tTrangle.vertices) < 0;
+            return IsPositiveOrder(tTrangle.vertices);
         }
 
         /// <summary>

@@ -78,8 +78,8 @@ namespace TMesh
 
             return false;
         }
-
-        public static bool TryGetClockwiseOrder(TVertex[] vertices,out TVertex[] res)
+        //尝试获取正面的三角形的顶点排列
+        public static bool TryGetPositiveWindingOrder(TVertex[] vertices,out TVertex[] res)
         {
             book = new TVertex[3];
             book2 = new Dictionary<TVertex, bool>();
@@ -101,7 +101,7 @@ namespace TMesh
             }
 
             TVertex[] positiveOrder;
-            if (!TryGetClockwiseOrder(vertices,out positiveOrder))
+            if (!TryGetPositiveWindingOrder(vertices,out positiveOrder))
             {
                 return false;
             }
