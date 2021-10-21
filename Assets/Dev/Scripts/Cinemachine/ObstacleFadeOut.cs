@@ -108,6 +108,8 @@ public class ObstacleFadeOut : MonoBehaviour
         }
     }
 
+    private Bounds bounds = new Bounds();
+
 #if UNITY_EDITOR
     private GUIStyle GizmosGUIStyle = null;
     void OnDrawGizmos()
@@ -115,9 +117,13 @@ public class ObstacleFadeOut : MonoBehaviour
         if (!camera)
             return;
 
-        var position = transform.position + transform.forward * (length - 0.5f);
-
-        Handles.DrawCube(1,position, transform.rotation, ExtentsXY.x);
+        Transform t = gameObject.transform;
+        var position = transform.localPosition + transform.forward * (length/2.0f);
+        bounds.center = position;
+        bounds.extents = new Vector3(ExtentsXY.x , ExtentsXY.y, length);
+        //Handles.DrawCube(1,position, transform.rotation, ExtentsXY.x);
+        Gizmos.matrix = Matrix4x4.TRS(t.position, t.rotation, t.lossyScale);
+        Gizmos.DrawWireCube(bounds.center, bounds.extents);
     }
 #endif
 
@@ -150,10 +156,13 @@ public class ObstacleFadeOut : MonoBehaviour
         foreach (var collider in res)
         {
             var renderer = collider.GetComponent<Renderer>();
+            if (!renderer)
+                continue;
+
             if (coldDownList.Any(info => info.renderer.gameObject.GetInstanceID() == renderer.gameObject.GetInstanceID()))
                 continue;
 
-            if (renderer && !Renderer.Contains(renderer))
+            if (!Renderer.Contains(renderer))
             {
                 Renderer.Add(renderer);
                 Transparent(renderer);

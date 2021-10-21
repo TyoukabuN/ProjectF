@@ -37,12 +37,12 @@ public partial class PlayerController : Controller, IControllable
     private new CapsuleCollider collider;
     private new Rigidbody rigidbody;
 
+    private Vector3 originPosition = Vector3.zero;
+
     void Awake()
     {
         if (current == null)
-        {
             current = this;
-        }
 
         if (m_FSM == null)
         {
@@ -51,28 +51,14 @@ public partial class PlayerController : Controller, IControllable
             m_FSM.AddState((int)StateType.Move, new MoveState(this));
             m_FSM.AddState((int)StateType.Jump, new JumpState(this));
             m_FSM.AddState((int)StateType.Fall, new FallState(this));
-            m_FSM.OnInit();
-            m_FSM.Enter((int)StateType.Stand);
+            m_FSM.OnInit((int)StateType.Stand);
         }
 
-        if (characterController == null)
-        {
-            characterController = GetComponent<CharacterController>();
-        }
-        if (rigidbody == null)
-        {
-            rigidbody = GetComponent<Rigidbody>();
-        }
-        if (collider == null)
-        {
-            collider = GetComponent<CapsuleCollider>();
-        }
-        if (animator == null)
-        {
-            animator = GetComponentInChildren<Animator>();
-        }
+        if (characterController == null) characterController = GetComponent<CharacterController>();
+        if (rigidbody == null) rigidbody = GetComponent<Rigidbody>();
+        if (collider == null) collider = GetComponent<CapsuleCollider>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
         if (cinemachineBrain == null && Camera.main)
-        {
             cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
             if (cinemachineBrain)
             {
@@ -81,9 +67,7 @@ public partial class PlayerController : Controller, IControllable
                 cinemachineBrain.m_CameraActivatedEvent.RemoveListener(OnCameraActivatedEvent);
                 cinemachineBrain.m_CameraActivatedEvent.AddListener(OnCameraActivatedEvent);
             }
-        }
-
-
+        originPosition = transform.position;
         InitObservedKey();
     }
 
@@ -93,12 +77,15 @@ public partial class PlayerController : Controller, IControllable
         Update_CircleScanLine();
         Update_InputDetection();
 
+        Move_Update();
+
         if (m_FSM != null)
-        {
             m_FSM.OnUpdate(Time.deltaTime);
-        }
+    }
 
-
+    public void ResetPosition()
+    {
+        transform.position = originPosition;
     }
 
 #if UNITY_EDITOR
@@ -118,7 +105,8 @@ public partial class PlayerController : Controller, IControllable
         var jump = string.Format("<color=red>跳跃:{0}/{1}</color>", JumpCounter.ToString(), CanJumpTime.ToString());
         var speed = string.Format("<color=red>速度:{0}</color>", FinalHorizontalSpeed.ToString());
         var ground = string.Format("<color=red>着地:{0}</color>", grounded.ToString());
-        string str = state + "\n" + jump + "\n" + speed + "\n" + ground;
+        var velocity = string.Format("<color=red>速度:{0}</color>", rigidbody.velocity.ToString());
+        string str = state + "\n" + jump + "\n" + speed + "\n" + ground + "\n" + velocity;
         Handles.Label(transform.position, str, GizmosGUIStyle);
         Handles.color = Color.red;
 

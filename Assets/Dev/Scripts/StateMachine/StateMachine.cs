@@ -9,6 +9,7 @@ public class StateMachine : State
     public State lastState;
     public State currentState;
     public int defaultStateKey = -1;
+    public int emptyStateKey = -1;
 
     public bool Enter(int stateKey)
     {

@@ -18,11 +18,8 @@ public class FSM : StateMachine
 
         if (currentState == null)
         {
-            //if (stateDict.TryGetValue(defaultStateKey, out currentState))
-            //{
-            //    return currentState.OnInit(this);
-            //}
-            return Enter(defaultStateKey);
+            var key = stateKey != emptyStateKey ? stateKey : defaultStateKey;
+            return Enter(key);
         }
         return currentState.OnInit(this);
     }

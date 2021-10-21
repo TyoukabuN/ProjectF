@@ -21,8 +21,6 @@ public class JumpState : State
         var anyMove = controllable.OnInputCheck_Move(Time.deltaTime);
         var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
 
-        controllable.Motion(Time.deltaTime);
-
         controllable.SetAnimatorTrigger(anyMove?"Move":"Stand");
 
         if (anyJump && controllable.CanJump())

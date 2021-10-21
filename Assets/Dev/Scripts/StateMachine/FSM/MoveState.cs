@@ -23,9 +23,6 @@ public class MoveState : State
         var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
 
 
-        controllable.Motion(Time.deltaTime);
-
-
         if (!controllable.IsMoving())
         {
             stateMachine.Enter((int)PlayerController.StateType.Stand);

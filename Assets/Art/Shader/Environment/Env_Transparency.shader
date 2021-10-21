@@ -31,7 +31,7 @@
                 float3 wpos : TEXCOORD1;
             };
 
-            sampler2D _MainTex;
+            sampler2D _MainTex; 
             float4 _MainTex_ST;
             float4 _FadeOutParam;
             float4 _Realtime;

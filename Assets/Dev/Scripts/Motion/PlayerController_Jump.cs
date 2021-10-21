@@ -29,8 +29,9 @@ public partial class PlayerController
             return;
 
         JumpCounter++;
-        verticalVelocity = Vector3.zero;
-        verticalVelocity += Vector3.up * JumpSpeed;
+        up = Vector3.zero;
+        up += Vector3.up * JumpSpeed;
+        Debug.Log("Jump");
         transform.position += Vector3.up * jumpAddtion;
     }
     public bool OnInputCheck_Jump(float timeStep = 0)
@@ -40,6 +41,10 @@ public partial class PlayerController
         if (GetKeyDown(InputDefine.Jump))
         {
             anyJump = anyJump || true;
+        }
+        if (GetKey(InputDefine.Jump))
+        {
+            //Jumping();
         }
         return anyJump;
     }

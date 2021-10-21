@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: X_Shader_C_Charactar_EdgeDetection
+  m_Shader: {fileID: 4800000, guid: 6eb1e1e4dd4a48246b71560f5353ddf0, type: 3}
+  m_ShaderKeywords: _CULL_OFF _MAINTEXCLAMP_ON _WAVESWITCH_ON _ZWRITE_OFF
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _DissolveTex:
+        m_Texture: {fileID: 2800000, guid: 644a03bc325957b4385f5779f45e345d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: f88f7898b01cddf40b9fe1be6c692502, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaveTex:
+        m_Texture: {fileID: 2800000, guid: 13e88290607cccd49b53a52e0e2041fc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _ColorPower: 2
+    - _Cull: 0
+    - _DissolvEdgeWdith: 0
+    - _DissolvePower: 0.131
+    - _DissolvePower2: 0
+    - _DissolveThreshold: 0
+    - _FadePower: 0.01
+    - _MainTexClamp: 1
+    - _MainTexRotate: 0
+    - _ModelBottom: -5.39
+    - _ModelTop: 7.87
+    - _SlopeLengle: 0.04
+    - _UseUVZ: 0
+    - _WaveFrequency: 113.54
+    - _WaveLength: 0.72
+    - _WaveSpeed: 19.7
+    - _WaveSwitch: 1
+    - _WaveTexScrollSpeed: 0.2
+    - _WireWidth: 0.15
+    - _ZWrite: 0
+    m_Colors:
+    - _Args: {r: 0.04, g: 4.76, b: 0.04, a: 0.15}
+    - _Args2: {r: -5.39, g: 7.87, b: 1.3, a: 14}
+    - _Color: {r: 1, g: 0.00904719, b: 0, a: 1}
+    - _DissolvEdgeColor: {r: 1, g: 0.731424, b: 0, a: 1}
+    - _Distort: {r: 0, g: 0, b: 0, a: 0}
+    - _FlowSpeed: {r: 0, g: 0.07, b: 0, a: 1}
+    - _MainTexClampUV: {r: 1, g: 1, b: 0, a: 0}
+    - _TintColor: {r: 0.8396226, g: 0.61387503, b: 0.61387503, a: 1}
+    - _WaveColor: {r: 1, g: 1, b: 1, a: 0.62352943}
+    - _WireColor: {r: 0, g: 0, b: 0, a: 1}

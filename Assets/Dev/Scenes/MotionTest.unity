@@ -518,21 +518,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93b9cd04881805540bafc6160c762d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followingCamera: {fileID: 878526493}
+  followingCamera: {fileID: 0}
   Debug_Input: 1
   comboInterval: 0.1
-  JumpSpeed: 6.8
+  JumpSpeed: 2.2666667
   CanJumpTime: 2
   JumpCounter: 0
   jumpAddtion: 0.05
-  Speed: 3
+  Speed: 6
   RuningSpeedMul: 1.5
   SpeedMul: 1
   Damping: 0.3
-  RotationDamping: 0.3
-  horizontalVelocity: {x: 0, y: 0, z: 0}
-  verticalVelocity: {x: 0, y: 0, z: 0}
-  gravity: {x: -0, y: -30, z: -0}
+  RotationDamping: 0.7
+  forward: {x: 0, y: 0, z: 0}
+  right: {x: 0, y: 0, z: 0}
+  up: {x: 0, y: 0, z: 0}
+  threshold: 0.01
+  gravity: {x: -0, y: -10, z: -0}
+  useForce: 0
+  Log_Move: 1
   continuousVC: {fileID: 0}
   m_WhatIsGround:
     serializedVersion: 2
@@ -1539,12 +1543,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1484efb2d99fb4b43851aca08a3882ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Renderer: []
   RecoverTimeStep: 0.5
   RecoverCounter: 0
-  lengthOffset: -0.2
+  TriggerInterval: 0.2
   ExtentsXY: {x: 0.2, y: 0.2}
-  fadeOutDuration: 0.8
+  animeTime: 1
+  lengthOffset: -0.2
+  Renderer: []
+  OriginAlpha: 1
+  TargetAlpha: 0.2
+  targetLayout:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &878526497
 MonoBehaviour:
   m_ObjectHideFlags: 0

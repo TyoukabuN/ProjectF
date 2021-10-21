@@ -4,10 +4,10 @@ using UnityEngine;
 
 public interface IControllable
 {
-    void MoveForward(float timeStep = 0);
-    void MoveBackward(float timeStep = 0);
-    void TurnLeft(float timeStep = 0);
-    void TurnRight(float timeStep = 0);
+    void OnMoveForward(float timeStep = 0);
+    void OnMoveBackward(float timeStep = 0);
+    void OnMoveLeft(float timeStep = 0);
+    void OnMoveRight(float timeStep = 0);
     void Jump(float timeStep = 0);
     bool CanJump();
     int LeftJumpTime();

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -17,11 +18,16 @@ public class ProceduralGrid : MonoBehaviour
     MeshFilter meshFilter;
     MeshRenderer meshRenderer;
 
+    public Image image;
+    CanvasRenderer canvasRenderer;
+    public Material material;
+
 
     void Awake()
     {
-        meshFilter = GetComponent<MeshFilter>();
-        meshRenderer = GetComponent<MeshRenderer>();
+        //meshFilter = GetComponent<MeshFilter>();
+        //meshRenderer = GetComponent<MeshRenderer>();
+        canvasRenderer = image.GetComponent<CanvasRenderer>();
 
         if (meshFilter)
             meshFilter.mesh = null;
@@ -30,7 +36,7 @@ public class ProceduralGrid : MonoBehaviour
 
         ReGenerate();
 
-        meshRenderer.material = ShaderHandle.GetMaterial("Custom_UVChecker");
+        //meshRenderer.material = ShaderHandle.GetMaterial("Custom_UVChecker");
     }
 
     void Update()
@@ -38,6 +44,7 @@ public class ProceduralGrid : MonoBehaviour
     }
 
     public List<Vector3> vertexs = new List<Vector3>();
+    public List<Vector3> normals = new List<Vector3>();
 
     bool working = false;
     public void ReGenerate()
@@ -52,10 +59,11 @@ public class ProceduralGrid : MonoBehaviour
         if (!mesh)
             mesh = new Mesh();
 
-        meshFilter.mesh = mesh;
+        //meshFilter.mesh = mesh;
 
         var gInterval = new WaitForSeconds(0.05f);
         vertexs.Clear();
+        normals.Clear();
 
         var uv = ListPool<Vector2>.Get();
         for (int y = 0; y < GridSizeY + 1; y++)
@@ -64,6 +72,7 @@ public class ProceduralGrid : MonoBehaviour
             { 
                 vertexs.Add(new Vector3(x,y));
                 uv.Add(new Vector2(x / GridSizeX, y / GridSizeY));
+                normals.Add(new Vector3(0.5f, 0.5f, 0.5f));
             }
         }
         mesh.vertices = vertexs.ToArray();
@@ -88,10 +97,11 @@ public class ProceduralGrid : MonoBehaviour
 
                 mesh.triangles = trangles.ToArray();
                 mesh.RecalculateNormals();
+
                 yield return gInterval;
             }
         }
-
+        mesh.normals = normals.ToArray();
         //other version
         //use in OpenGL
         //int[] triangles = new int[GridSizeX * GridSizeY * 6];
@@ -111,6 +121,12 @@ public class ProceduralGrid : MonoBehaviour
         ListPool<int>.Release(trangles);
         ListPool<int>.Release(temp);
         ListPool<Vector2>.Release(uv);
+
+        if (canvasRenderer)
+        {
+            canvasRenderer.SetMaterial(material,0);
+            canvasRenderer.SetMesh(mesh);
+        }
 
         working = false;
         yield break;

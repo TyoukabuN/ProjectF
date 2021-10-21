@@ -19,8 +19,6 @@ public partial class ShaderHandle : MonoSingleton<ShaderHandle>
     // Update is called once per frame
     void Update()
     {
-        float t = Time.realtimeSinceStartup;
-        realtimeVec4.Set(t / 20, t, t * 2, t * 3);
-        Shader.SetGlobalVector(Realtime_ID, realtimeVec4);
+        Update_GlobalOption();
     }
 }
