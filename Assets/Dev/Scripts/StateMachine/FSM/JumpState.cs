@@ -29,10 +29,10 @@ public class JumpState : State
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
         }
-        if (controllable.IsGround())
-        {
-            stateMachine.Enter((int)PlayerController.StateType.Move);
-        }
+        //if (controllable.IsGround())
+        //{
+        //    stateMachine.Enter((int)PlayerController.StateType.Move);
+        //}
 
         return true;
     }

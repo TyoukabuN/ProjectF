@@ -37,6 +37,8 @@ public partial class PlayerController : Controller, IControllable
     private new CapsuleCollider collider;
     private new Rigidbody rigidbody;
 
+    private Vector3 originPosition = Vector3.zero;
+
     void Awake()
     {
         if (current == null)
@@ -83,6 +85,7 @@ public partial class PlayerController : Controller, IControllable
             }
         }
 
+        originPosition = transform.position;
 
         InitObservedKey();
     }
@@ -99,6 +102,11 @@ public partial class PlayerController : Controller, IControllable
         }
 
 
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = originPosition;
     }
 
 #if UNITY_EDITOR

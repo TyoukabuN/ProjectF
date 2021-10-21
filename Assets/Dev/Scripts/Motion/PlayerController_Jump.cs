@@ -41,6 +41,10 @@ public partial class PlayerController
         {
             anyJump = anyJump || true;
         }
+        if (GetKey(InputDefine.Jump))
+        {
+            Jumping();
+        }
         return anyJump;
     }
 

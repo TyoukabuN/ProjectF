@@ -150,10 +150,13 @@ public class ObstacleFadeOut : MonoBehaviour
         foreach (var collider in res)
         {
             var renderer = collider.GetComponent<Renderer>();
+            if (!renderer)
+                continue;
+
             if (coldDownList.Any(info => info.renderer.gameObject.GetInstanceID() == renderer.gameObject.GetInstanceID()))
                 continue;
 
-            if (renderer && !Renderer.Contains(renderer))
+            if (!Renderer.Contains(renderer))
             {
                 Renderer.Add(renderer);
                 Transparent(renderer);
