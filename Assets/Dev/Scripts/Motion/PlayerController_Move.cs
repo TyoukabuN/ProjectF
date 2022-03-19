@@ -129,8 +129,6 @@ public partial class PlayerController
         float forwardStep = 1.0f;
         float rightStep = 1.0f;
 
-
-
         rdHorizontalVelocity.Set(rigidbody.velocity.x, 0, rigidbody.velocity.z);
         if (rdHorizontalVelocity.magnitude > FinalHorizontalSpeed)
         {
@@ -145,40 +143,22 @@ public partial class PlayerController
             rightStep = 0;
         }
 
-        var direction = forward * forwardStep + right * rightStep;
+        var direction = forward * forwardStep + right * rightStep + up;
         direction.Normalize();
 
-        //displacement
-        if (anyMoveInput)
+        if (!IsGround())
         { 
-            velocity = rdHorizontalVelocity + rdVerticalVelocity;
-            if (rigidbody)
-            {
-                rigidbody.velocity = velocity;
-                if (useForce)
-                {
-                    rigidbody.AddForce(forward.normalized   * forwardStep   * FinalHorizontalSpeed * timeStep);
-                    rigidbody.AddForce(right.normalized     * rightStep     * FinalHorizontalSpeed * timeStep);
-                }
-                else
-                {
-                    rigidbody.MovePosition(rigidbody.position + direction * FinalHorizontalSpeed * timeStep);
-                }
-            }
+            up += gravity * timeStep;
+            if(up.y < 0)
+                up = Vector3.ClampMagnitude(up, Math.Abs(gravity.y));
         }
+        else
+            up = Vector3.zero;
 
-        //velocity = Vector3.zero;
+        //displacement
+        //rigidbody.MovePosition(rigidbody.position + direction * FinalHorizontalSpeed * timeStep + direction * FinalVerticalSpeed * timeStep);
+        rigidbody.MovePosition(rigidbody.position + direction * Speed * timeStep);
 
-
-        //damp / counter force
-        if (!anyMoveInput)
-        {
-            //if (Mathf.Abs(rigidbody.velocity.z) > threshold)
-            //    rigidbody.AddForce(GetForwardVector() * -rigidbody.velocity.z * timeStep);
-            //if (Mathf.Abs(rigidbody.velocity.x) > threshold)
-            //    rigidbody.AddForce(GetRightVector() * -rigidbody.velocity.x * timeStep);
-            //continuousVC = null;
-        }
         //rotation
         if (anyMoveInput)
         {
@@ -187,18 +167,6 @@ public partial class PlayerController
             forward.y = 0;
             transform.forward = forward.normalized;
         }
-        if (!IsGround())
-        {
-            up += gravity * timeStep;
-            rigidbody.velocity = rigidbody.velocity + up;
-            //Debug.Log(up);
-        }
-        else
-        {
-            up = Vector3.zero;
-            rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, rigidbody.velocity.z);
-        }
-        Debug.Log(rigidbody.velocity);
     }
 
     [SerializeField] private LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character

@@ -15,7 +15,7 @@ public partial class PlayerController
     }
     public int LeftJumpTime()
     {
-        return CanJumpTime - CanJumpTime;
+        return CanJumpTime - JumpCounter;
     }
     public bool RecoverJumpTime()
     {
@@ -29,7 +29,8 @@ public partial class PlayerController
             return;
 
         JumpCounter++;
-        up = Vector3.zero;
+        if(up.y <= 0)
+            up = Vector3.zero;
         up += Vector3.up * JumpSpeed;
         Debug.Log("Jump");
         transform.position += Vector3.up * jumpAddtion;
