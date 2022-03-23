@@ -29,11 +29,10 @@ public partial class PlayerController
             return;
 
         JumpCounter++;
-        if(up.y <= 0)
+        if (up.y <= 0)
             up = Vector3.zero;
         up += Vector3.up * JumpSpeed;
-        Debug.Log("Jump");
-        transform.position += Vector3.up * jumpAddtion;
+        transform.position += Vector3.up * (jumpAddtion + groundedRadius);
     }
     public bool OnInputCheck_Jump(float timeStep = 0)
     {

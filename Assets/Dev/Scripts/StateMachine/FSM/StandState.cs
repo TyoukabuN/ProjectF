@@ -23,7 +23,7 @@ public class StandState : State
         {
             stateMachine.Enter((int)PlayerController.StateType.Move);
         }
-        if (anyJump)
+        if (anyJump && controllable.IsGround())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
         }

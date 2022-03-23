@@ -68,6 +68,8 @@ public partial class PlayerController : Controller, IControllable
                 cinemachineBrain.m_CameraActivatedEvent.AddListener(OnCameraActivatedEvent);
             }
         originPosition = transform.position;
+
+        m_WhatIsGround = LayerMask.GetMask("Ground");
         InitObservedKey();
     }
 
@@ -111,7 +113,7 @@ public partial class PlayerController : Controller, IControllable
         Handles.color = Color.red;
 
         Gizmos.color = Color.red; 
-        Gizmos.DrawWireSphere(transform.position + k_GroundedOffset, k_GroundedRadius);
+        Gizmos.DrawWireSphere(transform.position + groundedOffset, groundedRadius);
     }
 #endif
 

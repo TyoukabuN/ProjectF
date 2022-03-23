@@ -107,12 +107,6 @@ public partial class PlayerController
         right = -1 * GetRightVector();
     }
 
-
-    public void Jumping()
-    {
-        up += GetUpVector() * JumpSpeed;
-    }
-
     public void Move_Update()
     {
         Motion(Time.deltaTime);
@@ -120,20 +114,24 @@ public partial class PlayerController
 
     Vector3 rdHorizontalVelocity = Vector3.zero;
     Vector3 rdVerticalVelocity = Vector3.zero;
+
+    private float forwardStep = 1.0f;
+    private float rightStep = 1.0f;
+    private float upStep = 1.0f;
     public void Motion(float timeStep = 0)
     {
-        //Cinemachine.CinemachineBrain.
-        //limit
-        //if (!useForce)
-        //{ 
-        float forwardStep = 1.0f;
-        float rightStep = 1.0f;
+        GroundCheck();
+
+        timeStep *= Damping;
+        forwardStep = 1.0f;
+        rightStep = 1.0f;
+        upStep = 1.0f;
 
         rdHorizontalVelocity.Set(rigidbody.velocity.x, 0, rigidbody.velocity.z);
         if (rdHorizontalVelocity.magnitude > FinalHorizontalSpeed)
         {
             rdHorizontalVelocity = rdHorizontalVelocity.normalized * FinalHorizontalSpeed;
-            forwardStep = 0;
+            //forwardStep = 0;
         }
 
         rdVerticalVelocity.Set(0, rigidbody.velocity.y, 0);
@@ -143,8 +141,7 @@ public partial class PlayerController
             rightStep = 0;
         }
 
-        var direction = forward * forwardStep + right * rightStep + up;
-        direction.Normalize();
+        //var direction = forward.normalized * forwardStep + right.normalized * rightStep + up;
 
         if (!IsGround())
         { 
@@ -157,7 +154,9 @@ public partial class PlayerController
 
         //displacement
         //rigidbody.MovePosition(rigidbody.position + direction * FinalHorizontalSpeed * timeStep + direction * FinalVerticalSpeed * timeStep);
-        rigidbody.MovePosition(rigidbody.position + direction * Speed * timeStep);
+        //rigidbody.MovePosition(rigidbody.position + direction * Speed * timeStep);
+        Vector3 displacement = (forward + right) * FinalHorizontalSpeed + up;
+        rigidbody.MovePosition(rigidbody.position + displacement * timeStep);
 
         //rotation
         if (anyMoveInput)
@@ -168,86 +167,29 @@ public partial class PlayerController
             transform.forward = forward.normalized;
         }
     }
-
-    [SerializeField] private LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character
-    [SerializeField] private float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
-    [SerializeField] private Vector3 k_GroundedOffset = Vector3.zero;
-    [SerializeField] private bool grounded;
-    public bool IsGround()
-    {
-        bool wasGrounded = grounded;
-        grounded = false;
-
-        var colliders = Physics.RaycastAll(transform.position + k_GroundedOffset,Vector3.down, k_GroundedRadius, m_WhatIsGround);
-        if(colliders.Length>0)
-            grounded = true;
-
-        return grounded && up.y <= 0;
-    }
-
-    bool cancellingGrounded;
-    float maxSlopeAngle = 35f;
-    Vector3 normalVector = Vector3.zero;
-    private bool IsFloor(Vector3 colContactNormal)
-    {
-        float angle = Vector3.Angle(Vector3.up, colContactNormal);
-        return angle < maxSlopeAngle;
-    }
-
-    void OnCollisionStay123(Collision other)
-    {
-        //if (theCollision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        //{
-        //    grounded = true;
-        //}
-        
-        int layer = other.gameObject.layer;
-
-        if (m_WhatIsGround != (m_WhatIsGround | (1 << layer))) return;
-
-        for (int i = 0; i < other.contactCount; i++)
-        {
-            Vector3 normal = other.contacts[i].normal;
-            if (IsFloor(normal))
-            {
-                if (!grounded)
-                    OnGrounding();
-
-                grounded = true;
-                cancellingGrounded = false;
-                normalVector = normal;
-                CancelInvoke(nameof(StopGrounded));
-                break;
-            }
-        }
-
-        float delay = 3f;
-        if (!cancellingGrounded)
-        {
-            cancellingGrounded = true;
-            Invoke(nameof(StopGrounded), Time.deltaTime * delay);
-        }
-    }
-
     private void OnGrounding()
     {
-        FSM.Enter((int)PlayerController.StateType.Move);
+        FSM.Enter((int)PlayerController.StateType.Stand);
     }
 
-    private void StopGrounded()
+    [SerializeField] private LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character
+    [SerializeField] private float groundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+    [SerializeField] private Vector3 groundedOffset = Vector3.zero;
+    [SerializeField] private bool grounded;
+
+    public bool IsGround()
     {
-        grounded = false;
+        return grounded;
     }
 
+    public void GroundCheck()
+    {
+        grounded = Physics.CheckSphere(transform.position + groundedOffset, groundedRadius, m_WhatIsGround, QueryTriggerInteraction.Ignore);
+    }
 
     private bool anyMoveInput = false;
     public bool IsMoving()
     {
-        //if (!anyMoveInput)
-        //{
-        //    return (horizontalVelocity - Vector3.zero).magnitude > 0.8f;
-        //}
-
         return anyMoveInput;
     }
 
@@ -260,7 +202,6 @@ public partial class PlayerController
     public bool OnInputCheck_Move(float timeStep = 0)
     {
         anyMoveInput = false;
-
 
         forward = Vector3.zero;
         right = Vector3.zero;
@@ -300,8 +241,6 @@ public partial class PlayerController
         {
             SpeedMul = 1f;
         }
-
-
 
         return anyMoveInput;
     }

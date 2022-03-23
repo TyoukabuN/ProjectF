@@ -27,7 +27,7 @@ public class MoveState : State
         {
             stateMachine.Enter((int)PlayerController.StateType.Stand);
         }
-        if (anyJump)
+        if (anyJump && controllable.IsGround())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
         }
