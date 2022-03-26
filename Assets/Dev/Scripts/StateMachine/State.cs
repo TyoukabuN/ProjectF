@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class State
 {
-    public IControllable controllable;
+    public Controller controller;
 
     public StateMachine stateMachine;
     public int stateKey = -1;

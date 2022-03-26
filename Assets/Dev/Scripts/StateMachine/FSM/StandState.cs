@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class StandState : State
 {
-    public StandState(IControllable controllable, int stateKey = -1) : base(stateKey)
+    public StandState(Controller controllable, int stateKey = -1) : base(stateKey)
     {
-        this.controllable = controllable;
+        this.controller = controllable;
     }
     public override bool OnEnter(int stateKey = -1)
     {
-        controllable.SetAnimatorTrigger("Stand");
+        controller.SetAnimatorTrigger("Stand");
 
         return true;
     }
     public override bool OnUpdate(float timeStep = 0)
     {
-        var anyMove = controllable.OnInputCheck_Move(Time.deltaTime);
-        var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
+        var anyMove = controller.OnInputCheck_Move(Time.deltaTime);
+        var anyJump = controller.OnInputCheck_Jump(Time.deltaTime);
 
         if (anyMove)
         {
             stateMachine.Enter((int)PlayerController.StateType.Move);
         }
-        if (anyJump && controllable.IsGround())
+        if (anyJump && controller.IsGround())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
         }

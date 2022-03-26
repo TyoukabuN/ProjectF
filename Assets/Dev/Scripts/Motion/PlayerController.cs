@@ -6,7 +6,7 @@ using Cinemachine;
 using UnityEditor;
 #endif
 
-public partial class PlayerController : Controller, IControllable
+public partial class PlayerController : Controller//, IControllable
 {
     public enum StateType:int
     { 
@@ -29,18 +29,12 @@ public partial class PlayerController : Controller, IControllable
 
     public static PlayerController current;
 
-    private Animator animator;
-    [SerializeField]private Camera followingCamera;
-    private CharacterController characterController;
-    private CinemachineBrain cinemachineBrain;
-
-    private new CapsuleCollider collider;
-    private new Rigidbody rigidbody;
-
     private Vector3 originPosition = Vector3.zero;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         if (current == null)
             current = this;
 
@@ -54,23 +48,7 @@ public partial class PlayerController : Controller, IControllable
             m_FSM.OnInit((int)StateType.Stand);
         }
 
-        if (characterController == null) characterController = GetComponent<CharacterController>();
-        if (rigidbody == null) rigidbody = GetComponent<Rigidbody>();
-        if (collider == null) collider = GetComponent<CapsuleCollider>();
-        if (animator == null) animator = GetComponentInChildren<Animator>();
-        if (cinemachineBrain == null && Camera.main)
-            cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
-            if (cinemachineBrain)
-            {
-                cinemachineBrain.m_CameraCutEvent.RemoveListener(OnCameraCutEvent);
-                cinemachineBrain.m_CameraCutEvent.AddListener(OnCameraCutEvent);
-                cinemachineBrain.m_CameraActivatedEvent.RemoveListener(OnCameraActivatedEvent);
-                cinemachineBrain.m_CameraActivatedEvent.AddListener(OnCameraActivatedEvent);
-            }
         originPosition = transform.position;
-
-        m_WhatIsGround = LayerMask.GetMask("Ground");
-        InitObservedKey();
     }
 
     // Update is called once per frame

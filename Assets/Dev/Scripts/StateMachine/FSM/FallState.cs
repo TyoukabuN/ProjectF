@@ -5,27 +5,27 @@ using StateType = PlayerController.StateType;
 
 public class FallState : State
 {
-    public FallState(IControllable controllable, int stateKey = -1) : base(stateKey)
+    public FallState(Controller controllable, int stateKey = -1) : base(stateKey)
     {
-        this.controllable = controllable;
+        this.controller = controllable;
     }
 
     public override bool OnUpdate(float timeStep = 0)
     {
-        if (controllable == null)
+        if (controller == null)
             return false;
 
-        var anyMove = controllable.OnInputCheck_Move(Time.deltaTime);
-        var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
+        var anyMove = controller.OnInputCheck_Move(Time.deltaTime);
+        var anyJump = controller.OnInputCheck_Jump(Time.deltaTime);
 
-        controllable.Motion(Time.deltaTime);
+        controller.Motion(Time.deltaTime);
 
 
-        if (anyJump && controllable.CanJump())
+        if (anyJump && controller.CanJump())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
         }
-        if (controllable.IsGround())
+        if (controller.IsGround())
         {
             stateMachine.Enter((int)PlayerController.StateType.Move);
         }
@@ -35,10 +35,10 @@ public class FallState : State
 
     public override bool OnExit(int stateKey = -1)
     {
-        if ((StateType)stateKey != StateType.Jump &&
-            (StateType)stateKey != StateType.Fall)
+        if ((StateType)stateKey == StateType.Move ||
+            (StateType)stateKey == StateType.Stand)
         {
-            controllable.RecoverJumpTime();
+            controller.RecoverJumpTime();
         }
         return base.OnExit(stateKey);
     }

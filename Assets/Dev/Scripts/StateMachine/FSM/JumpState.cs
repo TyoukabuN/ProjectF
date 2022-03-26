@@ -4,43 +4,47 @@ using UnityEngine;
 using StateType = PlayerController.StateType;
 public class JumpState : State
 {
-    public JumpState(IControllable controllable, int stateKey = -1) : base(stateKey)
+    public JumpState(Controller controllable, int stateKey = -1) : base(stateKey)
     {
-        this.controllable = controllable;
+        this.controller = controllable;
     }
     public override bool OnEnter(int stateKey = -1)
     {
-         controllable.Jump(Time.deltaTime);
+         controller.Jump(Time.deltaTime);
         return true;
     }
     public override bool OnUpdate(float timeStep = 0)
     {
-        if (controllable == null)
+        if (controller == null)
             return false;
 
-        var anyMove = controllable.OnInputCheck_Move(Time.deltaTime);
-        var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
+        var anyMove = controller.OnInputCheck_Move(Time.deltaTime);
+        var anyJump = controller.OnInputCheck_Jump(Time.deltaTime);
 
-        controllable.SetAnimatorTrigger(anyMove?"Move":"Stand");
+        controller.SetAnimatorTrigger(anyMove?"Move":"Stand");
 
-        if (anyJump && controllable.CanJump())
+        if (anyJump && controller.CanJump())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
         }
-        if (controllable.IsGround())
+        if (controller.IsGround())
         {
             stateMachine.Enter((int)PlayerController.StateType.Move);
         }
+        //else(controllable.GetForwardVector)
+        //{
+        //    stateMachine.Enter((int)PlayerController.StateType.Fall);
+        //}
 
         return true;
     }
 
     public override bool OnExit(int stateKey = -1)
     {
-        if ((StateType)stateKey != StateType.Jump &&
-            (StateType)stateKey != StateType.Fall)
+        if ((StateType)stateKey == StateType.Move ||
+            (StateType)stateKey == StateType.Stand)
         {
-            controllable.RecoverJumpTime();
+            controller.RecoverJumpTime();
         }
         return base.OnExit(stateKey);
     }

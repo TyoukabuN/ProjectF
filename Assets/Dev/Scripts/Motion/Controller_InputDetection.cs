@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public partial class PlayerController
+public partial class Controller
 {
     //time interval of key down
     private Dictionary<KeyCode, float> keyPressBook = new Dictionary<KeyCode, float>();
@@ -78,6 +78,11 @@ public partial class PlayerController
     public bool GetKeyDown(KeyCode keyCode)
     {
         return Input.GetKeyDown(keyCode);
+    }
+
+    public bool GetKeyUp(KeyCode keyCode)
+    {
+        return Input.GetKeyUp(keyCode);
     }
 
     /// <summary>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class PlayerController
+public partial class Controller
 {
     private int scanLineAppearCenter = Shader.PropertyToID("_ScanLineAppearCenter");
     private Vector4 tempVector4 = Vector4.zero;

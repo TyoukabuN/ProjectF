@@ -4,30 +4,30 @@ using UnityEngine;
 
 public class MoveState : State
 {
-    public MoveState(IControllable controllable,int stateKey = -1) : base(stateKey)
+    public MoveState(Controller controllable,int stateKey = -1) : base(stateKey)
     {
-        this.controllable = controllable;
+        this.controller = controllable;
     }
     public override bool OnEnter(int stateKey = -1)
     {
-        controllable.SetAnimatorTrigger("Move");
+        controller.SetAnimatorTrigger("Move");
 
         return true;
     }
     public override bool OnUpdate(float timeStep = 0)
     {
-        if (controllable == null)
+        if (controller == null)
             return false;
 
-        var anyMove = controllable.OnInputCheck_Move(Time.deltaTime);
-        var anyJump = controllable.OnInputCheck_Jump(Time.deltaTime);
+        var anyMove = controller.OnInputCheck_Move(Time.deltaTime);
+        var anyJump = controller.OnInputCheck_Jump(Time.deltaTime);
 
 
-        if (!controllable.IsMoving())
+        if (!controller.IsMoving())
         {
             stateMachine.Enter((int)PlayerController.StateType.Stand);
         }
-        if (anyJump && controllable.IsGround())
+        if (anyJump && controller.IsGround())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
         }

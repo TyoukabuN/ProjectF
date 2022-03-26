@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
 
-public partial class PlayerController 
+
+public partial class Controller
 {
     public float JumpSpeed = 10;
     public int CanJumpTime = 2;

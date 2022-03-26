@@ -3,24 +3,109 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using System;
+using System.Linq;
 
-public partial class PlayerController
+public partial class Controller
 {
     //Physice Properties
     public float Speed = 20;
     public float RuningSpeedMul = 1.8f;
-    [SerializeField]private float SpeedMul = 1;
+    [SerializeField]protected float SpeedMul = 1;
     public float FinalHorizontalSpeed
     {
-        get { return Speed * SpeedMul; }
+        get { return Speed * SpeedMul + AdditionSpeed; }
     }
+    //addition speed
+    public float AdditionSpeed = 0;
+    public class AdditionSpeedInfo
+    {
+        public string key = string.Empty;
+        public float value = 0;
+        public float duration = 0;
+        public float timeStamp = 0;
+        public float counter = 0;
+        public AdditionSpeedInfo(string key,float value,float duration)
+        {
+            this.key = key;
+            this.value = value;
+            this.duration = duration;
+            this.timeStamp = Time.time;
+        }
+        public bool IsVaild()
+        {
+            return duration > Time.time - timeStamp;
+        }
+    }
+    public Dictionary<string, AdditionSpeedInfo> AdditionSpeedMap = new Dictionary<string, AdditionSpeedInfo>();
+    public List<AdditionSpeedInfo> AdditionSpeedList = new List<AdditionSpeedInfo>();
+    public void RefreshAdditionSpeed()
+    {
+        float temp = 0;
+        for (int i=0; i < AdditionSpeedList.Count; i++)
+        {
+            AdditionSpeedInfo info = null;
+            try
+            {
+                info = AdditionSpeedList[i];
+            }
+            catch(Exception e)
+            {
+                continue;
+            }
+            if (info == null)
+                continue;
+
+            if (!info.IsVaild())
+            {
+                AdditionSpeedList.RemoveAt(i);
+                AdditionSpeedMap.Remove(info.key);
+                continue;
+            }
+            temp += info.value;
+        }
+        temp = temp < 0 ? 0 : temp;
+        AdditionSpeed = temp;
+    }
+    public void InsertAdditionSpeed(string key,float value, float duration)
+    {
+        if (AdditionSpeedMap.ContainsKey(key))
+            return;
+        AdditionSpeed += value;
+        AdditionSpeed = AdditionSpeed < 0 ? 0 : AdditionSpeed;
+        var info = new AdditionSpeedInfo(key,value, duration);
+        AdditionSpeedMap.Add(key, info);
+        AdditionSpeedList.Add(info);
+    }
+    public void RemoveAdditionSpeed(string key)
+    {
+        if (!AdditionSpeedMap.ContainsKey(key))
+            return;
+        AdditionSpeed -= AdditionSpeedMap[key].value;
+        AdditionSpeed = AdditionSpeed < 0 ? 0 : AdditionSpeed;
+        AdditionSpeedInfo info = null;
+        if (AdditionSpeedMap.TryGetValue(key, out info))
+        {
+            AdditionSpeedMap.Remove(key);
+            AdditionSpeedList.Remove(info);
+        }
+    }
+    public void UpdateAdditonSpeedTimeStamp()
+    {
+        foreach (var pair in AdditionSpeedMap)
+        {
+            if (pair.Value == null) continue;
+            pair.Value.counter += Time.deltaTime;
+        }
+        RefreshAdditionSpeed();
+    }
+    //
     public float FinalVerticalSpeed
     {
         get { return JumpSpeed * SpeedMul; }
     }    
     [Range(0f,1f)] public float Damping = 0.3f;
     [Range(0f, 1f)] public float RotationDamping = 0.3f;
-    private Vector3 velocity = Vector3.zero;
+    protected Vector3 velocity = Vector3.zero;
 
     public Vector3 forward = Vector3.zero;
     public Vector3 right = Vector3.zero;
@@ -28,8 +113,8 @@ public partial class PlayerController
     public float threshold = 0.01f;
     public Vector3 gravity = -Vector3.up * 10f;
 
-    private Vector3 tempForward = Vector3.zero;
-    private Vector3 tempRight = Vector3.zero;
+    protected Vector3 tempForward = Vector3.zero;
+    protected Vector3 tempRight = Vector3.zero;
 
     public bool useForce = true;
     public bool Log_Move = true;
@@ -48,11 +133,36 @@ public partial class PlayerController
         }
     }
 
+    protected CinemachineBrain cinemachineBrain;
+    [SerializeField] protected Camera followingCamera;
+
+    protected new CapsuleCollider collider;
+    protected new Rigidbody rigidbody;
+
+    protected void Init_Move()
+    {
+        if (rigidbody == null) rigidbody = GetComponent<Rigidbody>();
+        if (collider == null) collider = GetComponent<CapsuleCollider>();
+
+        if (cinemachineBrain == null && Camera.main)
+            cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
+        if (cinemachineBrain)
+        {
+            cinemachineBrain.m_CameraCutEvent.RemoveListener(OnCameraCutEvent);
+            cinemachineBrain.m_CameraCutEvent.AddListener(OnCameraCutEvent);
+            cinemachineBrain.m_CameraActivatedEvent.RemoveListener(OnCameraActivatedEvent);
+            cinemachineBrain.m_CameraActivatedEvent.AddListener(OnCameraActivatedEvent);
+        }
+
+        m_WhatIsGround = LayerMask.GetMask("Ground");
+        InitObservedKey();
+    }
+
     void OnCameraCutEvent(CinemachineBrain brain)
     {
 
     }
-    [SerializeField]private CinemachineVirtualCamera continuousVC;
+    [SerializeField]protected CinemachineVirtualCamera continuousVC;
     void OnCameraActivatedEvent(ICinemachineCamera now, ICinemachineCamera pre)
     {
         continuousVC = pre as CinemachineVirtualCamera;
@@ -115,9 +225,9 @@ public partial class PlayerController
     Vector3 rdHorizontalVelocity = Vector3.zero;
     Vector3 rdVerticalVelocity = Vector3.zero;
 
-    private float forwardStep = 1.0f;
-    private float rightStep = 1.0f;
-    private float upStep = 1.0f;
+    protected float forwardStep = 1.0f;
+    protected float rightStep = 1.0f;
+    protected float upStep = 1.0f;
     public void Motion(float timeStep = 0)
     {
         GroundCheck();
@@ -143,7 +253,7 @@ public partial class PlayerController
 
         //var direction = forward.normalized * forwardStep + right.normalized * rightStep + up;
 
-        if (!IsGround())
+        if (!IsGround() || lastGroundDistance > 0)
         { 
             up += gravity * timeStep;
             if(up.y < 0)
@@ -167,15 +277,13 @@ public partial class PlayerController
             transform.forward = forward.normalized;
         }
     }
-    private void OnGrounding()
-    {
-        FSM.Enter((int)PlayerController.StateType.Stand);
-    }
 
-    [SerializeField] private LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character
-    [SerializeField] private float groundedRadius = .2f; // Radius of the overlap circle to determine if grounded
-    [SerializeField] private Vector3 groundedOffset = Vector3.zero;
-    [SerializeField] private bool grounded;
+    [SerializeField] protected LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character
+    [SerializeField] protected float groundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+    [SerializeField] protected Vector3 groundedOffset = Vector3.zero;
+    [SerializeField] protected bool grounded;
+    [SerializeField] protected float lastGroundDistance = 0.0f;
+    [SerializeField] protected Vector3 lastGroundHitPoint;
 
     public bool IsGround()
     {
@@ -185,9 +293,22 @@ public partial class PlayerController
     public void GroundCheck()
     {
         grounded = Physics.CheckSphere(transform.position + groundedOffset, groundedRadius, m_WhatIsGround, QueryTriggerInteraction.Ignore);
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + groundedOffset, Vector3.down, out hit, 100))
+        { 
+            if(transform.position.y - hit.point.y < 0)
+                lastGroundDistance = 0;
+            else
+                lastGroundDistance = (transform.position - hit.point).magnitude;
+
+            lastGroundHitPoint = hit.point;
+        }
+
+        lastGroundDistance = lastGroundDistance > 0 ? lastGroundDistance : 0;
     }
 
-    private bool anyMoveInput = false;
+    protected bool anyMoveInput = false;
     public bool IsMoving()
     {
         return anyMoveInput;
@@ -198,7 +319,7 @@ public partial class PlayerController
     {
         return SpeedMul;
     }
-
+    public float dashDuration = 1.0f;
     public bool OnInputCheck_Move(float timeStep = 0)
     {
         anyMoveInput = false;
@@ -240,6 +361,14 @@ public partial class PlayerController
         else if(!anyMoveInput)
         {
             SpeedMul = 1f;
+        }
+
+        UpdateAdditonSpeedTimeStamp();
+
+        if (GetKeyDown(InputDefine.Shift))
+        {
+            //SpeedMul = RuningSpeedMul;
+            InsertAdditionSpeed("dash", 20, dashDuration);
         }
 
         return anyMoveInput;
