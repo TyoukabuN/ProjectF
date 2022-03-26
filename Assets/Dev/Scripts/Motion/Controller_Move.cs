@@ -35,6 +35,10 @@ public partial class Controller
         {
             return duration > Time.time - timeStamp;
         }
+        public void ResetTimeStamp()
+        {
+            timeStamp = Time.time;
+        }
     }
     public Dictionary<string, AdditionSpeedInfo> AdditionSpeedMap = new Dictionary<string, AdditionSpeedInfo>();
     public List<AdditionSpeedInfo> AdditionSpeedList = new List<AdditionSpeedInfo>();
@@ -68,11 +72,17 @@ public partial class Controller
     }
     public void InsertAdditionSpeed(string key,float value, float duration)
     {
-        if (AdditionSpeedMap.ContainsKey(key))
+        AdditionSpeedInfo info = null;
+        if (AdditionSpeedMap.TryGetValue(key, out info))
+        {
+            info.value = value;
+            info.duration = duration;
+            info.ResetTimeStamp();
             return;
+        }
         AdditionSpeed += value;
         AdditionSpeed = AdditionSpeed < 0 ? 0 : AdditionSpeed;
-        var info = new AdditionSpeedInfo(key,value, duration);
+        info = new AdditionSpeedInfo(key,value, duration);
         AdditionSpeedMap.Add(key, info);
         AdditionSpeedList.Add(info);
     }
