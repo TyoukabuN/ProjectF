@@ -18,16 +18,21 @@ public class FallState : State
         var anyMove = controller.OnInputCheck_Move(Time.deltaTime);
         var anyJump = controller.OnInputCheck_Jump(Time.deltaTime);
 
-        controller.Motion(Time.deltaTime);
-
-
-        if (anyJump && controller.CanJump())
+        if (anyJump)
         {
-            stateMachine.Enter((int)PlayerController.StateType.Jump);
+            if(controller.CanRecoverJumpCounter())
+                controller.RecoverJumpTime();
+
+            if (controller.CanJump())
+            {
+                stateMachine.Enter((int)PlayerController.StateType.Jump);
+                return true;
+            }
         }
         if (controller.IsGround())
         {
-            stateMachine.Enter((int)PlayerController.StateType.Move);
+            stateMachine.Enter((int)PlayerController.StateType.Stand);
+            return true;
         }
 
         return true;

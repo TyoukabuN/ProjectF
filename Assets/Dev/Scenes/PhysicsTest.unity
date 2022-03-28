@@ -544,7 +544,7 @@ MonoBehaviour:
   Debug_Input: 0
   comboInterval: 0.1
   JumpSpeed: 10
-  CanJumpTime: 1
+  CanJumpTime: 2
   JumpCounter: 0
   jumpAddtion: 0.05
   Speed: 6
@@ -570,6 +570,7 @@ MonoBehaviour:
   grounded: 0
   lastGroundDistance: 0
   lastGroundHitPoint: {x: 0, y: 0, z: 0}
+  lastJumpGroundDistance: 0.1
   dashDuration: 0.35
   m_CircleScanLine: 0
 --- !u!54 &1574450234

@@ -27,6 +27,7 @@ public partial class Controller
         if (JumpCounter >= CanJumpTime)
             return;
 
+        Debug.Log(string.Format("<color=red>{0}</color>","跳跃"));
         JumpCounter++;
         if (up.y <= 0)
             up = Vector3.zero;

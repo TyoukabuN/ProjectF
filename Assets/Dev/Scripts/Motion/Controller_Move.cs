@@ -295,6 +295,12 @@ public partial class Controller
     [SerializeField] protected float lastGroundDistance = 0.0f;
     [SerializeField] protected Vector3 lastGroundHitPoint;
 
+    [SerializeField] public float lastJumpGroundDistance = 0.5f;
+
+    public bool CanRecoverJumpCounter()
+    {
+        return lastGroundDistance <= lastJumpGroundDistance;
+    }
     public bool IsGround()
     {
         return grounded;

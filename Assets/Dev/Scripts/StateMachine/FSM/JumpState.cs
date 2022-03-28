@@ -23,18 +23,21 @@ public class JumpState : State
 
         controller.SetAnimatorTrigger(anyMove?"Move":"Stand");
 
+        if (controller.IsGround())
+        {
+            stateMachine.Enter((int)PlayerController.StateType.Stand);
+            return true;
+        }
         if (anyJump && controller.CanJump())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
+            return true;
         }
-        if (controller.IsGround())
+        if (controller.up.y < 0)
         {
-            stateMachine.Enter((int)PlayerController.StateType.Move);
+            stateMachine.Enter((int)PlayerController.StateType.Fall);
+            return true;
         }
-        //else(controllable.GetForwardVector)
-        //{
-        //    stateMachine.Enter((int)PlayerController.StateType.Fall);
-        //}
 
         return true;
     }

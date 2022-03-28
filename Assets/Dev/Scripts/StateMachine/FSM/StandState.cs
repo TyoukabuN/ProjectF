@@ -22,10 +22,12 @@ public class StandState : State
         if (anyMove)
         {
             stateMachine.Enter((int)PlayerController.StateType.Move);
+            return true;
         }
         if (anyJump && controller.IsGround())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
+            return true;
         }
         return true;
     }

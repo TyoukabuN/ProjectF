@@ -26,10 +26,12 @@ public class MoveState : State
         if (!controller.IsMoving())
         {
             stateMachine.Enter((int)PlayerController.StateType.Stand);
+            return true;
         }
         if (anyJump && controller.IsGround())
         {
             stateMachine.Enter((int)PlayerController.StateType.Jump);
+            return true;
         }
 
         return true;

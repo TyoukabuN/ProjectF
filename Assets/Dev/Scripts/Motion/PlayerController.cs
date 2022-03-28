@@ -52,7 +52,8 @@ public partial class PlayerController : Controller//, IControllable
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
+    //void FixedUpdate()
     {
         Update_CircleScanLine();
         Update_InputDetection();
