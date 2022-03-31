@@ -1,4 +1,4 @@
-﻿Shader "Custom/UVChecker"
+﻿Shader "Custom/UVChecker/UVChecker"
 {
     Properties
     {

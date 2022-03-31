@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -9,9 +10,9 @@ using UnityEditor;
 [RequireComponent(typeof(MeshFilter)),RequireComponent(typeof(MeshRenderer))]
 public class ProceduralGrid : MonoBehaviour
 {
-    [Range(0,10)]
+    [Range(0,20)]
     public int GridSizeX = 4;
-    [Range(0, 10)]
+    [Range(0, 20)]
     public int GridSizeY = 2;
 
     public float genaralInteral = 0.05f;
@@ -25,6 +26,8 @@ public class ProceduralGrid : MonoBehaviour
     CanvasRenderer canvasRenderer;
     public Material material;
 
+    public bool DisplayVertex = false;
+
 
     void Awake()
     {
@@ -37,9 +40,12 @@ public class ProceduralGrid : MonoBehaviour
         //if (meshRenderer)
         //    meshRenderer.materials = new Material[] { };
 
-        meshRenderer.material = ShaderHandle.GetMaterial("Custom_UVChecker");
+        if (material != null)
+            meshRenderer.material = material;
+        else
+            meshRenderer.material = ShaderHandle.GetMaterial("Custom_UVCheckerUnLit");
 
-        ReGenerate();
+        //ReGenerate();
 
     }
 
@@ -63,6 +69,7 @@ public class ProceduralGrid : MonoBehaviour
         }
     }
     public List<Vertex> randomVertexs = new List<Vertex>();
+    public List<Vertex> vertexTemp = new List<Vertex>();
     public List<int> indexTemp = new List<int>();
 
     bool working = false;
@@ -76,7 +83,11 @@ public class ProceduralGrid : MonoBehaviour
     public IEnumerator Generate()
     {
         if (!mesh)
+        { 
             mesh = new Mesh();
+            mesh.name = "Procedural Mesh";
+        }
+
 
         //meshFilter.mesh = mesh;
 
@@ -85,6 +96,11 @@ public class ProceduralGrid : MonoBehaviour
         normals.Clear();
         uv.Clear();
 
+        if (GridSizeX <= 0 || GridSizeY <= 0)
+        {
+            mesh.name = "Procedural Mesh";
+            meshFilter.mesh = mesh;
+        }
 
         for (float y = 0; y < GridSizeY + 1; y++)
         {
@@ -97,42 +113,22 @@ public class ProceduralGrid : MonoBehaviour
         }
         mesh.vertices = vertexs.ToArray();
         mesh.uv = uv.ToArray();
-
-        rows.Clear();
-        cols.Clear();
-        for (int i = 0; i < GridSizeY; i++)
-            rows.Add(i);
-        for (int i = 0; i < GridSizeX; i++)
-            cols.Add(i);
-
-        indexTemp.Clear();
-        for (int i = 0; i < GridSizeY; i++)
-        {
-            int index = Random.Range(0, rows.Count);
-            indexTemp.Add(rows[index]);
-            rows.RemoveAt(index);
-        }
-        rows.AddRange(indexTemp);
-        indexTemp.Clear();
-        for (int i = 0; i < GridSizeX; i++)
-        {
-            int index = Random.Range(0, cols.Count);
-            indexTemp.Add(cols[index]);
-            cols.RemoveAt(index);
-        }
-        cols.AddRange(indexTemp);
+        mesh.normals = normals.ToArray();
 
         randomVertexs.Clear();
         for (int y = 0; y < GridSizeY; y++)
             for (int x = 0; x < GridSizeX; x++)
                 randomVertexs.Add(new Vertex(x, y));
-
-        for (int i = 0; i < randomVertexs.Count; i++)
+        
+        for (int i = 0; i < GridSizeY * GridSizeX; i++)
         {
-            randomVertexs[i].x = cols[randomVertexs[i].x];
-            randomVertexs[i].y = rows[randomVertexs[i].y];
+            int index = UnityEngine.Random.Range(0, randomVertexs.Count);
+            vertexTemp.Add(randomVertexs[index]);
+            randomVertexs.RemoveAt(index);
         }
 
+        randomVertexs.AddRange(vertexTemp);
+        vertexTemp.Clear();
 
         var trangles = ListPool<int>.Get();
         var temp = ListPool<int>.Get();
@@ -164,10 +160,14 @@ public class ProceduralGrid : MonoBehaviour
         {
             for (int i = 0; i < randomVertexs.Count; i++)
             {
+                int bIndice = 0;
                 var vertex = randomVertexs[i];
-                int row = rows[(int)vertex.y] * (GridSizeX + 1);
+                if (vertex.y >= GridSizeY && vertex.x >= GridSizeX)
+                    continue;
 
-                int bIndice = cols[(int)vertex.x] + row;
+                int row = vertex.y * (GridSizeX + 1);
+                bIndice = vertex.x + row;
+
                 temp.Clear();
                 temp.Add(bIndice);
                 temp.Add(bIndice + GridSizeX + 1);
@@ -179,12 +179,12 @@ public class ProceduralGrid : MonoBehaviour
 
                 mesh.triangles = trangles.ToArray();
                 mesh.RecalculateNormals();
+                meshFilter.mesh = mesh;
 
                 yield return gInterval;
             }
         }
 
-        mesh.normals = normals.ToArray();
         //other version
         //use in OpenGL
         //int[] triangles = new int[GridSizeX * GridSizeY * 6];
@@ -199,7 +199,6 @@ public class ProceduralGrid : MonoBehaviour
         //    }
         //}
 
-        mesh.name = "Procedural Mesh";
         meshFilter.mesh = mesh;
 
         ListPool<int>.Release(trangles);
@@ -217,6 +216,9 @@ public class ProceduralGrid : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
+        if (!DisplayVertex)
+            return;
+
         foreach (var vertex in vertexs)
         {
             Gizmos.DrawSphere(vertex,0.1f);
