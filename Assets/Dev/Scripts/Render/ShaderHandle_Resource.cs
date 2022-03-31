@@ -8,9 +8,9 @@ using UnityEditor;
 
 public partial class ShaderHandle
 {
-    private Dictionary<string, Shader> m_shaders;
+    private Dictionary<string, Shader> m_shaders = new Dictionary<string, Shader>();
     
-    private Dictionary<string, Material> m_material;
+    private Dictionary<string, Material> m_material = new Dictionary<string, Material>();
 
     public void SetupRenderAsset()
     {

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Tyouka_Env_Dithering
+  m_Name: Common_Dithering
   m_Shader: {fileID: 4800000, guid: 0e1675c60b2ff6348a5c2ac87cd1614e, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -21,10 +21,10 @@ Material:
     m_TexEnvs:
     - _DitherTex:
         m_Texture: {fileID: 2800000, guid: 0880202ac8a602c4fb3c13613e80bdd8, type: 3}
-        m_Scale: {x: 1, y: 0.5}
+        m_Scale: {x: 2, y: 2}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: ef3add8d2e362ac4d8cd1c676a48bf7f, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
