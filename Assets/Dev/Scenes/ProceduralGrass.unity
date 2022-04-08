@@ -417,8 +417,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MetaGrassMesh: {fileID: 4300000, guid: 5d9716d102ee7cc499e4ae3fb465f342, type: 3}
-  AmountPreClick: 15
-  Radius: 0.5
+  AmountPreClick: 60
+  Radius: 2
 --- !u!4 &1903385491
 Transform:
   m_ObjectHideFlags: 0
