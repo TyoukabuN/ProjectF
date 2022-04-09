@@ -21,6 +21,8 @@ public class ProceduralGrassPainter : MonoBehaviour
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
+
+    List<Vector3> grassPosition = new List<Vector3>();
     void OnSceneGUI(SceneView sceneView)
     {
         if (Event.current == null)
@@ -40,10 +42,22 @@ public class ProceduralGrassPainter : MonoBehaviour
             {
                 //Gizmos.DrawSphere(hitInfo.point, 1.0f);
                 //Debug.Log(hitInfo.point);
+                var genCenter = hitInfo.point;
                 for (int i = 0; i < AmountPreClick; i++)
                 {
                     var random = Random.insideUnitCircle;
-                    GenGrass(hitInfo.point + new Vector3(random.x,0, random.y) * Radius);
+                    var wpos = genCenter + new Vector3(random.x, 0, random.y) * Radius;
+                    //
+                    var distance = 200.0f;
+                    RaycastHit hitInfo2;
+                    if (Physics.Raycast(wpos + Vector3.up * distance, Vector3.down, out hitInfo2, distance + 1.0f))
+                    {
+                        wpos = hitInfo2.point;
+                        var normal = hitInfo2.normal;
+                        var angle = Random.Range(0.0f, 360.0f) ;
+                        var rotation = Quaternion.AngleAxis(angle , normal);
+                        GenGrass(wpos, rotation);
+                    }
                 }
             }
         }
@@ -60,23 +74,34 @@ public class ProceduralGrassPainter : MonoBehaviour
 
     List<Vector3> vertexs = new List<Vector3>();
     List<int> triangles = new List<int>();
-
+    List<Vector3> normals = new List<Vector3>();
     public void GenGrass(Vector3 wpos)
+    {
+        GenGrass(wpos, Quaternion.identity);
+    }
+    public void GenGrass(Vector3 wpos,Quaternion rotation)
     {
         if (vertexs == null)
             return;
 
         var originVertexCounts = vertexs.Count;
+        var originNormalCounts = normals.Count;
         var originTriangleCounts = triangles.Count;
         for (int i = 0; i < MetaGrassMesh.vertices.Length; i++)
         {
             var vertex = MetaGrassMesh.vertices[i];
-            vertexs.Add(wpos + vertex);
+            vertex = rotation * vertex;
+            vertex = vertex + wpos;
+            vertexs.Add(vertex);
         }
         for (int i = 0; i < MetaGrassMesh.triangles.Length; i++)
         {
             int indice = MetaGrassMesh.triangles[i] + originVertexCounts;
             triangles.Add(indice);
+        }        
+        for (int i = 0; i < MetaGrassMesh.normals.Length; i++)
+        {
+            normals.Add(MetaGrassMesh.normals[i]);
         }
         
 
@@ -87,6 +112,7 @@ public class ProceduralGrassPainter : MonoBehaviour
         }
         mesh.vertices = vertexs.ToArray();
         mesh.triangles = triangles.ToArray();
+        mesh.normals = normals.ToArray();
 
         meshFilter.mesh = mesh;
     }
@@ -96,6 +122,15 @@ public class ProceduralGrassPainter : MonoBehaviour
         vertexs = new List<Vector3>();
         triangles = new List<int>();
         mesh = null;
+        SceneView.onSceneGUIDelegate -= OnSceneGUI;
+    }
+    public void ReStart()
+    {
+        Clear();
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
+        SceneView.onSceneGUIDelegate -= OnSceneGUI;
+        SceneView.onSceneGUIDelegate += OnSceneGUI;
     }
     void Update()
     {
@@ -126,9 +161,18 @@ public class ProceduralGrassPainterEditor : Editor
         var instance = target as ProceduralGrassPainter;
         if (!target) return;
 
-        if (GUILayout.Button("Clear"))
+        EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
         {
-            instance.Clear();
+            if (GUILayout.Button("ReStart", GUILayout.Width(80)))
+            {
+                instance.ReStart();
+            }
+            if (GUILayout.Button("Clear",GUILayout.Width(80)))
+            {
+                instance.Clear();
+            }
+            EditorGUILayout.EndHorizontal();
         }
+
     }
 }
