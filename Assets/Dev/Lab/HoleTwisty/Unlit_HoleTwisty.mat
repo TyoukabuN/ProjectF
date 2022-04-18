@@ -20,8 +20,13 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: dcdd8a3cf89cd9c42a4f7d998fe27973, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors: []
+    m_Floats:
+    - _EdgeInner: 0.21
+    - _EdgeOuter: 0.41
+    - _Radius: 0.24
+    m_Colors:
+    - _HoleCenter: {r: 0.51, g: 0.5, b: 0, a: 0}
+    - _HoleColor: {r: 0, g: 0, b: 0, a: 1}
