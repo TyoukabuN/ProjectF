@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: X_Shader_G_GUI_Dissovle
-  m_Shader: {fileID: 4800000, guid: 47d66a2cfcd9ef24ba4a8a571640c017, type: 3}
+  m_Name: FadeAnimeViaTexture
+  m_Shader: {fileID: 4800000, guid: bc5879c22611b314c98874cf226ccca9, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -20,7 +20,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _DissolveTex:
-        m_Texture: {fileID: 2800000, guid: e9752b862be038d4eb3cd31f9da8d306, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7be781b1e4ce10f44b17ccd1068304b6, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -28,11 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _ColorMask: 15
-    - _DissolveFactor1: 0.377
-    - _DissolveFactor2: 0.595
-    - _DissolvePower: 10.407285
-    - _DissolvePreview: 0
+    - _Preview: 0
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -41,5 +37,4 @@ Material:
     - _UseUIAlphaClip: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DissolvEdgeColor: {r: 0.91, g: 0.25, b: 0.05, a: 1}
-    - _EdgeColor: {r: 0.09, g: 0.09, b: 0.09, a: 1}
+    - _FadeParam: {r: 0, g: 0, b: 0, a: 0}

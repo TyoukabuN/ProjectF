@@ -55,7 +55,8 @@ public class ProceduralGrassPainter : MonoBehaviour
                         wpos = hitInfo2.point;
                         var normal = hitInfo2.normal;
                         var angle = Random.Range(0.0f, 360.0f) ;
-                        var rotation = Quaternion.AngleAxis(angle , normal);
+                        var rotation = Quaternion.AngleAxis(30f , Vector3.up);
+                        //var rotation = new Quaternion(0, Mathf.Sin(30f * 0.5f * Mathf.Deg2Rad), 0, Mathf.Cos(30f * 0.5f * Mathf.Deg2Rad));
                         GenGrass(wpos, rotation);
                     }
                 }
