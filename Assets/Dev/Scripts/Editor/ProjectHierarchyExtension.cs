@@ -25,6 +25,7 @@ public class ProjectHierarchyExtension
         {"Assets/Art/Shader/ScanLine",new GUIContent("圆形扫描线(非Projector)")},
         {"Assets/Art/Shader/DitheringFaderOut",new GUIContent("基于镜头距离的Dithering淡出效果")},
         {"Assets/Art/Shader/UVChecker",new GUIContent("UV检查用")},
+        {"Assets/Art/Shader/Decal",new GUIContent("贴花/水印")},
     };
     private static void OnProjectWindowItemOnGUI(string guid, Rect selectionRect)
     {
