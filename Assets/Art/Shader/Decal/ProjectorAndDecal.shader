@@ -57,7 +57,7 @@
             //转为相对于本物体的局部坐标(变换矩阵都被抵消了)
             float3 objectPos = mul(unity_WorldToObject, worldPos).xyz;
             //立方体本地坐标-0.5~0.5
-            //clip(0.5 - abs(objectPos));
+            clip(0.5 - abs(objectPos));
             //本地坐标中心点为0，而UV为0.5
             objectPos += 0.5;
 
