@@ -7,7 +7,6 @@ using System.Reflection;
 using System;
 using util = TMesh.TCameraEditorUtility;
 using Object = UnityEngine.Object;
-
 namespace TMesh
 {
     public abstract class TMeshEditorWindowBase<TVertex, Trangle, Mesh> : EditorWindow  where TVertex: TMesh.TVertex where Trangle:TTrangle where Mesh:TMesh.TMeshBase
@@ -668,6 +667,7 @@ namespace TMesh
             }
         }
 
+        [Obsolete]
         protected static void OpenDocument()
         {
             WWW www = new WWW("https://docs.qq.com/doc/DY0JqTVFyWGRFSGdi");

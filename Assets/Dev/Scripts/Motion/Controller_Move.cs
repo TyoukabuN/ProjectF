@@ -129,6 +129,9 @@ public partial class Controller
     public bool useForce = true;
     public bool Log_Move = true;
 
+    public float JumpGravityFactor = 0.6f;
+    public float FallGravityFactor = 1.5f;
+
     public float Mass
     { 
         set
@@ -238,6 +241,8 @@ public partial class Controller
     protected float forwardStep = 1.0f;
     protected float rightStep = 1.0f;
     protected float upStep = 1.0f;
+
+
     public void Motion(float timeStep = 0)
     {
         GroundCheck();
@@ -264,8 +269,11 @@ public partial class Controller
         //var direction = forward.normalized * forwardStep + right.normalized * rightStep + up;
 
         if (!IsGround() || lastGroundDistance > 0)
-        { 
-            up += gravity * timeStep;
+        {
+            float gravityFactor = up.y > 0 ? JumpGravityFactor : FallGravityFactor;
+
+            up += gravity * gravityFactor  * timeStep;
+
             if(up.y < 0)
                 up = Vector3.ClampMagnitude(up, Math.Abs(gravity.y));
         }
