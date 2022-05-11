@@ -1,4 +1,4 @@
-﻿Shader "Tyouka/Test/Scanline"
+﻿Shader "TyoukabuN/Test/Scanline"
 {
     Properties
     {

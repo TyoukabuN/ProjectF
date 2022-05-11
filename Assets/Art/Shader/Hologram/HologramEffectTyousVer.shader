@@ -30,7 +30,7 @@
     }
     SubShader
     {
-        Tags {"RenderType"="Transparent" "Queue" = "Transparent"}
+        Tags {"RenderType"="Opaque" "Queue" = "Transparent"}
         LOD 100
         Stencil
         {

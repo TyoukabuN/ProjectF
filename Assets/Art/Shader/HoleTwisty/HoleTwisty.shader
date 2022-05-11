@@ -1,4 +1,4 @@
-﻿Shader "Tyouka/HoleTwisty"
+﻿Shader "TyoukabuN/HoleTwisty"
 {
     Properties
     {

@@ -42,7 +42,7 @@
         #pragma target 3.0
         #include "UnityCG.cginc"
         #include "Flow.cginc"
-        #include "Assets/Art/Shader/Base/TyousShaderUtilities.cginc"
+        #include "Assets/Art/Shader/Base/TyousShaderUtilitiy.cginc"
         #define USE_DERIVATIVE 1
 
         struct Input

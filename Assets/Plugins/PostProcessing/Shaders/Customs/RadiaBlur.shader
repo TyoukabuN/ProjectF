@@ -23,10 +23,10 @@
 			float4 outColor = 0;
 			//采样SAMPLE_COUNT次  
 			for (int j = 0; j < SAMPLE_COUNT; ++j)
-			{
+			{ 
 				//计算采样uv值：正常uv值+从中间向边缘逐渐增加的采样距离  
 				float2 uv = i.texcoord + _BlurFactor * dir * j;
-				outColor += tex2D(_MainTex, uv);
+				outColor += SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
 			}
 			//取平均值  
 			outColor /= SAMPLE_COUNT;

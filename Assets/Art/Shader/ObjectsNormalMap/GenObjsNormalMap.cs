@@ -3,40 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class GenObjsNormalMap : MonoBehaviour
+[RequireComponent(typeof(Camera))]
+public class GenObjsNormalMap : PostProcessBase
 {
-    public Camera RefCamera;
-    public DepthTextureMode DepthTextureMode = DepthTextureMode.DepthNormals;
-    public Shader Shader;
+    public Color OutlineColor = Color.black;
 
-    //private Material m_Material;
-    //public Material material{
-    //    get {
-    //        if (shader == null)
-    //            return null;
-    //        if (m_Material == null)
-    //            m_Material = new Material(shader);
-
-    //        return m_Material;
-    //    }
-    //}
-
+    private Camera camera;
     private CommandBuffer buffer;
+    public override string ShaderName { get { return "TyoukabuN/DisplayNormalMap"; } }
+
     private void Awake()
     {
-        if (RefCamera == null)
-            RefCamera = this.TryGetComponent<Camera>();
-
-        RefCamera.depthTextureMode = DepthTextureMode;
+        camera = GetComponent<Camera>();
+        camera.depthTextureMode = DepthTextureMode.DepthNormals;
     }
-    void Update()
+
+    private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        if (Shader == null)
+        if (camera == null)
             return;
 
-        if (RefCamera == null)
-            RefCamera = this.TryGetComponent<Camera>();
-        
-        //RefCamera.SetReplacementShader(Shader,null);
+        if (!IsMaterialVaild())
+            return;
+
+        material.SetColor("_OutlineColor", OutlineColor);
+        Graphics.Blit(source, destination, material, 0);
     }
 }

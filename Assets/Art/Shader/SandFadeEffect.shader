@@ -1,4 +1,4 @@
-﻿Shader "Tyouka/Charactar/SandFade"
+﻿Shader "TyoukabuN/Charactar/SandFade"
 {
 	Properties
 	{
@@ -118,7 +118,7 @@
 
 
 				fixed4 frag (v2f i) : COLOR
-				{
+				{ 
 					fixed posYPre =(i.vertex.y - _SandFadeParameter.z)/_SandFadeParameter.w;
 					fixed4 noise = tex2D(_GradientNoiseMap, float2( i.uv1.x,saturate(posYPre) ));
 

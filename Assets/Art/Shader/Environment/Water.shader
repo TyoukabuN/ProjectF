@@ -1,4 +1,4 @@
-﻿Shader "Tyouka/Env/Unlit_Toon_Water"
+﻿Shader "TyoukabuN/Env/Unlit_Toon_Water"
 {
 	Properties{
 		_Color ("Color",color) = (1,1,1,1)

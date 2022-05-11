@@ -1,4 +1,4 @@
-﻿Shader "Tyouka/Env/Scanablc"
+﻿Shader "TyoukabuN/Env/Scanablc"
 {
     Properties
     {

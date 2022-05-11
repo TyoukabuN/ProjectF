@@ -26,6 +26,7 @@ public class ProjectHierarchyExtension
         {"Assets/Art/Shader/DitheringFaderOut",new GUIContent("基于镜头距离的Dithering淡出效果")},
         {"Assets/Art/Shader/UVChecker",new GUIContent("UV检查用")},
         {"Assets/Art/Shader/Decal",new GUIContent("贴花/水印")},
+        {"Assets/Art/Shader/ObjectsNormalMap",new GUIContent("后处理描边(法线差异+深度差异)")},
     };
     private static void OnProjectWindowItemOnGUI(string guid, Rect selectionRect)
     {

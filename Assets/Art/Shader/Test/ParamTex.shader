@@ -1,4 +1,4 @@
-﻿Shader "Tyouka/Test/ParamTex"
+﻿Shader "TyoukabuN/Test/ParamTex"
 {
     Properties
     {

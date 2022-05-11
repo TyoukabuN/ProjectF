@@ -1,4 +1,4 @@
-﻿Shader "Tyouka/Env/Transparency"
+﻿Shader "TyoukabuN/Env/Transparency"
 {
     Properties
     {
