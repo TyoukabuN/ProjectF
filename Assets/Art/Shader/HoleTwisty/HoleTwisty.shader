@@ -1,4 +1,4 @@
-﻿Shader "Unlit/HoleTwisty"
+﻿Shader "Tyouka/HoleTwisty"
 {
     Properties
     {
