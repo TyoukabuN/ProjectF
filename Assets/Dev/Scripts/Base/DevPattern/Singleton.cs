@@ -10,7 +10,7 @@ public class Singleton<T> where T : Singleton<T>,new()
             if (m_instance == null)
                 m_instance = new T();
 
-            return new T();
+            return m_instance;
         }
     }
 }
