@@ -68,6 +68,8 @@ public class PrefabAddFather : EditorWindow
         {
             SearchPrefab(path, ResetPrefab);
         }
+
+        GUILayout.Space(20);
         if (GUILayout.Button("二进制"))
         {
             Save(()=> { });
