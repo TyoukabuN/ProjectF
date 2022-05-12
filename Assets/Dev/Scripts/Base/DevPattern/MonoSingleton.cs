@@ -7,14 +7,10 @@ using Util = DevPatternUtility;
 public class MonoSingleton<T> : MonoBehaviour where T : Component
 {
     static T m_instance;
-
-    private StingletonInitEvent OnInit;
-
     public static T current
     {
         get { return instance; }
     }
-
     public static T instance {
         get {
             if (m_instance == null)
@@ -27,6 +23,4 @@ public class MonoSingleton<T> : MonoBehaviour where T : Component
             return m_instance;
         }
     }
-
-    public class StingletonInitEvent : UnityEvent {  }
 }
