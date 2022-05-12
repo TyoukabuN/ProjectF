@@ -7,6 +7,7 @@ using DG.Tweening;
 public class GalMono : MonoSingleton<GalMono>
 {
     string scenes;  //实验用
+    bool switchb;   //试验用
     public List<MonoBehaviour> monoList;
     //private static GalMono _instance;
     //public static GalMono Instance
@@ -73,6 +74,13 @@ public class GalMono : MonoSingleton<GalMono>
                 scenes = scenes +"\n" + node.name;
                 node = node.nextScene;
             }
+        }
+
+        if (GUILayout.Button("切换场景"))
+        {
+            string name = switchb ?"scene1":"scene2";
+            GalSceneManager.instance.SwitchScene(name);
+            switchb = !switchb;
         }
         GUILayout.Label("<color=red><size=30>"+scenes+"</size></color>");
     }

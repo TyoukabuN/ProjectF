@@ -108,10 +108,16 @@ public class GalSceneManager:Singleton<GalSceneManager>
     public void SwitchScene(string name)
     {
         GalScene galScene = galScenePool.Find(name);
-        //if (galScene != null)
-        //{
-        //    galScene.gameObject.transform
-        //}
+       
+        if (galScene != null)
+        {
+            galScene.gameObject.transform.SetAsLastSibling();
+        }
+        else
+        {
+            LoadScene(name);
+        }
+        
     }
     public void LoadScene(string name)
     {
@@ -124,7 +130,7 @@ public class GalSceneManager:Singleton<GalSceneManager>
         {
             OnComplete.Invoke();
         }
-        GalSceneManager.instance.galScenePool.Add(new GalScene(sceneObj));
+        GalSceneManager.instance.galScenePool.Add(new GalScene(sceneObj,name));
     }
 
     public GameObject LoadScenePrefab(string name)

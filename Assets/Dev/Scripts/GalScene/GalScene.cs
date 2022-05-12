@@ -12,10 +12,10 @@ public class GalScene
     public GameObject gameObject;
     public string name;
     
-    public GalScene(GameObject obj)
+    public GalScene(GameObject obj,string name)
     {
         this.gameObject = obj;
-        this.name = obj.name;
+        this.name = name;
         value = this;
     }
 
