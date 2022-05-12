@@ -5,17 +5,14 @@
 
 #include "UnityCG.cginc"
 
-//径向倾斜
-float2 RadialShear_float(float2 UV, float2 Center, float2 Strength, float2 Offset)
-{
-    float2 delta = UV - Center;
-    float delta2 = dot(delta.xy, delta.xy);
-    float2 delta_offset = delta2 * Strength;
-	//-delta.x  xy的符号是为了逆时针旋转
-	//-delta.y, delta.x 则为逆时针
-	return UV + float2(-delta.y, delta.x) * delta_offset + Offset;
-}
+#define WORLD_POSITION(idx,vectype) vectype wpos : TEXCOORD##idx;
 
+//获取光照用的法线
+void GetLightDirAndViewDir(float3 wpos,out float3 lightDir,out float3 viewDir)
+{
+	lightDir = normalize(_WorldSpaceLightPos0 - wpos);
+	viewDir  = normalize(wpos - _WorldSpaceCameraPos);
+}
 //获取屏幕空间纹理坐标
 float2 GetScreenSpaceTexcood(float4 clipPos)
 {
@@ -24,6 +21,16 @@ float2 GetScreenSpaceTexcood(float4 clipPos)
 	uv.y = 1 - uv.y;
 #endif
 	return uv;
+}
+//径向倾斜
+float2 RadialShear_float(float2 UV, float2 Center, float2 Strength, float2 Offset)
+{
+	float2 delta = UV - Center;
+	float delta2 = dot(delta.xy, delta.xy);
+	float2 delta_offset = delta2 * Strength;
+	//-delta.x  xy的符号是为了逆时针旋转
+	//-delta.y, delta.x 则为逆时针
+	return UV + float2(-delta.y, delta.x) * delta_offset + Offset;
 }
 
 //深度图相关//////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +58,7 @@ float3 SamplingDepthNormalsTexture_Depth(float2 uv)
 	return SamplingDepthNormalsTexture_Depth(uv, float2(0, 0));
 }
 //
-float SamplingDepthNormalsTexture(float2 uv, float2 uvOffset, out float depth, out float3 normal)
+void SamplingDepthNormalsTexture(float2 uv, float2 uvOffset, out float depth, out float3 normal)
 {
 	float4 enc = tex2D(_CameraDepthNormalsTexture, uv + uvOffset);
 	DecodeDepthNormal(enc, depth, normal);

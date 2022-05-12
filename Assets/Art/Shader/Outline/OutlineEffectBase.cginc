@@ -6,16 +6,22 @@
 #include "UnityCG.cginc"
 
 //Rim////////////////////////////////////////////////////////////////////
+//Rim effect outlines are simple but only work well on spherical objects.
+//不能用于太几何的模型(例如立方体)
+//因为原理是用的是菲涅尔公式(用到Dot(N,V))
 uniform float4 _RimColor;
 uniform fixed _RimReducer;
 uniform fixed _RimPow;
-float3 GetEdge_Rim(float3 normal, float3 viewDir,float freducer,float fpow)
+
+uniform float _OutlineWidth;
+uniform float _OutlineSoftness;
+uniform float _OutlinePower;
+float3 GetEdge_Rim(float3 normalWS, float3 viewDirWS)
 {
-	return pow((freducer - dot(normal, viewDir)), fpow) * _RimColor.rgb;
-}
-float3 GetEdge_Rim(float3 normal, float3 viewDir)
-{
-	return GetEdge_Rim(normal, viewDir, _RimReducer, _RimPow);
+	float edge1 = 1 - _OutlineWidth;
+	float edge2 = edge1 + _OutlineSoftness;
+	float fresnel = pow(1 - saturate(dot(normalWS, viewDirWS)), _OutlinePower);
+	return lerp(1, smoothstep(edge1, edge2, fresnel), step(0, edge1));
 }
 
 //RobertsCross////////////////////////////////////////////////////////////////////

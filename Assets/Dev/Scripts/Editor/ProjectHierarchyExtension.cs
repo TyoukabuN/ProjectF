@@ -21,7 +21,8 @@ public class ProjectHierarchyExtension
         {"Assets/Art/Shader/GUI/FadeAnimeViaTexture",new GUIContent("基于Tex的Image淡入淡出")},
 
         {"Assets/Art/Shader/Outline",new GUIContent("理描边相关")},
-        {"Assets/Art/Shader/Outline/ObjectsNormalMap",new GUIContent("法线差异+深度差异+后处理")},
+        {"Assets/Art/Shader/Outline/ObjectsNormalMap",new GUIContent("法线差异/深度差异/后处理")},
+        {"Assets/Art/Shader/Outline/RimEffects",new GUIContent("菲涅尔/内描边/只适用于球体")},
 
         {"Assets/Art/Shader/HoleTwisty",new GUIContent("黑洞扭曲")},
         {"Assets/Art/Shader/Hologram",new GUIContent("全息投影")},
