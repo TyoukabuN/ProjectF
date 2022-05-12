@@ -18,7 +18,8 @@ Shader "TyoukabuN/DisplayNormalMap"
             // make fog work
 
             #include "UnityCG.cginc"
-            #include "Assets/Art/Shader/Base/TyousShaderUtilitiy.cginc"
+            #include "Assets/Art/Shader/Base/TyousShaderUtility.cginc"
+            #include "Assets/Art/Shader/Outline/OutlineEffectBase.cginc"
 
             struct appdata
             {
@@ -48,11 +49,11 @@ Shader "TyoukabuN/DisplayNormalMap"
                 float2 uv = GetScreenSpaceTexcood(i.pos);
                 float3 normal = SamplingDepthNormalsTexture_Normal(uv);
                 //①基于深度的描边
-                float depth = GeteEdge_DepthDiff_RobertsCross(i.pos);
+                float depth = GetEdge_DepthDiff_RobertsCross(i.pos);
                 depth = step(0.001, depth);
                 float3 depthColor = fixed3(depth, depth, depth);
                 //②基于发现差异的描边
-                float edge = GeteEdge_NormalDiff_RobertsCross(i.pos);
+                float edge = GetEdge_NormalDiff_RobertsCross(i.pos);
                 float3 edgeColor = fixed3(edge, edge, edge);
                 //混合①②两种描边
                 //NOTICE:这种方法的Camera的Far-Near不能太小

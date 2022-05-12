@@ -20,13 +20,15 @@ public class ProjectHierarchyExtension
         {"Assets/Art/Shader/GUI",new GUIContent("UI相关效果")},
         {"Assets/Art/Shader/GUI/FadeAnimeViaTexture",new GUIContent("基于Tex的Image淡入淡出")},
 
+        {"Assets/Art/Shader/Outline",new GUIContent("理描边相关")},
+        {"Assets/Art/Shader/Outline/ObjectsNormalMap",new GUIContent("法线差异+深度差异+后处理")},
+
         {"Assets/Art/Shader/HoleTwisty",new GUIContent("黑洞扭曲")},
         {"Assets/Art/Shader/Hologram",new GUIContent("全息投影")},
         {"Assets/Art/Shader/ScanLine",new GUIContent("圆形扫描线(非Projector)")},
         {"Assets/Art/Shader/DitheringFaderOut",new GUIContent("基于镜头距离的Dithering淡出效果")},
         {"Assets/Art/Shader/UVChecker",new GUIContent("UV检查用")},
         {"Assets/Art/Shader/Decal",new GUIContent("贴花/水印")},
-        {"Assets/Art/Shader/ObjectsNormalMap",new GUIContent("后处理描边(法线差异+深度差异)")},
     };
     private static void OnProjectWindowItemOnGUI(string guid, Rect selectionRect)
     {

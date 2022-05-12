@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-public class Singleton<T> where T :new()
+public class Singleton<T> where T : Singleton<T>,new()
 {
-    private T m_instance;
-    private StingletonInitEvent OnInit;
+    protected static T m_instance;
+    protected StingletonInitEvent OnInit;
 
-    public T instance {
+    public static T instance {
         get {
             if (m_instance == null)
                 m_instance = new T();
 
-            OnInit.Invoke();
+            m_instance.OnInit.Invoke();
             return new T();
         }
     }
