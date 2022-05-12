@@ -6,6 +6,8 @@ using UnityEngine.Events;
 using DG.Tweening;
 public class GalMono : MonoSingleton<GalMono>
 {
+    string scenes;  //实验用
+    bool switchb;   //试验用
     public List<MonoBehaviour> monoList;
     //private static GalMono _instance;
     //public static GalMono Instance
@@ -43,7 +45,7 @@ public class GalMono : MonoSingleton<GalMono>
     }
     void Start()
     {
-        
+        GalSceneManager.instance.AddCompleteEvent(() => { Debug.LogError("坚挺加载scene的事件");});
     }
 
     // Update is called once per frame
@@ -63,5 +65,23 @@ public class GalMono : MonoSingleton<GalMono>
         {
             GalSceneManager.instance.LoadScene("scene1");
         }
+        if (GUILayout.Button("查看当前载入场景"))
+        {
+            scenes = "";
+            GalScene node = GalSceneManager.instance.galScenePool.firstScene;
+            while (node != null)
+            {
+                scenes = scenes +"\n" + node.name;
+                node = node.nextScene;
+            }
+        }
+
+        if (GUILayout.Button("切换场景"))
+        {
+            string name = switchb ?"scene1":"scene2";
+            GalSceneManager.instance.SwitchScene(name);
+            switchb = !switchb;
+        }
+        GUILayout.Label("<color=red><size=30>"+scenes+"</size></color>");
     }
 }
