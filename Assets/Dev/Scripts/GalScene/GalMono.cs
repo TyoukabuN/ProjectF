@@ -43,7 +43,7 @@ public class GalMono : MonoSingleton<GalMono>
     }
     void Start()
     {
-        
+        GalSceneManager.instance.AddCompleteEvent(() => { Debug.LogError("坚挺加载scene的事件"); });
     }
 
     // Update is called once per frame

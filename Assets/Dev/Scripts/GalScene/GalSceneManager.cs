@@ -64,6 +64,7 @@ public class GalSceneManager:Singleton<GalSceneManager>
         sceneObj.transform.SetParent(canvasObj.transform);
         RectTransform sceneRect =  sceneObj.GetComponent<RectTransform>();
         sceneRect.anchoredPosition = Vector2.zero;
+        sceneRect.sizeDelta = Vector2.zero;
         if (OnComplete != null)
         {
             OnComplete.Invoke();
@@ -73,11 +74,13 @@ public class GalSceneManager:Singleton<GalSceneManager>
     public GameObject LoadScenePrefab(string name)
     {
         string path =  "Assets/GUI/GalTalk/Prefabs/" + name +".prefab";
+#if UNITY_EDITOR
         GameObject obj = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)) as GameObject;
         obj = GameObject.Instantiate(obj);
+#endif
+
         return obj;
     }
-
     private GameObject InitCanvas()
     {
         GameObject canvas = new GameObject("GalCanvas");
