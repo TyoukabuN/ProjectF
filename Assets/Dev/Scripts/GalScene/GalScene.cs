@@ -8,4 +8,9 @@ public class GalScene
     public GalScene nextScene;
 
     public GalScene value;
+
+    public GalScene()
+    {
+
+    }
 }
