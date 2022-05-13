@@ -117,6 +117,19 @@ public class GalSceneManager:Singleton<GalSceneManager>
         }
         
     }
+    public void SwitchScene()
+    {
+
+        if (currentScene != null)
+        {
+            currentScene = currentScene.nextScene;
+            if (currentScene != null)
+            {
+                currentScene.gameObject.transform.SetAsLastSibling();
+            }
+        }
+
+    }
     public void LoadScene(string name)
     {
         GameObject sceneObj = LoadScenePrefab(name);

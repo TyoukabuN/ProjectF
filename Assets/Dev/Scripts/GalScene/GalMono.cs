@@ -78,9 +78,11 @@ public class GalMono : MonoSingleton<GalMono>
 
         if (GUILayout.Button("切换场景"))
         {
-            string name = switchb ?"scene1":"scene2";
-            GalSceneManager.instance.SwitchScene(name);
-            switchb = !switchb;
+            //string name = switchb ?"scene1":"scene2";
+            //GalSceneManager.instance.SwitchScene(name);
+            //switchb = !switchb;
+            GalSceneManager.instance.SwitchScene();
+
         }
         GUILayout.Label("<color=red><size=30>"+scenes+"</size></color>");
     }
