@@ -1,21 +1,72 @@
-﻿#ifndef OUTLINE_EFFECT_BASE
+﻿#ifndef OUTLINE_EFFECT_CORE
 // Upgrade NOTE: excluded shader from DX11 because it uses wrong array syntax (type[size] name)
 #pragma exclude_renderers d3d11
-#define OUTLINE_EFFECT_BASE
+#define OUTLINE_EFFECT_CORE
 
 #include "UnityCG.cginc"
 
-//Rim////////////////////////////////////////////////////////////////////
-//Rim effect outlines are simple but only work well on spherical objects.
-//不能用于太几何的模型(例如立方体)
-//因为原理是用的是菲涅尔公式(用到Dot(N,V))
-uniform float4 _RimColor;
-uniform fixed _RimReducer;
-uniform fixed _RimPow;
+//reference:https://alexanderameye.github.io/notes/rendering-outlines/
 
+//outline common property
+uniform float4 _OutlineColor;
 uniform float _OutlineWidth;
 uniform float _OutlineSoftness;
 uniform float _OutlinePower;
+
+//Extrusion direction////////////////////////////////////////////////////
+//Vertex position OS:ObjectSpace
+float3 GetEdge_MoveVertex(float3 vertexOS,float width)
+{
+	return vertexOS + normalize(vertexOS) * width;
+}
+float4 GetEdge_MoveVertex(float4 vertexOS,float width)
+{
+	return float4(vertexOS.xyz + normalize(vertexOS.xyz) * width,vertexOS.w);
+}
+float3 GetEdge_MoveVertex(float3 vertexOS)
+{
+	return GetEdge_MoveVertex(vertexOS,_OutlineWidth);
+}
+float4 GetEdge_MoveVertex(float4 vertexOS)
+{
+	return GetEdge_MoveVertex(vertexOS,_OutlineWidth);
+}
+//pipeline function
+float4 frag_outline(appdata_base v):SV_TARGET
+{
+	return _OutlineColor;
+}
+//moveVertex
+struct v2f_outline_moveVertex {
+	float4 pos:SV_POSITION;
+};
+v2f_outline_moveVertex vert_outline_moveVertex(appdata_base v)
+{
+	v2f_outline_moveVertex o;
+	float4 vertex = GetEdge_MoveVertex(v.vertex,_OutlineWidth);
+	o.pos = UnityObjectToClipPos(vertex);
+	return o;
+}
+//moveVertex along normal
+v2f_outline_moveVertex vert_outline_moveVertex_alongNormal(appdata_base v)
+{
+	v2f_outline_moveVertex o;
+	float4 vertex = v.vertex;
+	vertex.xyz += v.normal.xyz * _OutlineWidth;
+	o.pos = UnityObjectToClipPos(vertex);
+	return o;
+}
+float4 frag_outline_moveVertex_alongNormal(appdata_base v):SV_TARGET
+{
+	return float4(0,0,0,1);
+}
+//Rim////////////////////////////////////////////////////////////////////
+//Rim effect outlines are simple but only work well on spherical objects.
+uniform float4 _RimColor;
+uniform fixed _RimReducer;
+uniform fixed _RimPow;
+//不能用于太几何的模型(例如立方体)
+//因为原理是用的是菲涅尔公式(用到Dot(N,V))
 float3 GetEdge_Rim(float3 normalWS, float3 viewDirWS)
 {
 	float edge1 = 1 - _OutlineWidth;
@@ -25,17 +76,15 @@ float3 GetEdge_Rim(float3 normalWS, float3 viewDirWS)
 }
 
 //RobertsCross////////////////////////////////////////////////////////////////////
-static const int RobertsCrossX[4] = { 1,0,0,-1 };
-static const int RobertsCrossY[4] = { 0,1,-1,0 };
-
-//reference:https://alexanderameye.github.io/notes/rendering-outlines/
+// static const int RobertsCrossX[4] = { 1,0,0,-1 };
+// static const int RobertsCrossY[4] = { 0,1,-1,0 };
 float GetEdge_RobertsCross(float3 samples[4])
 {
-	float3 horizontal = samples[0] * RobertsCrossX[0]; // top left (factor +1)
-	horizontal += samples[3] * RobertsCrossX[3]; // bottom right (factor -1)
+	float3 horizontal = samples[0] * 1; // top left (factor +1)
+	horizontal += samples[3] * -1; 		// bottom right (factor -1)
 
-	float3 vertical = samples[2] * RobertsCrossY[2]; // bottom left (factor -1)
-	vertical += samples[1] * RobertsCrossY[1]; // top right (factor +1)
+	float3 vertical = samples[2] * -1; 	// bottom left (factor -1)
+	vertical += samples[1] * 1; 		// top right (factor +1)
 
 	return sqrt(dot(horizontal, horizontal) + dot(vertical, vertical));
 }
@@ -83,4 +132,4 @@ float GetEdge_DepthDiff_RobertsCross(float4 clipPos)
 }
 
 
-#endif //OUTLINE_EFFECT_BASE
+#endif //OUTLINE_EFFECT_CORE
