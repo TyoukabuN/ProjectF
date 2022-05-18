@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TyoukabuN_VertexExtrusionAlongNormal
-  m_Shader: {fileID: 4800000, guid: b2ce4ebedb99bdf46b53f1bb1ab4d6f5, type: 3}
+  m_Name: TyoukabuN_VertexExtrusionAlongNormal_CS
+  m_Shader: {fileID: 4800000, guid: cafea16cc10b67141ba38166941a8b36, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -23,7 +23,11 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _OutlinNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _OutlineWidth: 0.26
+    - _OutlineWidth: 2.9
     m_Colors:
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}

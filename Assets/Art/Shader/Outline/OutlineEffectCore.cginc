@@ -12,6 +12,8 @@ uniform float4 _OutlineColor;
 uniform float _OutlineWidth;
 uniform float _OutlineSoftness;
 uniform float _OutlinePower;
+uniform sampler2D _OutlinNormalMap;
+uniform float4 _OutlinNormalMap_ST;
 
 //Extrusion direction////////////////////////////////////////////////////
 //Vertex position OS:ObjectSpace
@@ -45,15 +47,39 @@ v2f_outline_moveVertex vert_outline_moveVertex(appdata_base v)
 	v2f_outline_moveVertex o;
 	float4 vertex = GetEdge_MoveVertex(v.vertex,_OutlineWidth);
 	o.pos = UnityObjectToClipPos(vertex);
+	
 	return o;
 }
 //moveVertex along normal
-v2f_outline_moveVertex vert_outline_moveVertex_alongNormal(appdata_base v)
+v2f_outline_moveVertex vert_outline_moveVertex_alongOSNormal(appdata_base v)
 {
 	v2f_outline_moveVertex o;
 	float4 vertex = v.vertex;
-	vertex.xyz += v.normal.xyz * _OutlineWidth;
+	// float4 texcoord = float4(TRANSFORM_TEX(v.texcoord,_OutlinNormalMap),0,0);
+	// float3 normal = UnpackNormal(tex2Dlod(_OutlinNormalMap,texcoord));
+	float3 normal = v.normal.xyz;
+	vertex.xyz += normal * _OutlineWidth;
 	o.pos = UnityObjectToClipPos(vertex);
+	return o;
+}
+//recommend!!!!!!!!!!
+v2f_outline_moveVertex vert_outline_moveVertex_alongCSNormal(appdata_base v)
+{
+	v2f_outline_moveVertex o;
+	float4 vertexCS = UnityObjectToClipPos(v.vertex);
+	float3 normalCS = mul(UNITY_MATRIX_VP,UnityObjectToWorldNormal(v.normal));
+	// vertexCS.xyz += normalCS.xyz * _OutlineWidth;
+	vertexCS.xy += normalize(normalCS.xy)/ _ScreenParams.xy * vertexCS.w * max(0.01,_OutlineWidth) * 2;
+	o.pos = vertexCS;
+	return o;
+}
+v2f_outline_moveVertex vert_outline_moveVertex_alongCSNormalMap(appdata_base v)
+{
+	v2f_outline_moveVertex o;
+	float4 vertexCS = UnityObjectToClipPos(v.vertex);
+	float3 normalCS = mul(UNITY_MATRIX_VP,UnityObjectToWorldNormal(v.normal));
+	vertexCS.xy += normalize(normalCS.xy)/ _ScreenParams.xy * vertexCS.w * max(0.01,_OutlineWidth) * 2;
+	o.pos = vertexCS;
 	return o;
 }
 float4 frag_outline_moveVertex_alongNormal(appdata_base v):SV_TARGET

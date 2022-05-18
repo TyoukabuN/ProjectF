@@ -1,4 +1,4 @@
-﻿Shader "TyoukabuN/VertexExtrusionAlongNormal"
+﻿Shader "TyoukabuN/VertexExtrusionAlongNormal_OS"
 {
     Properties
     {
@@ -6,6 +6,7 @@
 
         _OutlineColor("_OutlineColor",Color) = (0,0,0,1)
         _OutlineWidth("_OutlineWidth",float) = 0.02
+        _OutlinNormalMap("_OutlinNormalMap",2D) = "white" {}
     }
     SubShader
     {
@@ -17,7 +18,7 @@
             Cull front
             
             CGPROGRAM
-            #pragma vertex vert_outline_moveVertex_alongNormal
+            #pragma vertex vert_outline_moveVertex_alongOSNormal
             #pragma fragment frag_outline
 
             #include "UnityCG.cginc"
