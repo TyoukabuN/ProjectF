@@ -74,7 +74,7 @@ public class GalScenePool
 }
 public class GalSceneManager:Singleton<GalSceneManager>
 {
-    public List<GalScene> galScenes;
+    public GalScene currentScene;
 
     private event UnityAction OnComplete;
 
@@ -83,10 +83,7 @@ public class GalSceneManager:Singleton<GalSceneManager>
     public GalScenePool galScenePool;
     public GalSceneManager()
     {
-        if (galScenes == null)
-        {
-            galScenes = new List<GalScene>();
-        }
+       
         if (canvasObj == null)
         {
             canvasObj = InitCanvas();
@@ -112,12 +109,26 @@ public class GalSceneManager:Singleton<GalSceneManager>
         if (galScene != null)
         {
             galScene.gameObject.transform.SetAsLastSibling();
+            currentScene = galScene;
         }
         else
         {
             LoadScene(name);
         }
         
+    }
+    public void SwitchScene()
+    {
+
+        if (currentScene != null)
+        {
+            currentScene = currentScene.nextScene;
+            if (currentScene != null)
+            {
+                currentScene.gameObject.transform.SetAsLastSibling();
+            }
+        }
+
     }
     public void LoadScene(string name)
     {
@@ -130,7 +141,9 @@ public class GalSceneManager:Singleton<GalSceneManager>
         {
             OnComplete.Invoke();
         }
-        GalSceneManager.instance.galScenePool.Add(new GalScene(sceneObj,name));
+        GalScene galScene = new GalScene(sceneObj, name);
+        GalSceneManager.instance.galScenePool.Add(galScene);
+        currentScene = galScene;
     }
 
     public GameObject LoadScenePrefab(string name)
