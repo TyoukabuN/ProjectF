@@ -17,7 +17,7 @@ public class GalSceneTalkController : MonoSingleton<GalSceneTalkController>
         gstv.clickNextBtn.onClick.AddListener(() => { 
             GalReadManager.instance.ReadNext();
             gstv.nameTxt.text = GalSceneTalkData.instance.charatorName;
-            gstv.contentTxt.text = GalSceneTalkData.instance.content;
+            gstv.SetTweenText( GalSceneTalkData.instance.content);
         });
     }
     // Update is called once per frame

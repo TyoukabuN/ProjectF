@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
+using UnityEditor;
+
 public class GalMono : MonoSingleton<GalMono>
 {
     string scenes;  //实验用
@@ -109,11 +111,29 @@ public class GalMono : MonoSingleton<GalMono>
 
     //    if (GUILayout.Button("读取"))
     //    {
-    //        string s =  GalReadManager.instance.ReadLine(1);
+    //        string s = GalReadManager.instance.ReadLine(1);
     //        GalReadManager.instance.DealString(s);
-    //        Debug.Log(GalReadManager.instance.gri.name + "说："+ GalReadManager.instance.gri.content);
+    //        Debug.Log(GalReadManager.instance.gri.name + "说：" + GalReadManager.instance.gri.content);
     //        Debug.LogError(s);
     //    }
     //}
     //#endregion
+
+    #region 加载测试
+    private void OnGUI()
+    {
+        if (GUILayout.Button("加载对话弹窗"))
+        {
+            string path = "Assets/GUI/GalTalk/Prefabs/" + "Gal_ScenTalk_View" + ".prefab";
+#if UNITY_EDITOR
+            GameObject obj = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)) as GameObject;
+#endif
+            obj = GameObject.Instantiate(obj);
+            obj.transform.SetParent(GalSceneManager.instance.canvasObj.transform);
+            obj.transform.position = Vector3.zero;
+            obj.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
+            obj.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        }
+    }
+    #endregion
 }

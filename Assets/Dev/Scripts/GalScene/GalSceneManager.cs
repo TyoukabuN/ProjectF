@@ -78,7 +78,7 @@ public class GalSceneManager:Singleton<GalSceneManager>
 
     private event UnityAction OnComplete;
 
-    private GameObject canvasObj;
+    public GameObject canvasObj;
 
     public GalScenePool galScenePool;
     public GalSceneManager()
