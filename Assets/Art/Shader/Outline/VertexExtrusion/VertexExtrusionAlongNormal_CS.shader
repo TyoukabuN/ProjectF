@@ -14,9 +14,9 @@
 
         Pass
         {
-            LOD 1
-            Cull front
-            
+            Cull Front
+            ZTest LEqual 
+
             CGPROGRAM
             #pragma vertex vert_outline_moveVertex_alongCSNormal
             #pragma fragment frag_outline

@@ -63,13 +63,18 @@ v2f_outline_moveVertex vert_outline_moveVertex_alongOSNormal(appdata_base v)
 	return o;
 }
 //recommend!!!!!!!!!!
+//clip空间的描边
+//https://www.videopoetics.com/tutorials/pixel-perfect-outline-shaders-unity/#working-in-clip-space
 v2f_outline_moveVertex vert_outline_moveVertex_alongCSNormal(appdata_base v)
 {
 	v2f_outline_moveVertex o;
 	float4 vertexCS = UnityObjectToClipPos(v.vertex);
 	float3 normalCS = mul(UNITY_MATRIX_VP,UnityObjectToWorldNormal(v.normal));
-	// vertexCS.xyz += normalCS.xyz * _OutlineWidth;
-	vertexCS.xy += normalize(normalCS.xy)/ _ScreenParams.xy * vertexCS.w * max(0.01,_OutlineWidth) * 2;
+	//乘上vertexCS.w是为了抵消掉接下的透视除的影响
+	//乘上vertexCS.w之后vertexCS的各个分量的取值范围为屏幕的宽高,以及camera near/far plane的间距
+	//除以 _ScreenParams.xy是为了使Outline对应一个像素
+	//
+	vertexCS.xy += normalize(normalCS.xy)/ _ScreenParams.xy * vertexCS.w * max(0.001,_OutlineWidth) * 2;
 	o.pos = vertexCS;
 	return o;
 }
@@ -78,7 +83,7 @@ v2f_outline_moveVertex vert_outline_moveVertex_alongCSNormalMap(appdata_base v)
 	v2f_outline_moveVertex o;
 	float4 vertexCS = UnityObjectToClipPos(v.vertex);
 	float3 normalCS = mul(UNITY_MATRIX_VP,UnityObjectToWorldNormal(v.normal));
-	vertexCS.xy += normalize(normalCS.xy)/ _ScreenParams.xy * vertexCS.w * max(0.01,_OutlineWidth) * 2;
+	vertexCS.xy += normalize(normalCS.xy)/ _ScreenParams.xy * vertexCS.w * max(0.001,_OutlineWidth) * 2;
 	o.pos = vertexCS;
 	return o;
 }
