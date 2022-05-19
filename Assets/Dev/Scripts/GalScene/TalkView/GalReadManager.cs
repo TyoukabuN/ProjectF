@@ -20,11 +20,13 @@ public class GalReadManager : Singleton<GalReadManager>
     }
     public string ReadLine(int index)
     {
-        if (File.Exists(cPath))
+        if (File.Exists(cPath)&& configStrArray.Length < 1)
         {
             FileStream fs =  File.Open(cPath, FileMode.Open);
             StreamReader sr = new StreamReader(fs);
             fullContent = sr.ReadToEnd();
+            fs.Close();
+            sr.Close();
             configStrArray = fullContent.Split('|');
         }
         return configStrArray[index];

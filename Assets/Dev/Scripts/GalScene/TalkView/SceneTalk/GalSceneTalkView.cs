@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GalSceneTalkView : MonoSingleton<GalSceneTalkView>
+public class GalSceneTalkView : MonoBehaviour
 {
     public GalSceneTalkData gstd;
     public Text nameTxt;
@@ -11,5 +11,8 @@ public class GalSceneTalkView : MonoSingleton<GalSceneTalkView>
     public Button saveBtn;
     public Button clickNextBtn;
 
-    
+    private void Awake()
+    {
+
+    }
 }
