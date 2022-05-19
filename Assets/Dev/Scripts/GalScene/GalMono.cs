@@ -29,6 +29,7 @@ public class GalMono : MonoSingleton<GalMono>
     {
         monoList = new List<MonoBehaviour>();
 
+
         if (OnInitComplete != null)
         {
             OnInitComplete.Invoke();
@@ -58,7 +59,7 @@ public class GalMono : MonoSingleton<GalMono>
     {
 
     }
-    #region 测试的部分
+    //#region 测试的部分
     //private void OnGUI()
     //{
     //    if (GUILayout.Button("点击load图片场景"))
@@ -71,7 +72,7 @@ public class GalMono : MonoSingleton<GalMono>
     //        GalScene node = GalSceneManager.instance.galScenePool.firstScene;
     //        while (node != null)
     //        {
-    //            scenes = scenes +"\n" + node.name;
+    //            scenes = scenes + "\n" + node.name;
     //            node = node.nextScene;
     //        }
     //    }
@@ -84,27 +85,35 @@ public class GalMono : MonoSingleton<GalMono>
     //        GalSceneManager.instance.SwitchScene();
 
     //    }
-    //    GUILayout.Label("<color=red><size=30>"+scenes+"</size></color>");
+    //    GUILayout.Label("<color=red><size=30>" + scenes + "</size></color>");
 
-    //    //if (GUILayout.Button("charu"))
-    //    //{
-    //    //    int[] arr = { 5, 8, 6, 4, 2, 1, 9, 7 };
-    //    //    for (int i = 1; i < arr.Length; i++)
-    //    //    {
-    //    //        int nextValue = arr[i];
-    //    //        int index = i - 1;
-    //    //        while (index >= 0 && arr[index] > nextValue)
-    //    //        {
-    //    //            arr[index + 1] = arr[index];
-    //    //            arr[index] = nextValue;
-    //    //            index--;
-    //    //        }
-    //    //    }
-    //    //    foreach (var item in arr)
-    //    //    {
-    //    //        Debug.Log(item);
-    //    //    }
-    //    //}
+    //    if (GUILayout.Button("charu"))
+    //    {
+    //        int[] arr = { 5, 8, 6, 4, 2, 1, 9, 7 };
+    //        for (int i = 1; i < arr.Length; i++)
+    //        {
+    //            int nextValue = arr[i];
+    //            int index = i - 1;
+    //            while (index >= 0 && arr[index] > nextValue)
+    //            {
+    //                arr[index + 1] = arr[index];
+    //                arr[index] = nextValue;
+    //                index--;
+    //            }
+    //        }
+    //        foreach (var item in arr)
+    //        {
+    //            Debug.Log(item);
+    //        }
+    //    }
+
+    //    if (GUILayout.Button("读取"))
+    //    {
+    //        string s =  GalReadManager.instance.ReadLine(1);
+    //        GalReadManager.instance.DealString(s);
+    //        Debug.Log(GalReadManager.instance.gri.name + "说："+ GalReadManager.instance.gri.content);
+    //        Debug.LogError(s);
+    //    }
     //}
-    #endregion
+    //#endregion
 }
