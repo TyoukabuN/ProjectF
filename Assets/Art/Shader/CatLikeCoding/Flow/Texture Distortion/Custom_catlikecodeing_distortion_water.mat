@@ -49,7 +49,7 @@ Material:
     - _RadialShear_Center: 0
     - _RadialShear_Offset: 0
     - _RadialShear_Strength: -1.16
-    - _Speed: 0.6
+    - _Speed: 0.41
     - _Tiling: 3
     - _TimeScale: 0.25
     - _UJump: 0.25

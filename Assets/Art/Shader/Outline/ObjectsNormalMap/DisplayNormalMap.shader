@@ -19,7 +19,7 @@ Shader "TyoukabuN/DisplayNormalMap"
 
             #include "UnityCG.cginc"
             #include "Assets/Art/Shader/Base/TyousShaderUtility.cginc"
-            #include "Assets/Art/Shader/Outline/OutlineEffectBase.cginc"
+            #include "Assets/Art/Shader/Outline/OutlineEffectCore.cginc"
 
             struct appdata
             {
@@ -34,7 +34,6 @@ Shader "TyoukabuN/DisplayNormalMap"
             };
 
             sampler2D _MainTex;
-            float4 _OutlineColor;
 
             v2f vert (appdata v)
             {
@@ -52,7 +51,7 @@ Shader "TyoukabuN/DisplayNormalMap"
                 float depth = GetEdge_DepthDiff_RobertsCross(i.pos);
                 depth = step(0.001, depth);
                 float3 depthColor = fixed3(depth, depth, depth);
-                //②基于发现差异的描边
+                //②基于法线差异的描边
                 float edge = GetEdge_NormalDiff_RobertsCross(i.pos);
                 float3 edgeColor = fixed3(edge, edge, edge);
                 //混合①②两种描边
