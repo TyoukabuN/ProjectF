@@ -40,7 +40,6 @@ public class GalMono : MonoSingleton<GalMono>
     [RuntimeInitializeOnLoadMethod]
     public static void OnGameStarRun()
     {
-        
         GalMono.instance.Init();
     }
     void Start()

@@ -71,10 +71,13 @@ v2f_outline_moveVertex vert_outline_moveVertex_alongCSNormal(appdata_base v)
 	float4 vertexCS = UnityObjectToClipPos(v.vertex);
 	float3 normalCS = mul(UNITY_MATRIX_VP,UnityObjectToWorldNormal(v.normal));
 	//乘上vertexCS.w是为了抵消掉接下的透视除的影响
-	//乘上vertexCS.w之后vertexCS的各个分量的取值范围为屏幕的宽高,以及camera near/far plane的间距
-	//除以 _ScreenParams.xy是为了使Outline对应一个像素
-	//
-	vertexCS.xy += normalize(normalCS.xy)/ _ScreenParams.xy * vertexCS.w * max(0.001,_OutlineWidth) * 2;
+	//乘上vertexCS.w之后vertexCS的各个分量的取值范围为屏幕的宽高,以及camera near/far plane的间距,你能在camera组件那找到这些值
+	//除以 _ScreenParams.xy是为了将单位转换到ndc下_ScreenParams.xy相当于near plane的xy取值范围
+	//乘以2是因为这个公式是要将normalCS转换到ndc中去的，ndc的各个分量的取值范围都是[-1,1]意味着范围是2，下面-
+	//-的转换公式使用的是比例转换，所以需要乘上ndc分量的范围
+	//vertexCS.xy += normalize(normalCS.xy)/ _ScreenParams.xy * vertexCS.w * max(0.001,_OutlineWidth) * 2;
+	float2 ratio = 2 / _ScreenParams.xy * vertexCS.w;//clip space to ndc
+	vertexCS.xy += normalize(normalCS.xy) * ratio * max(0.001,_OutlineWidth) ;
 	o.pos = vertexCS;
 	return o;
 }

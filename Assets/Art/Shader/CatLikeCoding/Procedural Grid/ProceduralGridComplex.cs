@@ -8,7 +8,7 @@ using UnityEditor;
 #endif
 
 [RequireComponent(typeof(MeshFilter)),RequireComponent(typeof(MeshRenderer))]
-public class ProceduralGrid : MonoBehaviour
+public class ProceduralGridComplex : MonoBehaviour
 {
     [Range(0,20)]
     public int GridSizeX = 4;
@@ -55,6 +55,7 @@ public class ProceduralGrid : MonoBehaviour
 
     public List<Vector3> vertexs = new List<Vector3>();
     public List<Vector3> normals = new List<Vector3>();
+    public List<Vector4> tangents = new List<Vector4>();
     public List<Vector2> uv = new List<Vector2>();
     public List<int> rows = new List<int>();
     public List<int> cols = new List<int>();
@@ -94,6 +95,7 @@ public class ProceduralGrid : MonoBehaviour
         var gInterval = new WaitForSeconds(genaralInteral);
         vertexs.Clear();
         normals.Clear();
+        tangents.Clear();
         uv.Clear();
 
         if (GridSizeX <= 0 || GridSizeY <= 0)
@@ -109,11 +111,13 @@ public class ProceduralGrid : MonoBehaviour
                 vertexs.Add(new Vector3(x,y));
                 uv.Add(new Vector2(x / (float)GridSizeX, y / (float)GridSizeY));
                 normals.Add(new Vector3(0.5f, 0.5f, 0.5f));
+                tangents.Add(new Vector4(1f, 0f, 0f, -1f));
             }
         }
         mesh.vertices = vertexs.ToArray();
         mesh.uv = uv.ToArray();
         mesh.normals = normals.ToArray();
+        mesh.tangents = tangents.ToArray();
 
         randomVertexs.Clear();
         for (int y = 0; y < GridSizeY; y++)
@@ -226,19 +230,22 @@ public class ProceduralGrid : MonoBehaviour
     }
 }
 
-[CustomEditor(typeof(ProceduralGrid))]
-public class ProceduralGridEditor:Editor
+[CustomEditor(typeof(ProceduralGridComplex))]
+public class ProceduralGridComplexEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        var instance = target as ProceduralGrid;
+        var instance = target as ProceduralGridComplex;
         if (!target) return;
 
         if (GUILayout.Button("Refresh Grid"))
         {
-            instance.ReGenerate();
+            if (EditorApplication.isPlaying)
+                instance.ReGenerate();
+            else
+                EditorApplication.isPlaying = true;
         }
     }
 }

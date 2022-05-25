@@ -32,9 +32,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _DepthFactor: 2.51
+    - _DepthFactor: 0.24
     - _FoamFactor: 0
-    - _RampColorIntensity: 1.04
+    - _RampColorIntensity: 1.17
     - _waveHight: 0.048
     - _waveScale: 1.3
     - _waveSpeed: 27.3
