@@ -60,6 +60,8 @@ public class ProceduralGrid : MonoBehaviour
         if (!mesh)
             mesh = new Mesh();
 
+        if (!meshFilter)
+            yield return null;
         //meshFilter.mesh = mesh;
 
         var gInterval = new WaitForSeconds(0.05f);

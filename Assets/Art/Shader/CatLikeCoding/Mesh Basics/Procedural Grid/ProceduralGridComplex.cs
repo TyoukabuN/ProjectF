@@ -33,7 +33,8 @@ public class ProceduralGridComplex : MonoBehaviour
     {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
-        canvasRenderer = image.GetComponent<CanvasRenderer>();
+        if(image)
+            canvasRenderer = image.GetComponent<CanvasRenderer>();
 
         if (meshFilter)
             meshFilter.mesh = null;
