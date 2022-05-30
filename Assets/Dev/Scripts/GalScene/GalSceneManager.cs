@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class GalScenePool
@@ -161,6 +162,10 @@ public class GalSceneManager:Singleton<GalSceneManager>
 
         GameObject canvas = new GameObject("GalCanvas");
         GameObject.DontDestroyOnLoad(canvas);
+        GameObject eventObj = new GameObject("eventSystem");
+        GameObject.DontDestroyOnLoad(eventObj);
+        eventObj.AddComponent<EventSystem>();
+        eventObj.AddComponent<StandaloneInputModule>();
         Canvas canvasComponent =  canvas.AddComponent<Canvas>();
         canvasComponent.renderMode = RenderMode.ScreenSpaceOverlay;
 
