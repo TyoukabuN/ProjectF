@@ -11,11 +11,13 @@ public class ProceduralCube : MonoBehaviour
     public int xSize = 3;
     public int ySize = 3;
     public int zSize = 3;
+    public int roundness = 2;
     // 
     public float genaralInteral = 0.05f;
-    public Material material;
-    public Vector3[] vertices;
-    public int[] triangles;
+    [HideInInspector] public Material material;
+    [HideInInspector] public Vector3[] vertices;
+    [HideInInspector] public Vector3[] normals;
+    [HideInInspector] public int[] triangles;
 
     Mesh mesh;
     MeshFilter meshFilter;
@@ -59,45 +61,53 @@ public class ProceduralCube : MonoBehaviour
         int faceVertices = ((xSize - 1) * (ySize - 1) + (xSize - 1) * (zSize - 1) + (ySize - 1) * (zSize - 1)) * 2;
 
         vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
+        normals = new Vector3[vertices.Length];
 
         int v = 0;
         for (int y = 0; y <= ySize; y++)
         {
             for (int x = 0; x <= xSize; x++)
             {
-                vertices[v++] = new Vector3(x, y, 0);
+                SetVertex(v++, x, y, 0);
             }
             for (int z = 1; z <= zSize; z++)
             {
-                vertices[v++] = new Vector3(xSize, y, z);
+                SetVertex(v++, xSize, y, z);
             }
             for (int x = xSize - 1; x >= 0; x--)
             {
-                vertices[v++] = new Vector3(x, y, zSize);
+                SetVertex(v++, x, y, zSize);
             }
             for (int z = zSize - 1; z > 0; z--)
             {
-                vertices[v++] = new Vector3(0, y, z);
+                SetVertex(v++, 0, y, z);
             }
         }
 
         for (int z = 1; z < zSize; z++)
-        {
             for (int x = 1; x < xSize; x++)
-            {
-                vertices[v++] = new Vector3(x, ySize, z);
-            }
-        }
+                SetVertex(v++, x, ySize, z);
+
         for (int z = 1; z < zSize; z++)
-        {
             for (int x = 1; x < xSize; x++)
-            {
-                vertices[v++] = new Vector3(x, 0, z);
-            }
-        }
+                SetVertex(v++, x, 0, z);
+
 
         mesh.vertices = vertices;
+        mesh.normals = normals;
         mesh.RecalculateNormals();
+    }
+
+    private void SetVertex(int i, int x, int y, int z)
+    {
+        Vector3 inner = vertices[i] = new Vector3(x, y, z);
+
+        inner.x = Mathf.Clamp(inner.x, roundness, xSize - roundness);
+        inner.y = Mathf.Clamp(inner.y, roundness, ySize - roundness);
+        inner.z = Mathf.Clamp(inner.z, roundness, zSize - roundness);
+
+        normals[i] = (vertices[i] - inner).normalized;
+        vertices[i] = inner + normals[i] * roundness;
     }
     //v01  v11
     //
@@ -145,19 +155,28 @@ public class ProceduralCube : MonoBehaviour
 
         int vMin = ring - 2;
         vMid -= xSize - 2;
-        for (int z = 1; z <= zSize - 2; z++, vMin--,vMid++, v++)
+        int vMax = v + 3;
+        for (int z = 1; z <= zSize - 2; z++, vMin--, vMid++, vMax++)
         {
             t = SetQuad(triangles, t, vMin, vMid + xSize - 1, vMin + 1, vMid);
 
-            for (int x = 1; x <= xSize - 2; x++, vMid++, v++)
+            for (int x = 1; x <= xSize - 2; x++, vMid++)
             {
-                t = SetQuad(triangles, t, vMid + xSize - 1, vMid + xSize, vMid , vMid + 1);
+                t = SetQuad(triangles, t, vMid + xSize - 1, vMid + xSize, vMid, vMid + 1);
             }
+            t = SetQuad(triangles, t, vMid + xSize - 1, vMax, vMid, vMax - 1);
         }
+
+        int vTop = vMin - 1;
+        t = SetQuad(triangles, t, vTop + 1, vTop, vTop + 2, vMid);
+        for (int x = 1; x < xSize - 1; x++, vTop--, vMid++)
+        {
+            t = SetQuad(triangles, t, vTop, vTop - 1, vMid, vMid + 1);
+        }
+        t = SetQuad(triangles, t, vTop, vTop - 1, vMid, vTop - 2);
 
         return 1;
     }
-
     private int CreateTopFace(int[] triangles, int t, int ring)
     {
         int v = ring * ySize;
@@ -199,6 +218,9 @@ public class ProceduralCube : MonoBehaviour
     }
 
 #if UNITY_EDITOR
+    [HideInInspector] public bool DisplayIndice = true;
+    [HideInInspector] public bool DisplayNormal = true;
+
     private GUIStyle GizmosGUIStyle = null;
     private void OnDrawGizmos()
     {
@@ -214,9 +236,18 @@ public class ProceduralCube : MonoBehaviour
 
         for(int i=0;i<vertices.Length;i++)
         {
-            Handles.Label(vertices[i], i.ToString(), GizmosGUIStyle); ;
             var vertex = vertices[i];
+
+            if(DisplayIndice) Handles.Label(vertex, i.ToString(), GizmosGUIStyle);
+
+            Gizmos.color = Color.white;
             Gizmos.DrawSphere(vertex, 0.05f);
+
+            if (DisplayNormal)
+            { 
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawRay(vertices[i], normals[i]);
+            }
         }
     }
 #endif
@@ -230,8 +261,10 @@ public class ProceduralCubeEditor : Editor
     {
         base.OnInspectorGUI();
 
+        
+
         var instance = target as ProceduralCube;
-        if (!target) return;
+        if (!instance) return;
 
         if (GUILayout.Button("Refresh Grid"))
         {
@@ -240,6 +273,11 @@ public class ProceduralCubeEditor : Editor
             else
                 EditorApplication.isPlaying = true;
         }
+
+        EditorGUILayout.Space();
+
+        instance.DisplayIndice = EditorGUILayout.Toggle("显示顶点序号", instance.DisplayIndice);
+        instance.DisplayNormal = EditorGUILayout.Toggle("显示法线", instance.DisplayNormal);
     }
 }
 #endif
