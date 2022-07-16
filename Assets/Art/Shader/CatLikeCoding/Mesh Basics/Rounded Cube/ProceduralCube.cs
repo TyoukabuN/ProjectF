@@ -12,12 +12,17 @@ public class ProceduralCube : MonoBehaviour
     public int ySize = 3;
     public int zSize = 3;
     public int roundness = 2;
+    public Texture GridTexture;
     // 
     public float genaralInteral = 0.05f;
     [HideInInspector] public Material material;
     [HideInInspector] public Vector3[] vertices;
     [HideInInspector] public Vector3[] normals;
+    [HideInInspector] public Color32[] cubeUV;
     [HideInInspector] public int[] triangles;
+    [HideInInspector] public int[] trianglesZ;
+    [HideInInspector] public int[] trianglesX;
+    [HideInInspector] public int[] trianglesY;
 
     Mesh mesh;
     MeshFilter meshFilter;
@@ -53,7 +58,6 @@ public class ProceduralCube : MonoBehaviour
         mesh.RecalculateNormals();
     }
 
-
     private void CreateVertices()
     {
         int cornerVertices = 8;
@@ -62,6 +66,7 @@ public class ProceduralCube : MonoBehaviour
 
         vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
         normals = new Vector3[vertices.Length];
+        cubeUV = new Color32[vertices.Length];
 
         int v = 0;
         for (int y = 0; y <= ySize; y++)
@@ -95,9 +100,9 @@ public class ProceduralCube : MonoBehaviour
 
         mesh.vertices = vertices;
         mesh.normals = normals;
+        mesh.colors32 = cubeUV;
         mesh.RecalculateNormals();
     }
-
     private void SetVertex(int i, int x, int y, int z)
     {
         Vector3 inner = vertices[i] = new Vector3(x, y, z);
@@ -108,6 +113,7 @@ public class ProceduralCube : MonoBehaviour
 
         normals[i] = (vertices[i] - inner).normalized;
         vertices[i] = inner + normals[i] * roundness;
+        cubeUV[i] = new Color32((byte)x, (byte)y, (byte)z,0);
     }
     //v01  v11
     //
@@ -123,19 +129,91 @@ public class ProceduralCube : MonoBehaviour
     }
     private void CreateTriangle()
     {
+        //2个面每个quad有2个triangle,3个vertex indice定义1个triangle
+        int[] trianglesZ = new int[(xSize * ySize * 6 * 2)]; 
+        int[] trianglesX = new int[(zSize * ySize * 6 * 2)]; 
+        int[] trianglesY = new int[(xSize * zSize * 6 * 2)];
+        int tZ = 0, tX = 0, tY = 0, v = 0;
+        int quads = (xSize * ySize + xSize * zSize + ySize * zSize) * 2;
+        triangles = new int[quads * 6];
+        int ring = (xSize + zSize) * 2;//周长
+        for (int y = 0; y < ySize; y++, v++)
+        {
+            for (int q = 0; q < xSize; q++, v++)
+            {
+                tZ = SetQuad(trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
+            }
+            for (int q = 0; q < zSize; q++, v++)
+            {
+                tX = SetQuad(trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
+            }
+            for (int q = 0; q < xSize; q++, v++)
+            {
+                tZ = SetQuad(trianglesZ, tZ, v, v + 1, v + ring, v + ring + 1);
+            }
+            for (int q = 0; q < zSize - 1; q++, v++)
+            {
+                tX = SetQuad(trianglesX, tX, v, v + 1, v + ring, v + ring + 1);
+            }
+            tX = SetQuad(trianglesX, tX, v, v - ring + 1, v + ring, v + 1);
+        }
+        tY = CreateTopFace(trianglesY, tY, ring);
+        tY = CreateBottomFace(trianglesY, tY, ring);
+
+        var matInfos = new MaterialInfo[3] { 
+            new MaterialInfo("Z",trianglesZ,Color.white),
+            new MaterialInfo("X",trianglesX,Color.red),
+            new MaterialInfo("Y",trianglesY,Color.green),
+        };
+
+        mesh.subMeshCount = matInfos.Length;
+        var materials = new Material[matInfos.Length];
+        for (int i = 0; i < matInfos.Length; i++)
+        {
+            var info = matInfos[i];
+            mesh.SetTriangles(info.triangles, i);
+            var mat = new Material(ShaderHandle.GetShader("Custom/Rounded Cube Grid Self"));
+            mat.name = info.name;
+            mat.SetColor("_Color", info.color);
+            mat.SetTexture("_MainTex", GridTexture);
+            mat.EnableKeyword(info.faceKeyWord);
+            materials[i] = mat;
+            Renderer render = GameObject.FindObjectOfType(typeof(Renderer)) as Renderer;
+            Shader.Find("Standard");
+        }
+        meshRenderer.materials = materials;
+
+        //mesh.triangles = triangles;
+    }
+    struct MaterialInfo {
+        public MaterialInfo(string name, int[] triangles, Color color, string namePrefix = "Material ")
+        {
+            this.name = namePrefix + name;
+            this.triangles = triangles;
+            this.color = color;
+            this.faceKeyWord = "_FACES_" + name;
+        }
+        public string name;
+        public int[] triangles;
+        public Color color;
+        public string faceKeyWord;
+    }
+    private void CreateTriangle2()
+    {
+        int[] trianglesZ = new int[(xSize * ySize * 6 * 2)]; //2个面每个quad有2个triangle,
         int quads = (xSize * ySize + xSize * zSize + ySize * zSize) * 2;
         triangles = new int[quads * 6];
         int ring = (xSize + zSize) * 2;//周长
         int t = 0, v = 0;
         for (int y = 0; y < ySize; y++, v++)
-        { 
+        {
             for (int q = 0; q < ring - 1; q++, v++)
             {
                 t = SetQuad(triangles, t, v, v + 1, v + ring, v + ring + 1);
             }
             t = SetQuad(triangles, t, v, v - ring + 1, v + ring, v + 1);
         }
-        t = CreateTopFace(triangles,t, ring);
+        t = CreateTopFace(triangles, t, ring);
         t = CreateBottomFace(triangles, t, ring);
 
         mesh.triangles = triangles;

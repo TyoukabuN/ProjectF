@@ -5,7 +5,7 @@ using UnityEngine;
 public class PhysicsTest : MonoBehaviour
 {
     private CharacterController characterController;
-    private Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
     void Awake()
     {
         characterController = GetComponent<CharacterController>();

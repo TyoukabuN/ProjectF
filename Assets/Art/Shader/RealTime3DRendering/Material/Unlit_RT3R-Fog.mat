@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Unlit_RT3R-Fog
+  m_Shader: {fileID: 4800000, guid: 6309e98eb2b74084797076a5a0a05ee4, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _GlossTex:
+        m_Texture: {fileID: 2800000, guid: 41c3aa404f3041e4abb2b1d7134a3ad2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 4460c1d72ee10f54583f9255281554eb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _FogRange: 40
+    - _FogStart: 20
+    - _SpecularPower: 346.9
+    m_Colors:
+    - _AmbientColor: {r: 1, g: 1, b: 1, a: 0.4117647}
+    - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}

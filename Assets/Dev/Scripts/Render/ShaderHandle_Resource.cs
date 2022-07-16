@@ -61,7 +61,7 @@ public partial class ShaderHandle
         if (current.m_shaders.TryGetValue(name,out asset))
             return asset;
 
-        return null;
+        return Shader.Find(name);
     }
 
     public static Material GetMaterial(string name)
