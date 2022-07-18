@@ -3,11 +3,17 @@
 
 #include "UnityCG.cginc"
 
+//fog
+float4 _FogColor; 
+float _FogStart;
+float _FogRange;
 //viewDirection:not normalize one, means the distance between camera to vector in worldSpace
 float get_fog_amount(float3 viewDirection,float fogStart,float fogRange)
 {
     return saturate((length(viewDirection) - fogStart)/fogRange);
 }
+#define APPLTY_FOG(color) color.rgb = lerp(color.rgb,_FogColor.rgb * _FogColor.a,get_fog_amount(UnityWorldSpaceViewDir(i.worldPos),_FogStart,_FogRange));
+//fog
 
 struct LightContributionData
 {
@@ -23,6 +29,7 @@ struct LightContributionData
 
 //Common
 //for v2f struct
+#define DECLARE_LIGHT_BASE_FIELD_VERT float3 normal :NORMAL;
 #define DECLARE_LIGHT_BASE_FIELD(idx) float3 normal :NORMAL;  float3 worldPos : TEXCOORD##idx;
 //for vertex shader
 #define ASSIGH_LIGHT_BASE_FIELD(o) o.normal = v.normal; o.worldPos = mul(UNITY_MATRIX_M,v.vertex);

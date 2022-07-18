@@ -7,9 +7,9 @@
         _AmbientColor("Ambient Color",Color) = (1,1,1,1)
         _SpecularColor("Specular Color",Color) = (1,1,1,1)
         _SpecularPower("Specular Power",float) = 50
-        _FogColor("Fog Color",Color) = (1,1,1,1)
-        _FogStart("Fog Start",float) = 20
-        _FogRange("Fog Range",float) = 40
+        _FogColor("Fog Color",Color) = (0.5,0.5,0.5,0.5)
+        _FogStart("Fog Start",float) = 10
+        _FogRange("Fog Range",float) = 20
     }
     SubShader
     {
@@ -49,10 +49,6 @@
             float4 _AmbientColor;
             float4 _SpecularColor; 
             float _SpecularPower;
-            //
-            float4 _FogColor; 
-            float _FogStart;
-            float _FogRange;
 
             v2f vert (appdata v)
             {
