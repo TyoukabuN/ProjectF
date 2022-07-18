@@ -28,6 +28,8 @@ struct LightContributionData
 };
 
 //Common
+#define DECLARE_WORLD_SPACE_POSITION(idx) float3 worldPos : TEXCOORD##idx;
+#define ASSIGN_WORLD_SPACE_POSITION(o) o.worldPos = mul(UNITY_MATRIX_M,v.vertex);
 //for v2f struct
 #define DECLARE_LIGHT_BASE_FIELD_VERT float3 normal :NORMAL;
 #define DECLARE_LIGHT_BASE_FIELD(idx) float3 normal :NORMAL;  float3 worldPos : TEXCOORD##idx;

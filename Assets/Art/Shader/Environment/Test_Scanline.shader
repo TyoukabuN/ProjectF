@@ -38,7 +38,7 @@
             #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
-            #include "CircleScanLine.cginc"
+            #include "Assets/Art/Shader/CircleScanLine.cginc"
 
             struct v2f
             {
